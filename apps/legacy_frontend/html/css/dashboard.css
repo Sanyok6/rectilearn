@@ -1,0 +1,209 @@
+/* css file for dashboard.html */
+
+body {
+    text-align: center;
+    font-family: sans-serif;
+    background-color: rgb(251, 251, 251);
+    padding: none;
+}
+
+.flex {
+    display: flex;
+}
+.flexwrap {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.section_title {
+    text-align: left;
+    font-size: xx-large;
+}
+
+
+/* sidebar styling */
+#sidebar {
+    width: 14vw;
+    height: 100vh;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    background:white;
+
+    box-shadow: 0 120px 160px 0 rgba(0,0,0,0.2);
+    border-right: solid;
+    border-color: black;
+}
+#sidebar_bottom {
+    position: absolute; 
+    left: 0; 
+    right: 0; 
+    margin-left: auto; 
+    margin-right: auto; 
+    bottom:10px;
+}
+.sidebar_item {
+    background-color: inherit;
+    border:none;
+    color:rgb(70, 70, 70);
+    font-size: x-large;
+    width:100%;
+}
+.sidebar_item:hover {color:blue;text-decoration: underline;}
+
+
+/* card section styling */
+#cards_section {
+    margin-left: 17vw;
+    margin-top: 1vh;
+}
+#games_section {
+    margin-left: 17vw;
+    margin-top:5vw;
+}
+
+.card {
+    position: relative;
+    height: 30vh;
+    width: 25vh;
+    border-radius: 15px;
+    border: solid;
+    box-shadow: 0 6px 8px 0 rgba(0,0,0,0.2);
+    border-width: 1.5px;
+    margin: 15px;
+    background-color: white;
+}
+.card_title {
+    width:100%;
+    height:10vh;
+    color:white;
+    background: rgb(6,211,255);
+    background: linear-gradient(127deg, rgba(6,211,255,1) 0%, rgba(71,224,255,1) 33%, rgba(121,245,255,1) 100%); 
+    font-size: 2em;
+    padding-top:15%;
+    overflow: hidden;
+    border-bottom: solid;
+    border-width: 1.5px;
+    border-radius: 15px 15px 0 0;
+    border-color: black;
+    font-weight: bold;
+}
+.card_bottom {
+    border-top: solid;
+    border-width: 1.5px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width:100%;
+    justify-content: space-evenly;
+}
+.card_button {
+    width:50%;
+    background:none;
+    padding: none;
+    border:none;
+}
+.card_button:hover {color:blue;}
+.delete_btn:hover {color:red;}
+.title_link {
+    font-size: x-large;
+    color:black;
+}
+.title_link:hover {
+    color:blue;
+}
+.creation_time {
+    font-size: small;
+}
+.play_btn {
+    background-color: blue;
+    height:4vh;
+    width:45%;
+    border:none;
+    border-radius: 20px;
+    color:white;
+    font-size: medium;
+}
+.play_btn:hover {font-size: large;}
+
+.card_create_new {
+    padding:20%;
+}
+.card_create_new:hover {
+    scale: 1.2;
+}
+
+
+/* game of day styling */
+#game_of_day {
+    width:30vw;
+    border-radius: 20px;
+    margin:20px;
+    margin-top: 10px;
+}
+#game_of_day:hover {
+    scale: 1.02;
+}
+#game_of_day_image {
+    width:inherit;
+    border-radius: 30px;
+}
+#game_of_day_description {
+    color: rgb(29, 29, 29);
+    font-size: xx-large;
+}
+
+
+/* other games section */
+#other_games {
+    overflow-y: scroll;
+    height: 40vh;
+}
+.other_game {
+    text-align: center;
+    position: relative;
+    border-radius: 20px;
+    border:solid;
+    border-width: 1px;
+    overflow: hidden;
+    margin:10px;
+    width:210px;
+    box-shadow: 0 6px 8px 0 rgba(0,0,0,0.2);
+
+}
+.other_game:hover {
+    scale: 1.1;
+}
+.other_game_image {
+    /* images have a ratio of 1:2 */
+    width:100%;
+}
+.other_game_text {
+    font-size: 25px;
+    white-space: nowrap;
+    margin:5px;
+    margin-top: 0px;
+    margin:5px;
+    top:10%;
+}
+.other_game_text:hover {text-decoration: underline;}
+
+
+/* device compatibility */
+@media screen and (max-height: 62em) {
+    .card {
+        width: 30vh;
+        height: 35vh;
+    }
+}
+
+@media screen and (max-width: 62em) {
+    #sidebar {
+        display: none;
+    }
+    #games_section, #cards_section {
+        margin-left: 1vw;
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "name": "fastapi",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+      "dev": "pipenv run uvicorn main:app --reload",
+      "build": "echo \"Error: No Build Command Specified.\"",
+      "start": "pipenv run uvicorn main:app",
+      "postinstall": "pipenv install"
+    }
+  }
+  
