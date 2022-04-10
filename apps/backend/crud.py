@@ -6,9 +6,9 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 
-def get_user(email: str):
+def get_user(name: str):
     with Session(database.engine) as session:
-        return session.query(models.User).filter(models.User.email == email).first()
+        return session.query(models.User).filter(models.User.name == name).first()
 
 
 def create_user(user: schemas.UserCreate):

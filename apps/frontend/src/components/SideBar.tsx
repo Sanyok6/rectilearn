@@ -1,4 +1,4 @@
-import React, { ReactNode, ReactText } from 'react';
+import React, { Dispatch, ReactNode, ReactText, SetStateAction } from 'react';
 import {
   IconButton,
   Avatar,
@@ -37,6 +37,7 @@ import {
   FiMoon,
 } from 'react-icons/fi';
 import { IconType } from 'react-icons';
+import { SectionType } from '../pages/dashboard';
 
 interface LinkItemProps {
   name: string;
@@ -55,8 +56,10 @@ const LinkItems: Array<LinkItemProps> = [
 
 export default function Sidebar({
   children,
+  alterSection
 }: {
-  children?: ReactNode;
+  children?: ReactNode,
+  alterSection: Dispatch<SetStateAction<SectionType>>
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
@@ -64,6 +67,7 @@ export default function Sidebar({
       <SidebarContent
         onClose={() => onClose}
         display={{ base: 'none', md: 'block' }}
+        alterSection={alterSection}
       />
       <Drawer
         autoFocus={false}
@@ -74,7 +78,7 @@ export default function Sidebar({
         onOverlayClick={onClose}
         size="full">
         <DrawerContent>
-          <SidebarContent onClose={onClose} />
+          <SidebarContent onClose={onClose} alterSection={alterSection} />
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
@@ -88,12 +92,13 @@ export default function Sidebar({
 
 interface SidebarProps extends BoxProps {
   onClose: () => void;
+  alterSection: Dispatch<SetStateAction<SectionType>>;
 }
 
-const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+const SidebarContent = ({ onClose, alterSection, ...rest }: SidebarProps) => {
   return (
     <Box
-      transition="0.5s ease"
+      transition="0.2s ease"
       bg={useColorModeValue('white', 'gray.900')}
       borderRight="1px"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
@@ -108,7 +113,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
+        <NavItem key={link.name} icon={link.icon} alterSection={() => [alterSection(link.name.toLowerCase() as SectionType), onClose()]}>
           {link.name}
         </NavItem>
       ))}
@@ -119,11 +124,12 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 interface NavItemProps extends FlexProps {
   icon: IconType;
   children: ReactText;
+  alterSection: React.MouseEventHandler<HTMLAnchorElement>;
 }
 
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+const NavItem = ({ icon, children, alterSection, ...rest }: NavItemProps) => {
   return (
-    <Link href="#" style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+    <Link onClick={alterSection} style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
       <Flex
         align="center"
         p="4"
