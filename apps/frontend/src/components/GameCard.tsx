@@ -51,7 +51,7 @@ const GameCard = (props: Props) => {
             <Box
                 maxW={'1540px'}
                 w={'full'}
-                bg={useColorModeValue('white', 'gray.600')}
+                bg={useColorModeValue('white', 'gray.700')}
                 boxShadow={'2xl'}
                 rounded={'xl'}
                 p={5}
@@ -84,6 +84,9 @@ const GameCard = (props: Props) => {
                                 {name}
                             </Text>
                         </Tooltip>
+                    </Stack>
+                    <Stack>
+                        <Button>PLAY</Button>
                     </Stack>
                 </Stack>
             </Box>

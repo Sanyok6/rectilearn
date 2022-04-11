@@ -90,7 +90,7 @@ const Card = (props: Props) => {
             <Box
                 maxW={'420px'}
                 w={'full'}
-                bg={useColorModeValue('white', 'gray.600')}
+                bg={useColorModeValue('white', 'gray.700')}
                 boxShadow={'2xl'}
                 rounded={'xl'}
                 p={5}
