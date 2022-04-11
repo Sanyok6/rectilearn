@@ -18,7 +18,7 @@ Devs: VG, Rush, and atlas (may need to learn fastAPI)
 |Database| - Store the user information, as well as the study sets of the user (NastyPigz wants to use Deta Base SDK)
 Devs: We can decide
 
-|Game Dev| - Create simple 2D games in JS (the more the better!) that let the user practice their study sets (idk what you guys want to use)
+|Game Dev| - Create 2D games in Unity (Atlas). Create simple 2D games in JS (the more the better!) that let the user practice their study sets (idk what you guys want to use)
 Devs: Capitalism, Rush (This is kinda the whole point of the project, so this should be done well)
 
 
