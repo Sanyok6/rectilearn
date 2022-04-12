@@ -17,7 +17,6 @@ def create_user(user: schemas.UserCreate):
         name=user.name,
         email=user.email,
         hashed_password=user.password,
-        role=user.role,
     )
     try:
         with Session(database.engine) as session:
