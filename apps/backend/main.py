@@ -31,8 +31,8 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 
-def authenticate_user(username: str, password: str):
-    user = crud.get_user(username)
+def authenticate_user(email: str, password: str):
+    user = crud.get_user(email)
 
     if not user:
         return False
@@ -81,6 +81,7 @@ async def index():
 
 @app.post("/auth/token", response_model=schemas.TokenData)
 def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+    # NOTE: The email is expected as the username
     user: typing.Union[models.User, bool] = authenticate_user(form_data.username, form_data.password)
     if user is False:
         raise HTTPException(
@@ -89,6 +90,7 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    # Store the username and email in the access token, so we can use it later
     access_token = create_access_token(
         data={"name": user.name, "email": user.email}, expires_delta=access_token_expires
     )
