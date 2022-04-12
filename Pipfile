@@ -29,6 +29,8 @@ tomli = "==2.0.1"
 typing-extensions = "==4.1.1"
 uvicorn = "==0.17.6"
 SQLAlchemy = "==1.4.35"
+cloud-sql-python-connector = {extras = ["pg8000"], version = "*"}
+bcrypt = "*"
 
 [dev-packages]
 
