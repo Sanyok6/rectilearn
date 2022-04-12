@@ -82,7 +82,9 @@ async def index():
 @app.post("/auth/token", response_model=schemas.TokenData)
 def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     # NOTE: The email is expected as the username
-    user: typing.Union[models.User, bool] = authenticate_user(form_data.username, form_data.password)
+    user: typing.Union[models.User, bool] = authenticate_user(
+        form_data.username, form_data.password
+    )
     if user is False:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -92,7 +94,8 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     # Store the username and email in the access token, so we can use it later
     access_token = create_access_token(
-        data={"name": user.name, "email": user.email}, expires_delta=access_token_expires
+        data={"name": user.name, "email": user.email},
+        expires_delta=access_token_expires,
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
