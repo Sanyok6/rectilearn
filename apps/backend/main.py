@@ -13,8 +13,6 @@ import crud, models, schemas
 from database import engine
 from settings import *
 
-models.Base.metadata.create_all(bind=engine)
-
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
