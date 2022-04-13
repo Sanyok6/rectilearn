@@ -4,12 +4,45 @@ import { useState, useEffect, useRef } from "react";
 
 const mapLayout =
 `
-|                |
-|                |
-|                |
-|                |
-|                |`.split("\n");
+|||||||||||||||||
+|               |
+|               |
+|               |
+|               |
+|               |
+|               |
+|               |
+|               |
+|               |
+|||||||||||||||||`.split("\n");
 mapLayout.shift();
+
+async function game(beforeStart: any, SPEED: any, player: any, wallXY: any) {
+    console.log(mapLayout);
+    console.log(width(), height());
+    player.onUpdate(() => {
+        camPos(player.pos);
+    });
+    onKeyDown("left", () => {
+        player.flipX(true);
+        player.move(-SPEED, 0);
+    });
+    onKeyDown("right", () => {
+        player.flipX(false);
+        player.move(SPEED, 0);
+    });
+    onKeyDown("up", () => {
+        player.move(0, -SPEED);
+    });
+    onKeyDown("down", () => {
+        player.move(0, SPEED);
+    });
+    beforeStart.destroy();
+    add([
+        text("Press arrow keys", { width: wallXY * 10 }),
+        pos(12, 12),
+    ]);
+}
 
 const Game: NextPage = () => {
     const [ka, setK] = useState<KaboomCtx>();
@@ -26,48 +59,69 @@ const Game: NextPage = () => {
             let start = false;
             const SPEED = 320;
             let player: any;
-            onClick(async () => {
-                if (start) {
-                    player.moveTo(mousePos());
-                } else {
+            onTouchEnd(async () => {
+                if (!start) {
+                    start = true;
                     await loadSprite("bean", "/sprites/bean.png");
                     await loadSprite("wall", "/sprites/wall.jpeg");
-                    console.log(mapLayout);
-                    addLevel(mapLayout, {
-                        width: width(),
-                        height: height(),
+                    const itemXLen = mapLayout[0].length;
+                    const itemYLen = mapLayout.length;
+                    const wallXY = Math.max(width() / itemXLen, height() / itemYLen)
+                    const mapObj = addLevel(mapLayout, {
+                        width: wallXY,
+                        height: wallXY,
                         "|": () => [
                             sprite("wall", {
-                                width: width() / 15,
-                                height: height() / 15
+                                width: wallXY,
+                                height: wallXY
                             }),
                             area(),
                             solid()
                         ],
                     });
                     player = add([
-                        sprite("bean"),
-                        pos(center()),
-                        area()
+                        sprite("bean", {
+                            width: wallXY,
+                        }),
+                        pos(mapObj.getPos(itemXLen / 2, itemYLen / 2)),
+                        area(),
+                        solid()
                     ]);
-                    onKeyDown("left", () => {
-                        player.move(-SPEED, 0);
+                    await game(beforeStart, SPEED, player, wallXY);
+                } else {
+                    player.moveTo(mousePos().sub(center()).unit().scale(10))
+                }
+            })
+            onClick(async () => {
+                if (!start) {
+                    start = true;
+                    await loadSprite("bean", "/sprites/bean.png");
+                    await loadSprite("wall", "/sprites/wall.jpeg");
+                    const itemXLen = mapLayout[0].length;
+                    const itemYLen = mapLayout.length;
+                    const wallXY = Math.max(width() / itemXLen, height() / itemYLen)
+                    const mapObj = addLevel(mapLayout, {
+                        width: wallXY,
+                        height: wallXY,
+                        "|": () => [
+                            sprite("wall", {
+                                width: wallXY,
+                                height: wallXY
+                            }),
+                            area(),
+                            solid()
+                        ],
                     });
-                    onKeyDown("right", () => {
-                        player.move(SPEED, 0);
-                    });
-                    onKeyDown("up", () => {
-                        player.move(0, -SPEED);
-                    });
-                    onKeyDown("down", () => {
-                        player.move(0, SPEED);
-                    });
-                    beforeStart.destroy();
-                    add([
-                        text("Press arrow keys", { width: width() / 2 }),
-                        pos(12, 12),
+                    player = add([
+                        sprite("bean", {
+                            width: wallXY,
+                        }),
+                        pos(mapObj.getPos(itemXLen / 2, itemYLen / 2)),
+                        area(),
+                        solid()
                     ]);
-                } 
+                    await game(beforeStart, SPEED, player, wallXY);
+                }
             });
             const beforeStart = add([
                 text("Click Anywhere To Start", {
