@@ -1,11 +1,16 @@
-import email
 import typing
 from pydantic import BaseModel
 
 
-class User(BaseModel):
+class UserBase(BaseModel):
     email: str
     name: str
+
+    class Config:
+        orm_mode = True
+
+
+class User(UserBase):
     role: typing.Optional[str] = None
 
     class Config:
@@ -17,7 +22,7 @@ class TokenData(BaseModel):
     token_type: str
 
 
-class UserCreate(User):
+class UserCreate(UserBase):
     password: str
 
     class Config:

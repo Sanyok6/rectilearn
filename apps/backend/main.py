@@ -13,8 +13,6 @@ import crud, models, schemas
 from database import engine
 from settings import *
 
-models.Base.metadata.create_all(bind=engine)
-
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -62,13 +60,13 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if username is None:
+        email: str = payload.get("email")
+        if email is None:
             raise credentials_exception
 
     except JWTError:
         raise credentials_exception
-    user = crud.get_user(email=username)
+    user = crud.get_user(email=email)
     if user is None:
         raise credentials_exception
     return user
@@ -82,7 +80,9 @@ async def index():
 @app.post("/auth/token/", response_model=schemas.TokenData)
 def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     # NOTE: The email is expected as the username
-    user: typing.Union[models.User, bool] = authenticate_user(form_data.username, form_data.password)
+    user: typing.Union[models.User, bool] = authenticate_user(
+        form_data.username, form_data.password
+    )
     if user is False:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -92,12 +92,13 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     # Store the username and email in the access token, so we can use it later
     access_token = create_access_token(
-        data={"name": user.name, "email": user.email}, expires_delta=access_token_expires
+        data={"email": user.email},
+        expires_delta=access_token_expires,
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@app.get("/auth/users/me/", response_model=schemas.User)
+@app.get("/auth/users/me", response_model=schemas.User)
 async def read_users_me(current_user: schemas.User = Depends(get_current_user)):
     return current_user
 
