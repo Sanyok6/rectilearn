@@ -25,7 +25,7 @@ def create_user(user: schemas.UserCreate):
             session.commit()
             session.refresh(db_user)
             return db_user
-    except sqlalchemy.exc.IntegrityError:
+    except (sqlalchemy.exc.IntegrityError, sqlalchemy.exc.DatabaseError):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="User with that email already exists",
