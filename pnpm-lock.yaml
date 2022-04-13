@@ -54,6 +54,7 @@ importers:
       config: workspace:*
       eslint: 7.32.0
       framer-motion: ^6
+      kaboom: ^2000.2.9
       next: 12.0.8
       next-transpile-modules: 9.0.0
       react: 17.0.2
@@ -72,6 +73,7 @@ importers:
       '@emotion/styled': 11.8.1_468cdc36b475775f84f658d543c5f9e1
       '@fontsource/pacifico': 4.5.5
       framer-motion: 6.2.9_react-dom@17.0.2+react@17.0.2
+      kaboom: 2000.2.9
       next: 12.0.8_f370f735164a03a12cea0cc89593cbee
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
@@ -2793,6 +2795,10 @@ packages:
     dependencies:
       array-includes: 3.1.4
       object.assign: 4.1.2
+    dev: false
+
+  /kaboom/2000.2.9:
+    resolution: {integrity: sha512-LenwxK87NHnjBgfjpu+vQfMCSUEg2FnhBTPsqnYyJhc/iGIL1ZMoQEumtU/nIEPz1rP0M3Xdh4OAmotYRi1F6g==}
     dev: false
 
   /language-subtag-registry/0.3.21:
