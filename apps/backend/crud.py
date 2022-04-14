@@ -25,6 +25,7 @@ def create_user(user: schemas.UserCreate):
             session.refresh(db_user)
             return db_user
     except (sqlalchemy.exc.IntegrityError, sqlalchemy.exc.DatabaseError):
+        # The pg8000 library will raise DatabaseError instead of IntegrityError
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="User with that email already exists",
