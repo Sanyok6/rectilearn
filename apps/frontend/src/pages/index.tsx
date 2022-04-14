@@ -3,15 +3,15 @@ import Head from "next/head";
 
 import WelcomePage from "../components/welcomePage/welcome";
 
-const Dashboard: NextPage = () => {
+const Index: NextPage = () => {
   return (
     <>
       <Head>
         <title>Page</title>
       </Head>
-        <WelcomePage />
+      <WelcomePage />
     </>
   );
 }
 
-export default Dashboard;
+export default Index;

@@ -2,18 +2,25 @@ from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
+# from .. import settings
 import settings
 from alembic import context
+# from ..models import Base
 from models import Base
-
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 if settings.PRODUCTION:
-    # TODO: Rush please do this idk how to do this
-    pass
+    if settings.USE_HEROKU:
+        config.set_main_option("sqlalchemy.url", "postgresql+psycopg2"+settings.HEROKU_POSTGRESQL_URI)
+
+    else:
+        raise Exception("Migrations not supported in google cloud")
+
 else:
+    # Testing environment
+    # lets use sqlite for now
     config.set_main_option("sqlalchemy.url", "sqlite:///./database.db")
 
 # Interpret the config file for Python logging.

@@ -1,4 +1,6 @@
 import typing
+from datetime import datetime
+
 from pydantic import BaseModel
 
 
@@ -11,6 +13,7 @@ class UserBase(BaseModel):
 
 
 class User(UserBase):
+    id: int
     role: typing.Optional[str] = None
 
     class Config:
@@ -27,3 +30,14 @@ class UserCreate(UserBase):
 
     class Config:
         orm_mode = True
+
+
+class BaseStudySet(BaseModel):
+    creator: int
+    question: str
+    answer: str
+
+
+class StudySet(BaseStudySet):
+    id: int
+    created_at: datetime

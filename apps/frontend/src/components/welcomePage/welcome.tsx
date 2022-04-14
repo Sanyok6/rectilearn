@@ -1,17 +1,16 @@
-import CallToActionWithVideo from "./section1";
-import WithAction from "./navBar";
+import { Box } from "@chakra-ui/react";
+import NavBar from "./navBar";
 import Background from "./background";
+import Section1 from "./section1";
 import Section2 from "./section2";
-
-import { Box } from "@chakra-ui/react"
 
 export default function WelcomePage() {
     return (
         <>
             <Box>
-                <Background />
-                <WithAction />
-                <CallToActionWithVideo />
+                <Background /> 
+                <NavBar />
+                <Section1 />
                 <Section2 />
             </Box>
         </>

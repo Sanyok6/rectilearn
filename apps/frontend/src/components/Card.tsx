@@ -9,32 +9,13 @@ import {
     useBreakpointValue,
     useColorModeValue,
     Tooltip,
-    chakra
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import NextImage from 'next/image';
+import { Image } from '../utils/chakraImage';
 
 import { Icon, IconButton, IconButtonProps, LightMode } from '@chakra-ui/react';
 import { FiInfo, FiPlay, FiStar } from 'react-icons/fi';
 
-
-
-export const Image = chakra(NextImage, {
-    baseStyle: { maxH: 120, maxW: 120 },
-    shouldForwardProp: (prop) =>
-      [
-        "width",
-        "height",
-        "src",
-        "alt",
-        "quality",
-        "placeholder",
-        "blurDataURL",
-        "loader",
-        "layout",
-        "onLoad"
-      ].includes(prop),
-  });
 
 export const InfoButton = (props: IconButtonProps) => (
     <LightMode>

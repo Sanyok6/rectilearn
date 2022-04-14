@@ -9,27 +9,9 @@ import {
     useBreakpointValue,
     useColorModeValue,
     Tooltip,
-    chakra
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import NextImage from 'next/image';
-
-export const Image = chakra(NextImage, {
-    baseStyle: { maxH: 120, maxW: 120 },
-    shouldForwardProp: (prop) =>
-      [
-        "width",
-        "height",
-        "src",
-        "alt",
-        "quality",
-        "placeholder",
-        "blurDataURL",
-        "loader",
-        "layout",
-        "onLoad"
-      ].includes(prop),
-});
+import { Image } from '../utils/chakraImage';
 
 interface game {
     id: number;
