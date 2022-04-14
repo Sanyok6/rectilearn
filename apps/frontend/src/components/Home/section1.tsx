@@ -17,7 +17,7 @@ import {
   } from '@chakra-ui/react';
   import "@fontsource/pacifico"
 import NextLink from 'next/link';
-import { Image } from '../../utils/chakraImage';
+import { Image } from '../../utils/next-chakra-image';
 
 import Typewriter from 'typewriter-effect';
 

@@ -55,7 +55,8 @@ const Game: NextPage = () => {
                 cRef.current.focus();
             }
             const mod = await import("kaboom");
-            setK(mod.default({ canvas: cRef.current || undefined }));
+            const kab = mod.default({ canvas: cRef.current || undefined });
+            setK(kab);
             let start = false;
             const SPEED = 320;
             let player: any;
@@ -128,7 +129,7 @@ const Game: NextPage = () => {
                     size: width() / 25
                 }),
                 pos(center()),
-                origin("center"),
+                kab.origin("center"),
             ]);
         })()
         return () => ka?.every(destroy);

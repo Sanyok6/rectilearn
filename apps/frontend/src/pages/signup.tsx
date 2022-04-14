@@ -2,7 +2,7 @@ import { Box, Center, Flex, useColorModeValue } from "@chakra-ui/react";
 import { NextPage } from "next";
 import Head from "next/head";
 
-import LoginPage from "../components/Login/Prompt";
+import SignUpPage from "../components/SignUp/Prompt";
 import NavBar from "../components/Home/navBar";
 
 const Login: NextPage = () => {
@@ -16,7 +16,7 @@ const Login: NextPage = () => {
           <NavBar />
         </Box>
         <Center bg={useColorModeValue("#F7FAFC", "gray.900")} height="100%" flex="1 1 auto">
-          <LoginPage />
+          <SignUpPage />
         </Center>
       </Flex>
     </>
