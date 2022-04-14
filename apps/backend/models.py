@@ -20,6 +20,7 @@ class User(Base):
 class StudySets(Base):
     __tablename__ = "study_sets"
     id = Column(Integer, autoincrement=True, primary_key=True, unique=True)
+    subject = Column(String(255))
     creator = Column(Integer, ForeignKey("users.id"))
     questions = relationship("StudySetQuestions")
     created_at = Column(DateTime(), default=datetime.utcnow())
