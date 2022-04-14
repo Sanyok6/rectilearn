@@ -37,7 +37,13 @@ class BaseStudySet(BaseModel):
     question: str
     answer: str
 
+    class Config:
+        orm_mode = True
+
 
 class StudySet(BaseStudySet):
     id: int
     created_at: datetime
+
+    class Config:
+        orm_mode = True
