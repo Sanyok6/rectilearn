@@ -3,6 +3,6 @@ const withTM = require("next-transpile-modules")(["ui"]);
 module.exports = withTM({
   reactStrictMode: true,
   images: {
-    domains: ['media.istockphoto.com']
+    domains: ['media.istockphoto.com', 'images.unsplash.com'],
   }
 });

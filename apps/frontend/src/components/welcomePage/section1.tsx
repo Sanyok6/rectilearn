@@ -6,25 +6,24 @@ import {
     Heading,
     Text,
     Button,
-    Image,
     Icon,
     IconButton,
     createIcon,
     IconProps,
     useColorModeValue,
-    HStack
+    HStack,
+    chakra,
+    Link
   } from '@chakra-ui/react';
   import "@fontsource/pacifico"
+import NextLink from 'next/link';
+import { Image } from '../../utils/chakraImage';
 
-  import Typewriter from 'typewriter-effect';
+import Typewriter from 'typewriter-effect';
 
-  export default function CallToActionWithVideo() {
-
+export default function CallToActionWithVideo() {
     return (
-      
-
-      <Container maxW={'7xl'}>
-
+      <Container maxW={'7xl'} height={{ base: "120vh", sm: "100vh" }}>
         <Stack
           align={'center'}
           spacing={{ base: 8, md: 10 }}
@@ -51,27 +50,26 @@ import {
                 }}>
                   With <span style={{fontFamily: 'pacifico'}}>Rectilearn</span>, 
                 </Text>
-
               </HStack>
               <br />
               <HStack spacing={5}>
-                <Text as={'span'} color={'white'}>studying is</Text>
-                <Text color={'blue.400'}>
+                <Text as={'span'} color={useColorModeValue('black', 'white')}>studying is</Text>
+                <Box color={'blue.400'} marginInlineStart={"0.1em !important"}>
                   <Typewriter
                     options={{
-                      strings: ["Exciting", "Better", "Cooler", "Easier", "Efficient"],
+                      strings: ["Exciting", "Enjoyable", "Easier", "Efficient", "Cooler", "Better"],
                       autoStart: true,
                       loop: true,
                     }}
                   />
-                </Text>
+                </Box>
               </HStack>
             </Heading>
-            <Text fontSize={'lg'} color={'gray.500'} align={"left"}>
-              <span style={{fontFamily: "pacifico"}}>Rectileran</span> makes studying a little less ordinary
+            <Text fontSize={'lg'} color={useColorModeValue('gray.700', 'gray.400')} align={"left"}>
+              <chakra.span fontFamily={"pacifico"}>Rectilearn</chakra.span> makes studying a little less ordinary
                with games that let you have fun while studying. 
-               But <span style={{fontFamily: "pacifico"}}>Rectileran</span> is not just another study game, 
-               unlike other study tools, it is <a href="#">Open source</a>,
+               But <chakra.span fontFamily={"pacifico"}>Rectileran</chakra.span> is not just another study game, 
+               unlike other study tools, it is <NextLink href="#" passHref><Link textDecor={"underline"}>Open Source</Link></NextLink>,
                it is directed towards language learners, and it makes studying much more enjoyable. 
             </Text>
             <Stack
@@ -92,7 +90,12 @@ import {
                 size={'lg'}
                 fontWeight={'normal'}
                 px={6}
-                leftIcon={<PlayIcon h={4} w={4} color={'gray.300'} />}>
+                bg={useColorModeValue('blue.100', undefined)}
+                leftIcon={<PlayIcon h={4} w={4} color={useColorModeValue('gray.700', 'gray.300')} />}
+                _hover={{
+                  bg: useColorModeValue('blue.100', undefined)
+                }}
+              >
                 How It Works
               </Button>
             </Stack>
@@ -110,7 +113,7 @@ import {
               top={'-20%'}
               left={0}
               zIndex={-1}
-              color={useColorModeValue('blue.50', 'blue.400')}
+              color={useColorModeValue('blue.100', 'blue.400')}
             />
             <Box
               position={'relative'}
@@ -130,11 +133,13 @@ import {
                 left={'50%'}
                 top={'50%'}
                 transform={'translateX(-50%) translateY(-50%)'}
+                zIndex={1}
               />
               <Image
                 alt={'Hero Image'}
-                fit={'cover'}
-                align={'center'}
+                objectFit={'cover'}
+                layout={'fill'}
+                alignItems={'center'}
                 w={'100%'}
                 h={'100%'}
                 src={
