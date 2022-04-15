@@ -32,7 +32,7 @@ SQLAlchemy = "==1.4.35"
 cloud-sql-python-connector = {extras = ["pg8000"], version = "*"}
 bcrypt = "*"
 alembic = "*"
-psycopg2 = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 

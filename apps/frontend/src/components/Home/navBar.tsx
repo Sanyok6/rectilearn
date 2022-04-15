@@ -63,7 +63,7 @@ export default function NavBar() {
   const Links = links.filter((i) => i.url !== pathname.toLowerCase());
   return (
     <>
-      <Box bg={'transparent'} px={4}>
+      <Box bg={useColorModeValue('rgba(0, 0, 0, 0.05)', 'rgba(0, 0, 0, 0.5)')} px={4}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
             <Box fontFamily={"pacifico"}>Rectilearn</Box>
             <HStack
