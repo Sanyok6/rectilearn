@@ -30,3 +30,79 @@ def create_user(user: schemas.UserCreate):
             status_code=status.HTTP_409_CONFLICT,
             detail="User with that email already exists",
         )
+
+
+def create_study_set(study_set: schemas.StudySetCreate, creator_id: int):
+    db_study_set = models.StudySets(
+        subject=study_set.subject,
+        creator=creator_id
+    )
+
+    with Session(database.engine) as session:
+        session.add(db_study_set)
+        session.commit()
+
+        if study_set.questions:
+            for question in study_set.questions:
+                add_question(db_study_set.id, question)
+
+        session.refresh(db_study_set)
+        return db_study_set
+
+
+def get_study_sets(creator_id: int):
+    with Session(database.engine) as session:
+        return (
+            session.query(models.StudySets)
+            .filter(models.StudySets.creator == creator_id)
+            .all()
+        )
+
+
+def get_study_set(study_set_id: int):
+    with Session(database.engine) as session:
+        return (
+            session.query(models.StudySets)
+            .filter(models.StudySets.id == study_set_id)
+            .first()
+        )
+
+
+def add_question(study_set_id: int, question: schemas.StudySetQuestionCreate):
+    db_question = models.StudySetQuestions(
+        question=question.question,
+        answers=question.answers,
+        study_set=study_set_id,
+    )
+    with Session(database.engine) as session:
+        session.add(db_question)
+        session.commit()
+        session.refresh(db_question)
+        return db_question
+
+
+def delete_question(question_id: int):
+    with Session(database.engine) as session:
+        session.query(models.StudySetQuestions).filter(
+            models.StudySetQuestions.id == question_id
+        ).delete()
+        session.commit()
+        return True
+
+
+def get_question(question_id: int):
+    with Session(database.engine) as session:
+        return (
+            session.query(models.StudySetQuestions)
+            .filter(models.StudySetQuestions.id == question_id)
+            .first()
+        )
+
+
+def delete_studyset(study_set_id: int):
+    with Session(database.engine) as session:
+        session.query(models.StudySets).filter(
+            models.StudySets.id == study_set_id
+        ).delete()
+        session.commit()
+        return True

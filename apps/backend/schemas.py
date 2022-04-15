@@ -32,8 +32,7 @@ class UserCreate(UserBase):
         orm_mode = True
 
 
-class StudySetQuestions(BaseModel):
-    id: int
+class StudySetQuestionCreate(BaseModel):
     question: str
     answers: typing.List[str]
 
@@ -41,9 +40,16 @@ class StudySetQuestions(BaseModel):
         orm_mode = True
 
 
+class StudySetQuestions(StudySetQuestionCreate):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
 class StudySetCreate(BaseModel):
-    creator: int
-    questions: typing.List[StudySetQuestions]
+    subject: str
+    questions: typing.Optional[typing.List[StudySetQuestionCreate]] = None
 
     class Config:
         orm_mode = True
@@ -51,7 +57,9 @@ class StudySetCreate(BaseModel):
 
 class StudySet(StudySetCreate):
     id: int
+    creator: int
     created_at: datetime
+    questions: typing.List[StudySetQuestions]
 
     class Config:
         orm_mode = True
