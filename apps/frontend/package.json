@@ -17,6 +17,7 @@
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@fontsource/pacifico": "^4.5.5",
+    "axios": "^0.26.1",
     "framer-motion": "^6",
     "kaboom": "^2000.2.9",
     "next": "12.0.8",
