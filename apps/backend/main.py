@@ -114,15 +114,12 @@ def create_user(user: schemas.UserCreate):
 def create_study_set(
     study_set: schemas.StudySetCreate, user: schemas.User = Depends(get_current_user)
 ):
-    print("here")
     v = crud.create_study_set(study_set, user.id)
-    print(v)
     return v
 
 
 @app.get("/studysets", response_model=typing.List[schemas.StudySet])
 def get_study_set(user: schemas.User = Depends(get_current_user)):
-    print(user.id)
     return crud.get_study_sets(user.id)
 
 

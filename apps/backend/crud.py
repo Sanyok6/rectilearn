@@ -44,7 +44,6 @@ def create_study_set(study_set: schemas.StudySetCreate, creator_id: int):
 
         if study_set.questions:
             for question in study_set.questions:
-                print("added question")
                 add_question(db_study_set.id, question)
 
         session.refresh(db_study_set)
