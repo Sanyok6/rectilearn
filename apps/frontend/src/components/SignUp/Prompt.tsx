@@ -13,8 +13,9 @@ import {
     useColorModeValue,
 } from '@chakra-ui/react';
 import React from 'react';
-import { PasswordField } from './PasswordField';
+import { PasswordField } from '../PasswordField';
 import { useRouter } from 'next/router';
+import SignUpForm from './Form';
 
 const LoginPage = () => {
     const Router = useRouter();
@@ -35,33 +36,7 @@ const LoginPage = () => {
                 </HStack>
                 </Stack>
             </Stack>
-            <Box
-                py={{ base: '6', sm: '8' }}
-                px={{ base: '4', sm: '10' }}
-                bg={useColorModeValue('white', 'gray.700')}
-                boxShadow={{ base: 'none', sm: useColorModeValue('md', 'md-dark') }}
-                borderRadius={'xl'}
-            >
-                <Stack spacing="6">
-                    <Stack spacing="5">
-                        <FormControl>
-                        <FormLabel htmlFor="email">Email</FormLabel>
-                        <Input id="email" type="email" bg={useColorModeValue(undefined, 'RGBA(0, 0, 0, 0.16)')} />
-                        </FormControl>
-                        <FormControl>
-                        <FormLabel htmlFor="username">Username</FormLabel>
-                        <Input id="username" type="username" bg={useColorModeValue(undefined, 'RGBA(0, 0, 0, 0.16)')} />
-                        </FormControl>
-                        <PasswordField />
-                    </Stack>
-                    <HStack justify="space-between">
-                        <Checkbox defaultIsChecked>Remember me</Checkbox>
-                    </HStack>
-                    <Stack spacing="6">
-                        <Button variant="primary" bg={"blue.400"} color={"white"} _hover={{ transform: "scale(1.01)" }}>Sign Up</Button>
-                    </Stack>
-                </Stack>
-            </Box>
+            <SignUpForm />
             </Stack>
         </Container>
     );

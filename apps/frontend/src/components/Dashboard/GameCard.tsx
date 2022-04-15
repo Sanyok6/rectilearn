@@ -11,7 +11,7 @@ import {
     Tooltip,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { Image } from '../utils/next-chakra-image';
+import { Image } from '../../utils/next-chakra-image';
 
 interface game {
     id: number;

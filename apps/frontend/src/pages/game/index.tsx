@@ -45,7 +45,6 @@ async function game(beforeStart: any, SPEED: any, player: any, wallXY: any) {
 }
 
 const Game: NextPage = () => {
-    const [ka, setK] = useState<KaboomCtx>();
     const cRef = useRef<HTMLCanvasElement>(null);
     useEffect(() => {
         (async function () {
@@ -56,7 +55,6 @@ const Game: NextPage = () => {
             }
             const mod = await import("kaboom");
             const kab = mod.default({ canvas: cRef.current || undefined });
-            setK(kab);
             let start = false;
             const SPEED = 320;
             let player: any;
@@ -132,7 +130,6 @@ const Game: NextPage = () => {
                 kab.origin("center"),
             ]);
         })()
-        return () => ka?.every(destroy);
     }, []);
     return (
         <>

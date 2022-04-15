@@ -11,7 +11,7 @@ import {
     Tooltip,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { Image } from '../utils/next-chakra-image';
+import { Image } from '../../utils/next-chakra-image';
 
 import { Icon, IconButton, IconButtonProps, LightMode } from '@chakra-ui/react';
 import { FiInfo, FiPlay, FiStar } from 'react-icons/fi';

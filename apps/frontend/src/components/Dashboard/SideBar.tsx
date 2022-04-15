@@ -43,8 +43,8 @@ import {
   FiMoon,
 } from "react-icons/fi";
 import { IconType } from "react-icons";
-import { SectionType } from "../pages/dashboard";
-import DashboardSettingsCtx from "../lib/dashboardSettings";
+import { SectionType } from "../../pages/dashboard";
+import DashboardSettingsCtx from "../../lib/dashboardSettings";
 
 interface LinkItemProps {
   name: string;
@@ -52,10 +52,6 @@ interface LinkItemProps {
 }
 
 const LinkItems: Array<LinkItemProps> = [
-  //   { name: 'Home', icon: FiHome },
-  //   { name: 'Trending', icon: FiTrendingUp },
-  //   { name: 'Favourites', icon: FiStar },
-  //   { name: 'Settings', icon: FiSettings },
   { name: "Sets", icon: FiStar },
   { name: "Games", icon: FiBell },
   { name: "Explore", icon: FiCompass },
@@ -72,7 +68,7 @@ export default function Sidebar({
   return (
     <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
       <SidebarContent
-        onClose={() => onClose}
+        onClose={onClose}
         display={{ base: "none", md: "block" }}
         alterSection={alterSection}
       />

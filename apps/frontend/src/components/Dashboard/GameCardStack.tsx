@@ -1,5 +1,5 @@
 import {
-    Box, Center, HStack, ScaleFade, Skeleton, useBreakpointValue, useDisclosure, VStack,
+    Box, Center, ScaleFade, Skeleton, useBreakpointValue, useDisclosure, VStack,
 } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import CardGrid from './CardGrid';

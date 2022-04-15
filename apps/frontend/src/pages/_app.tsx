@@ -1,7 +1,9 @@
 import type { AppProps } from "next/app";
 import { ChakraProvider } from "@chakra-ui/react";
 import theme from "../lib/theme";
-import NextNProgress from "nextjs-progressbar";
+import dynamic from "next/dynamic";
+
+const NextNProgress = dynamic(() => import("nextjs-progressbar"));
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
