@@ -35,13 +35,18 @@ def create_user(user: schemas.UserCreate):
 def create_study_set(study_set: schemas.StudySetCreate, creator_id: int):
     db_study_set = models.StudySets(
         subject=study_set.subject,
-        creator=creator_id,
+        creator=creator_id
     )
-    print("uere")
+
     with Session(database.engine) as session:
         session.add(db_study_set)
-        print("added")
         session.commit()
+
+        if study_set.questions:
+            for question in study_set.questions:
+                print("added question")
+                add_question(db_study_set.id, question)
+
         session.refresh(db_study_set)
         return db_study_set
 
