@@ -14,6 +14,7 @@ import * as React from 'react';
 import { HiEye, HiEyeOff } from 'react-icons/hi';
 
 export const PasswordField = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
+  const { onChange } = props;
   const { isOpen, onToggle } = useDisclosure()
   const inputRef = React.useRef<HTMLInputElement>(null)
 
@@ -43,6 +44,7 @@ export const PasswordField = React.forwardRef<HTMLInputElement, InputProps>((pro
           name="password"
           type={isOpen ? 'text' : 'password'}
           autoComplete="current-password"
+          onChange={onChange}
           required
           bg={useColorModeValue(undefined, 'RGBA(0, 0, 0, 0.16)')}
           {...props}

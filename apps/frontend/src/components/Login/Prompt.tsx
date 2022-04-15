@@ -16,15 +16,47 @@ import {
     chakra,
     useToast,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, {useState} from 'react';
+import requestApi from '../../utils/api';
 import { PasswordField } from './PasswordField';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { FiUser } from 'react-icons/fi';
+import { BiHandicap } from 'react-icons/bi';
+
+
+async function handleLogin(email: string, password: string): Promise<void> {
+    console.log("clicked")
+    const formData = new FormData();
+    formData.append('username', email);
+    formData.append('password', password);
+    requestApi('auth/token', 'POST', {'Content-Type': `multipart/form-data}`}, formData).then((response) => {
+        console.log(response)
+        if (response.status === 200) {
+            localStorage.setItem('accessToken', response.data['access_token']);
+        } else {
+            // Show error message
+        }
+    });
+}
 
 const LoginPage = () => {
     const Router = useRouter();
     const toast = useToast();
+
+    const [email, updateEmail] = useState('');
+    const [password, updatePassword] = useState('');
+
+    const handleEmailChange = (newEmail: any) => {
+        console.log("email changed")
+        updateEmail(newEmail);
+    }
+
+    const handlePasswordChange = (newPassword: any) => {
+        console.log("password changed")
+        updatePassword(newPassword);
+    }
+
     return (
         <Container maxW="lg" py={{ base: '12', md: '24' }} px={{ base: '0', sm: '8' }}>
             <Stack spacing="8">
@@ -52,9 +84,9 @@ const LoginPage = () => {
                     <Stack spacing="5">
                         <FormControl>
                         <FormLabel htmlFor="email">Email</FormLabel>
-                        <Input id="email" type="email" bg={useColorModeValue(undefined, 'RGBA(0, 0, 0, 0.16)')} />
+                        <Input id="email" onChange={handleEmailChange} type="email" bg={useColorModeValue(undefined, 'RGBA(0, 0, 0, 0.16)')} />
                         </FormControl>
-                        <PasswordField />
+                        <PasswordField onChange={handlePasswordChange} />
                     </Stack>
                     <HStack justify="space-between">
                         <Checkbox defaultIsChecked>Remember me</Checkbox>
@@ -74,8 +106,8 @@ const LoginPage = () => {
                         </Button>
                     </HStack>
                     <Stack spacing="6">
-                        <Button variant="primary" bg={"blue.400"} color={"white"} _hover={{ transform: "scale(1.01)" }}>Login</Button>
-                        <HStack>
+`                        <Button variant="primary" bg={"blue.400"} color={"white"} _hover={{ transform: "scale(1.01)" }} onClick={() => handleLogin(email, password)}>Login</Button>
+`                        <HStack>
                         <Divider />
                         <Text fontSize="sm" whiteSpace="nowrap" color="muted">
                             or
