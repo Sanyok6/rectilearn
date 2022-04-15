@@ -22,7 +22,7 @@ class StudySets(Base):
     id = Column(Integer, autoincrement=True, primary_key=True, unique=True)
     subject = Column(String(255))
     creator = Column(Integer, ForeignKey("users.id"))
-    questions = relationship("StudySetQuestions")
+    questions = relationship("StudySetQuestions", lazy="subquery")
     created_at = Column(DateTime(), default=datetime.utcnow())
 
 

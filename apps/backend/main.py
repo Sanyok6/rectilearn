@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from http import HTTPStatus
 import typing
 import os
 from typing import Optional
@@ -16,7 +17,7 @@ from settings import *
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token/")
 
 app = FastAPI()
 
@@ -107,6 +108,85 @@ async def read_users_me(current_user: schemas.User = Depends(get_current_user)):
 def create_user(user: schemas.UserCreate):
     user.password = get_password_hash(user.password)
     return crud.create_user(user)
+
+
+@app.post("/studysets/new", response_model=schemas.StudySet)
+def create_study_set(
+    study_set: schemas.StudySetCreate, user: schemas.User = Depends(get_current_user)
+):
+    print("here")
+    v = crud.create_study_set(study_set, user.id)
+    print(v)
+    return v
+
+
+@app.get("/studysets", response_model=typing.List[schemas.StudySet])
+def get_study_set(user: schemas.User = Depends(get_current_user)):
+    print(user.id)
+    return crud.get_study_sets(user.id)
+
+
+@app.post(
+    "/studysets/{study_set_id}/add_question", response_model=schemas.StudySetQuestions
+)
+def new_question(
+    study_set_id: int,
+    question: schemas.StudySetQuestionCreate,
+    user: schemas.User = Depends(get_current_user),
+):
+    study_set = crud.get_study_set(study_set_id)
+    if study_set.creator != user.id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authorized to add question to this study set",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return crud.add_question(study_set_id, question)
+
+
+@app.delete("/studysets/{study_set_id}/delete_question")
+def delete_question(
+    study_set_id: int,
+    question_id: int,
+    user: schemas.User = Depends(get_current_user),
+):
+    study_set = crud.get_study_set(study_set_id)
+    if study_set.creator != user.id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authorized to delete this study set",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    if crud.get_question(question_id=question_id) is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No question found with this id",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    if crud.get_question(question_id=question_id).study_set != study_set_id:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No question found for this study set",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    if crud.delete_question(study_set_id):
+        return HTTPStatus(status.HTTP_200_OK)
+
+
+@app.delete("/studysets/{study_set_id}/delete_study_set")
+def delete_study_set(
+    study_set_id: int,
+    user: schemas.User = Depends(get_current_user),
+):
+    study_set = crud.get_study_set(study_set_id)
+    if study_set.creator != user.id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authorized to delete this study set",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    if crud.delete_studyset(study_set_id):
+        return HTTPStatus(status.HTTP_200_OK)
 
 
 if __name__ == "__main__":
