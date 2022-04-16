@@ -151,7 +151,7 @@ function RewriteModal({ question, answer, response, open, setOpen }: { question:
     )
 }
 
-export default function Questions({ question, answer, open }: { question: string, answer: string, open: boolean, isOpen: any }) {
+export default function Questions({ question, answer, open }: { question: string, answer: string, open: boolean }) {
     return (
         <AskQuestionModal question={question} answer={answer} questionOpen={open} />
     )

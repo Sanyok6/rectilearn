@@ -207,7 +207,7 @@ const lavaGame = () => {
         return (
         <>
             <canvas ref={cRef}></canvas>
-            <Questions question="What is 2+2" answer="4" />
+            <Questions question="What is 2+2" answer="4" open={true} />
         </>
     )}
 
