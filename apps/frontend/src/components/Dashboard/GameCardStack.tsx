@@ -56,7 +56,7 @@ const games = [
 const GameCardStack = () => {
     const [shouldOpen, setShouldOpen] = useState<boolean>(false);
     useEffect(() => {
-        setShouldOpen(false);
+        setShouldOpen(true);
     }, []);
     return (
         <>

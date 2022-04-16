@@ -73,7 +73,7 @@ const sets = [
 const CardStack = () => {
     const [shouldOpen, setShouldOpen] = useState<boolean>(false);
     useEffect(() => {
-        setShouldOpen(false);
+        setShouldOpen(true);
     }, []);
     return (
         <>
