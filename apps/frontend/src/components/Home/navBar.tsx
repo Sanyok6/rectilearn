@@ -76,7 +76,7 @@ export default function NavBar() {
   });
   return (
     <>
-      <Box bg={'transparent'} px={4}>
+      <Box bg={useColorModeValue('rgba(0, 0, 0, 0.05)', 'rgba(0, 0, 0, 0.5)')} px={4}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
             <Box fontFamily={"pacifico"}>Rectilearn</Box>
             <HStack
@@ -121,7 +121,7 @@ export default function NavBar() {
             </HStack>
         </Flex>
 
-        {isOpen ? (
+        {isOpen && (
           <Box pb={4} display={{ md: 'none' }}>
             <Stack as={'nav'} spacing={4}>
               {Links.map((link, index) => (
@@ -129,9 +129,8 @@ export default function NavBar() {
               ))}
             </Stack>
           </Box>
-        ) : null}
+        )}
       </Box>
-
     </>
   );
 }

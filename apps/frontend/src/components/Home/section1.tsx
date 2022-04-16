@@ -1,22 +1,23 @@
 import {
-    Container,
-    Stack,
-    Flex,
-    Box,
-    Heading,
-    Text,
-    Button,
-    Icon,
-    IconButton,
-    createIcon,
-    IconProps,
-    useColorModeValue,
-    HStack,
-    chakra,
-    Link
-  } from '@chakra-ui/react';
-  import "@fontsource/pacifico"
+  Container,
+  Stack,
+  Flex,
+  Box,
+  Heading,
+  Text,
+  Button,
+  Icon,
+  IconButton,
+  createIcon,
+  IconProps,
+  useColorModeValue,
+  HStack,
+  chakra,
+  Link
+} from '@chakra-ui/react';
+import "@fontsource/pacifico"
 import NextLink from 'next/link';
+
 import { Image } from '../../utils/next-chakra-image';
 
 import Typewriter from 'typewriter-effect';
@@ -54,10 +55,10 @@ export default function CallToActionWithVideo() {
               <br />
               <HStack spacing={5}>
                 <Text as={'span'} color={useColorModeValue('black', 'white')}>studying is</Text>
-                <Box color={'blue.400'} marginInlineStart={"0.1em !important"}>
+                <Box color={'blue.400'} >
                   <Typewriter
                     options={{
-                      strings: ["Exciting", "Enjoyable", "Easier", "Efficient", "Cooler", "Better"],
+                      strings: ["Exciting", "Easier", "Efficient", "Cooler", "Better"],
                       autoStart: true,
                       loop: true,
                     }}
