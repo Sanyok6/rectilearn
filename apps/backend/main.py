@@ -153,14 +153,13 @@ def login_for_access_token(response: Response, form_data: OAuth2PasswordRequestF
         data={"email": user.email},
         expires_delta=access_token_expires,
     )
-    # response.set_cookie(key="access_token", value=access_token)
     response.set_cookie(
-            "Authorization",
-            value=f"Bearer {access_token}",
-            httponly=True,
-            
-            expires=access_token_expires.total_seconds(),
-        )
+        "Authorization",
+        value=f"Bearer {access_token}",
+        httponly=True,
+        secure=True,
+        expires=access_token_expires.total_seconds(),
+    )
     return {"access_token": access_token, "token_type": "bearer"}
 
 

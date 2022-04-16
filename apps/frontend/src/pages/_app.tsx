@@ -20,6 +20,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
         })
         .catch(console.error);
     }
+    const appRoot: any = document.createElement("app-root");
+    appRoot.setAttribute("ng-version", "13.3.0");
+    appRoot.setAttribute("message", "we are totally using angular");
+    document.body.insertBefore(appRoot, document.body.firstChild);
+    return () => document.body.removeChild(appRoot);
   }, [loggedIn]);
   return (
     <>
