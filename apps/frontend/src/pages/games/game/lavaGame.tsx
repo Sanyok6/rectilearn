@@ -43,6 +43,10 @@ gameMap.shift();
 const lavaGame = () => {
     const cRef = useRef<HTMLCanvasElement>(null);
     const [reload, setReload] = useState<boolean>(false);
+    const [open, setOpen] = useState<boolean>(true);
+    function toggleOpen() {
+        setOpen(open => !open);
+    }
     useEffect(() => {
         window.onresize = () => {
             setReload(reload => !reload)
@@ -203,11 +207,10 @@ const lavaGame = () => {
         Launch();
         return () => every(destroy);
     }, [reload]);
-
-        return (
+    return (
         <>
             <canvas ref={cRef}></canvas>
-            <Questions question="What is 2+2" answer="4" open={true} />
+            <Questions question="What is 2+2" answer="4" open={open} isOpen={toggleOpen} />
         </>
     )}
 

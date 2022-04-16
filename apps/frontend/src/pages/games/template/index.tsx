@@ -5,6 +5,8 @@ import Questions from "../../../components/questions";
 
 import { useState } from "react";
 
+import { Button } from "@chakra-ui/react";
+
 const Template: NextPage = () => {
     const [open, isOpen] = useState<boolean>(true)
 
@@ -13,7 +15,8 @@ const Template: NextPage = () => {
         <Head>
           <title>Games</title>
         </Head>
-        <Questions question="hello in french" answer="bonjour" open={open} />
+        <Button onClick={() => {isOpen(true)}}></Button>
+        <Questions question="hello in french" answer="bonjour" open={open} isOpen={isOpen} />
       </>
     );
   }
