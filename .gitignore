@@ -4,8 +4,7 @@
 __pycache__
 database.db
 venv
-settings.py
-
+.env
 # vscode
 .vscode
 
