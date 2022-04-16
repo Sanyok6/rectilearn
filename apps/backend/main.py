@@ -6,19 +6,63 @@ from typing import Optional
 import uvicorn
 from fastapi import Depends, FastAPI, HTTPException, status, Response
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-
+from fastapi.security import  OAuth2PasswordRequestForm, OAuth2
+from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-from sqlalchemy.orm import Session
+from fastapi.security.utils import get_authorization_scheme_param
 import crud, models, schemas
-from database import engine
 from settings import *
 
-
+from starlette.requests import Request
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+class OAuth2PasswordBearerCookie(OAuth2):
+    def __init__(
+        self,
+        tokenUrl: str,
+        scheme_name: str = None,
+        scopes: dict = None,
+        auto_error: bool = True,
+    ):
+        if not scopes:
+            scopes = {}
+        flows = OAuthFlowsModel(password={"tokenUrl": tokenUrl, "scopes": scopes})
+        super().__init__(flows=flows, scheme_name=scheme_name, auto_error=auto_error)
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token/")
+    async def __call__(self, request: Request) -> Optional[str]:
+        # header_authorization: str = request.headers.get("Authorization")
+        cookie_authorization: str = request.cookies.get("Authorization")
+
+        # header_scheme, header_param = get_authorization_scheme_param(
+        #     header_authorization
+        # )
+        cookie_scheme, cookie_param = get_authorization_scheme_param(
+            cookie_authorization
+        )
+        print(cookie_authorization)
+
+        # if header_scheme.lower() == "bearer":
+        #     authorization = True
+        #     scheme = header_scheme
+        #     param = header_param
+
+        if cookie_scheme.lower() == "bearer":
+            authorization = True
+            scheme = cookie_scheme
+            param = cookie_param
+
+        else:
+            authorization = False
+
+        if not authorization or scheme.lower() != "bearer":
+            if self.auto_error:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN, detail="Not authenticated"
+                )
+            else:
+                return None
+        return param
+oauth2_scheme = OAuth2PasswordBearerCookie(tokenUrl="auth/token/")
 
 app = FastAPI()
 
@@ -85,11 +129,8 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 
 
 @app.get("/")
-async def index(response: Response):
-    response.set_cookie(
-        key="test_val",
-        value="test123"
-    )
+async def index():
+
     return "Hello"
 
 
@@ -111,15 +152,14 @@ def login_for_access_token(response: Response, form_data: OAuth2PasswordRequestF
         data={"email": user.email},
         expires_delta=access_token_expires,
     )
-    response.set_cookie(key="access_token", value=access_token)
-    # response.set_cookie(
-    #     key="access_token",
-    #     value=access_token,
-    #     expires=int(access_token_expires.total_seconds()),
-    #     httponly=True,
-    #     secure=True,
-    #     samesite=None
-    # )
+    # response.set_cookie(key="access_token", value=access_token)
+    response.set_cookie(
+            "Authorization",
+            value=f"Bearer {access_token}",
+            httponly=True,
+            
+            expires=access_token_expires.total_seconds(),
+        )
     return {"access_token": access_token, "token_type": "bearer"}
 
 
