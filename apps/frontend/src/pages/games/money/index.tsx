@@ -170,7 +170,7 @@ const Game: NextPage = () => {
                 text("Bait: 0"),
                     pos(0, 160),
                     fixed(),
-                    { value: 10 },
+                    { value: 0 },
                 ])
                 function spin() {
                     let spinning = false
