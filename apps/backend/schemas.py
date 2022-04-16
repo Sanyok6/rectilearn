@@ -50,7 +50,7 @@ class StudySetQuestions(StudySetQuestionCreate):
 class StudySetCreate(BaseModel):
     subject: str
     questions: typing.Optional[typing.List[StudySetQuestionCreate]] = None
-
+    is_public: typing.Optional[bool]=None
     class Config:
         orm_mode = True
 

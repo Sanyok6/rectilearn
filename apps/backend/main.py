@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from http import HTTPStatus
 import typing
+import random
 import os
 from typing import Optional
 import uvicorn
@@ -248,6 +249,60 @@ def delete_study_set(
         )
     if crud.delete_studyset(study_set_id):
         return HTTPStatus(status.HTTP_200_OK)
+
+@app.get("/studysets/public", response_model=typing.List[schemas.StudySet])
+def get_public_study_sets():
+    sets=  crud.get_public_study_sets()
+    if len(sets) == 0:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No study sets",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return sets
+
+@app.get("/studysets/{study_set_id}", response_model=schemas.StudySet)  
+def get_study_set_by_id(study_set_id: int, user: schemas.User = Depends(get_current_user)):
+    set =  crud.get_study_set(study_set_id)
+    if set == None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No study set found with this id",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    if set.is_public == False:
+        if set.creator != user.id:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Not authorized to view this study set",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    return set
+
+@app.get("/studysets/questions/random", response_model=schemas.StudySetQuestions)
+def get_random_question(user: schemas.User = Depends(get_current_user)):
+    sets = crud.get_public_study_sets()
+    if len(sets) == 0:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No study sets",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    set = random.choice(sets)
+    questions = crud.get_questions(set.id)
+    print(questions)
+    question = random.choice(questions)
+
+    return question
+
+    
+
+
+@app.post("/logout")
+def logout(response: Response):
+    response.delete_cookie(key="Authorization")
+    return {"message": "Successfully logged out"}
 
 
 if __name__ == "__main__":
