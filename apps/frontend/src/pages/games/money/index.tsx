@@ -2,6 +2,8 @@ import type { NextPage } from "next";
 import { useState, useEffect, useRef } from "react";
 import Questions from "../../../components/questions";
 
+import { useToast } from "@chakra-ui/react";
+
 const mapLayout =
 `
 |||||||||||||||||
@@ -23,6 +25,9 @@ const Game: NextPage = () => {
 
     const cRef = useRef<HTMLCanvasElement>(null);
     const [reload, setReload] = useState<boolean>(false);
+
+    const toast = useToast()
+
     useEffect(() => {
         window.onresize = () => {
             setReload(reload => !reload)
@@ -300,7 +305,13 @@ const Game: NextPage = () => {
                             COST += COST;
                             console.log(COST)
                          } else {
-                             alert("you need $"+COST*5+" for that!")
+                            toast({
+                                title: 'Not enough money',
+                                description: "you need $"+COST*5+" for that upgrade!",
+                                status: 'warning',
+                                duration: 5000,
+                                isClosable: true,
+                              })
                          }
                     }
 
@@ -317,7 +328,13 @@ const Game: NextPage = () => {
                            cash.text = "Cash: " + cash.value;
                            SPEED += 200;
                         } else {
-                            alert("you need $"+SPEED/20+" for that!")
+                            toast({
+                                title: 'Not enough money',
+                                description: "you need $"+SPEED/20+" for that upgrade!",
+                                status: 'warning',
+                                duration: 5000,
+                                isClosable: true,
+                              })
                         }
                     }
 
