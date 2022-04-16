@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import ARRAY, Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import ARRAY, Column, Integer, String, DateTime, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
 from database import Base
@@ -24,7 +24,7 @@ class StudySets(Base):
     creator = Column(Integer, ForeignKey("users.id"))
     questions = relationship("StudySetQuestions", lazy="subquery")
     created_at = Column(DateTime(), default=datetime.utcnow())
-
+    is_public = Column(Boolean, default=False)
 
 class StudySetQuestions(Base):
     __tablename__ = "studyset_questions"
