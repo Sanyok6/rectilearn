@@ -11,6 +11,8 @@ import {
     useDisclosure,  
     InputGroup,
     InputRightElement,
+    Center,
+    HStack
 } from "@chakra-ui/react"
 
 import { CheckIcon, Icon } from "@chakra-ui/icons"
@@ -100,8 +102,18 @@ function RewriteModal({ question, answer, response, open, setOpen }: { question:
             <ModalHeader fontSize={30}>{question}</ModalHeader>
             <ModalBody>
                 <Box margin={5}>
-                    <Text>Correct answer: {answer}</Text>
-                    <Text>You wrote: {response}</Text>
+                    <Center>
+                        <HStack spacing={1}>
+                            <Text>Correct answer: </Text>
+                            <Text color="green.500">{answer}</Text>
+                        </HStack>
+                    </Center>
+                    <Center>
+                        <HStack spacing={1}>
+                            <Text>You wrote: </Text>
+                            <Text color="red.500">{response}</Text>
+                        </HStack>
+                    </Center>
                 </Box>
                 <Formik
                     initialValues={{
