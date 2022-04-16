@@ -22,26 +22,26 @@ import { RiEditLine } from "react-icons/ri"
 import { useState } from "react"
 import { Field, Formik } from "formik";
 
-function AskQuestionModal({ question, answer }: {question: string, answer: string}) {
-    const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: false });
+function AskQuestionModal({ question, answer, isOpen, questionOpen }: {question: string, answer: string, isOpen: boolean, questionOpen: any}) {
+    // const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: false });
 
     const [open, setOpen] = useState<boolean>(false);
     const [value, setValue] = useState<string>("");
 
     function submit() {
         if (value === answer) {
-            onClose();
+            questionOpen(false);
         } else {
-            onClose();
+            questionOpen(false);
             setOpen(true);
         }
     }
 
     return (
         <>
-            <Button onClick={onOpen} position="fixed" bottom={0} left={0} bg={"black"}>Open Modal</Button>
+            {/* <Button onClick={onOpen} position="fixed" bottom={0} left={0} bg={"black"}>Open Modal</Button> */}
 
-            <Modal size={"xl"} closeOnEsc={false} closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
+            <Modal size={"xl"} closeOnEsc={false} closeOnOverlayClick={false} isOpen={isOpen}  onClose={() => void(0)}>
                 <ModalOverlay />
                 <ModalContent>
                 <ModalHeader fontSize={30}>{question}</ModalHeader>
@@ -57,6 +57,7 @@ function AskQuestionModal({ question, answer }: {question: string, answer: strin
                         value={value}
                         onKeyPress={(e) => e.key === "Enter" && submit()}
                         onChange={(e) => setValue(e.target.value)} 
+                        autoComplete={"off"}
                     />
                     <Button onClick={submit} margin={2} colorScheme='blue' width="80%">
                         Submit
@@ -96,7 +97,7 @@ function RewriteModal({ question, answer, response, open, setOpen }: { question:
 
     return (
       <>
-        <Modal size={"xl"} closeOnEsc={false} closeOnOverlayClick={false} isOpen={open} onClose={() => void(0)}>
+        <Modal size={"xl"} closeOnEsc={false} closeOnOverlayClick={false} isOpen={open} onClose={() => void(0)} >
           <ModalOverlay />
           <ModalContent>
             <ModalHeader fontSize={30}>{question}</ModalHeader>
@@ -126,17 +127,17 @@ function RewriteModal({ question, answer, response, open, setOpen }: { question:
                     {({ handleChange, values }) => (
                         <>
                             <InputGroup margin="auto" width={"80%"} size='lg' fontSize="25" textAlign="center" marginBottom={1} >
-                                <Field as={Input} onChange={(e: any) => [handleChange(e), checkCorrect(values, e)]} value={values.i1} name="i1" placeholder='rewrite' fontSize="25" textAlign={"center"} />
+                                <Field as={Input} onChange={(e: any) => [handleChange(e), checkCorrect(values, e)]} value={values.i1} name="i1" placeholder='rewrite' fontSize="25" textAlign={"center"} autoComplete={"off"} />
                                 <InputRightElement>{<Icon as={isCorrect(values.i1) ? CheckIcon : RiEditLine} color={isCorrect(values.i1) ? "green.500" : "yellow.500" } />}</InputRightElement>
                             </InputGroup>
 
                             <InputGroup margin="auto" width={"80%"} size='lg' fontSize="25" textAlign="center" marginBottom={1} >
-                                <Field as={Input} onChange={(e: any) => [handleChange(e), checkCorrect(values, e)]} value={values.i2} name="i2" placeholder='rewrite' fontSize="25" textAlign={"center"} />
+                                <Field as={Input} onChange={(e: any) => [handleChange(e), checkCorrect(values, e)]} value={values.i2} name="i2" placeholder='rewrite' fontSize="25" textAlign={"center"} autoComplete={"off"} />
                                 <InputRightElement>{<Icon as={isCorrect(values.i2) ? CheckIcon : RiEditLine } color={isCorrect(values.i2) ? "green.500" : "yellow.500" } />}</InputRightElement>
                             </InputGroup>
 
                             <InputGroup margin="auto" width={"80%"} size='lg' fontSize="25" textAlign="center" marginBottom={1} >
-                                <Field as={Input} onChange={(e: any) => [handleChange(e), checkCorrect(values, e)]} value={values.i3} name="i3" placeholder='rewrite' fontSize="25" textAlign={"center"} />
+                                <Field as={Input} onChange={(e: any) => [handleChange(e), checkCorrect(values, e)]} value={values.i3} name="i3" placeholder='rewrite' fontSize="25" textAlign={"center"} autoComplete={"off"} />
                                 <InputRightElement>{<Icon as={isCorrect(values.i3) ? CheckIcon : RiEditLine } color={isCorrect(values.i3) ? "green.500" : "yellow.500" } />}</InputRightElement>
                             </InputGroup>
                         </>
@@ -151,7 +152,8 @@ function RewriteModal({ question, answer, response, open, setOpen }: { question:
 }
 
 export default function Questions({ question, answer }: { question: string, answer: string }) {
+    const [open, questionOpen] = useState<boolean>(false)
     return (
-        <AskQuestionModal question={question} answer={answer} />
+        <AskQuestionModal question={question} answer={answer} isOpen={open} questionOpen={questionOpen} />
     )
 }
