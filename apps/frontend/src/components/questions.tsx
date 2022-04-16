@@ -55,7 +55,7 @@ function AskQuestionModal({ question, answer }: {question: string, answer: strin
                         textAlign="center"
                         id="ans"
                         value={value}
-                        onKeyPress={(e) => e.key === "enter" && submit()}
+                        onKeyPress={(e) => e.key === "Enter" && submit()}
                         onChange={(e) => setValue(e.target.value)} 
                     />
                     <Button onClick={submit} margin={2} colorScheme='blue' width="80%">

@@ -35,7 +35,8 @@ def create_user(user: schemas.UserCreate):
 def create_study_set(study_set: schemas.StudySetCreate, creator_id: int):
     db_study_set = models.StudySets(
         subject=study_set.subject,
-        creator=creator_id
+        creator=creator_id,
+        is_public=study_set.is_public
     )
 
     with Session(database.engine) as session:
@@ -89,7 +90,9 @@ def delete_question(question_id: int):
         session.commit()
         return True
 
-
+def get_questions(study_set_id: int):
+    with Session(database.engine) as session:
+        return (session.query(models.StudySetQuestions).filter(models.StudySetQuestions.study_set == study_set_id).all())
 def get_question(question_id: int):
     with Session(database.engine) as session:
         return (
@@ -106,3 +109,12 @@ def delete_studyset(study_set_id: int):
         ).delete()
         session.commit()
         return True
+def get_public_study_sets():
+    with Session(database.engine) as session:
+        return (
+            session.query(models.StudySets)
+            .filter(models.StudySets.is_public == True).filter(models.StudySets.questions!=None)
+            .all()
+        )
+
+

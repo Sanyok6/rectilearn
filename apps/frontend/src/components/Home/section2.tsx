@@ -12,7 +12,7 @@ import FadeIn from "./fadeIn"
 export default function Section2() {
   return (
     <>
-      <Box width={{ base: "80%", sm: "70%" }} margin="auto" textAlign={"left"} mb={10}>
+      <Box width={{ base: "80%", sm: "50%" }} margin="auto" textAlign={"left"} mb={10}>
         <List spacing={20} fontSize={{ base: "15", sm: "50"}} display="flex" flexDir="column" flexWrap="wrap" height="100%">
           <FadeIn>
             <ListItem>
