@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useContext } from 'react';
 import {
   Box,
   Flex,
@@ -18,6 +18,7 @@ import {
   FiMoon,
 } from "react-icons/fi";
 import { useRouter } from 'next/router';
+import AuthCtx from '../../lib/auth';
 
 const links = [
   {
@@ -36,6 +37,10 @@ const links = [
     name: 'Signup',
     url: '/signup'
   },
+  {
+    name: 'Dashboard',
+    url: '/dashboard'
+  }
 ];
 
 const NavLink = ({ children, href }: { children: ReactNode, href: string }) => (
@@ -60,7 +65,15 @@ export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { toggleColorMode } = useColorMode();
   const { pathname } = useRouter();
-  const Links = links.filter((i) => i.url !== pathname.toLowerCase());
+  const ctx = useContext(AuthCtx);
+  const Links = links.filter((i) => {
+    if (["/login", "/signup"].includes(i.url) && ctx.loggedIn) {
+      return false;
+    } else if (i.url === "/dashboard" && !ctx.loggedIn) {
+      return false;
+    }
+    return (i.url !== pathname.toLowerCase())
+  });
   return (
     <>
       <Box bg={'transparent'} px={4}>

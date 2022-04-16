@@ -4,7 +4,7 @@ import typing
 import os
 from typing import Optional
 import uvicorn
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException, status, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
@@ -85,12 +85,16 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 
 
 @app.get("/")
-async def index():
+async def index(response: Response):
+    response.set_cookie(
+        key="test_val",
+        value="test123"
+    )
     return "Hello"
 
 
 @app.post("/auth/token/", response_model=schemas.TokenData)
-def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+def login_for_access_token(response: Response, form_data: OAuth2PasswordRequestForm = Depends()):
     # NOTE: The email is expected as the username
     user: typing.Union[models.User, bool] = authenticate_user(
         form_data.username, form_data.password
@@ -106,6 +110,13 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     access_token = create_access_token(
         data={"email": user.email},
         expires_delta=access_token_expires,
+    )
+    response.set_cookie(
+        key="access_token",
+        value=access_token,
+        expires=int(access_token_expires.total_seconds()),
+        httponly=True,
+        secure=True,
     )
     return {"access_token": access_token, "token_type": "bearer"}
 

@@ -22,14 +22,12 @@ const RefInput = ({ innerRef, ...props }: { innerRef: ((node: HTMLInputElement |
 }
 
 type InputTypes = {
-  email: string,
+  username: string,
   password: string;
-  rememberMe: boolean
 } | {
   email: string,
-  username: string,
+  name: string,
   password: string,
-  rememberMe: boolean
 }
 
 interface IPasswordFieldProps<T> extends InputProps {

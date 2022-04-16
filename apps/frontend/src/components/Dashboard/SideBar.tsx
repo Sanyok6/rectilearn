@@ -57,6 +57,11 @@ const LinkItems: Array<LinkItemProps> = [
   { name: "Explore", icon: FiCompass },
 ];
 
+const LinkItemsBined: Array<LinkItemProps> = [
+  { name: "Sets & ames", icon: FiStar },
+  { name: "Explore", icon: FiCompass },
+]
+
 export default function Sidebar({
   children,
   alterSection,
@@ -105,15 +110,7 @@ interface SidebarProps extends BoxProps {
 
 const SidebarContent = ({ onClose, alterSection, ...rest }: SidebarProps) => {
   const { groupGS } = useContext(DashboardSettingsCtx);
-  let LinkItemsArr = LinkItems;
-  if (groupGS) {
-    LinkItemsArr = LinkItems.slice(2, 3);
-    console.log(LinkItemsArr);
-    LinkItemsArr.unshift({
-      name: "Sets & Games",
-      icon: FiStar
-    });
-  }
+  const LinkItemsArr = groupGS ? LinkItemsBined : LinkItems;
   return (
     <Box
       transition="0.2s ease"

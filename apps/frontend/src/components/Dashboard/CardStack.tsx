@@ -13,7 +13,7 @@ import {
     VStack,
     ScaleFade,
 } from '@chakra-ui/react';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import CardGrid from './CardGrid';
 import Card from './Card';
 import { FiPlus } from 'react-icons/fi';
@@ -71,13 +71,13 @@ const sets = [
 ];
 
 const CardStack = () => {
-    const { isOpen, onToggle } = useDisclosure();
+    const [shouldOpen, setShouldOpen] = useState<boolean>(false);
     useEffect(() => {
-        onToggle();
+        setShouldOpen(false);
     }, []);
     return (
         <>
-            {!isOpen && (
+            {!shouldOpen && (
                 <Center w="100%">
                     <VStack w="40%" mt="2em" spacing={3}>
                         <Skeleton w="80%" h="6em" />
@@ -95,13 +95,13 @@ const CardStack = () => {
                     </VStack>
                 </Center>
             )}
-            <ScaleFade initialScale={0.99} in={isOpen}>
+            <ScaleFade initialScale={0.99} in={shouldOpen}>
                 <Box
                     maxW="7xl"
                     mx="auto"
                     px={{ base: '4', md: '8', lg: '12' }}
                     py={{ base: '6', md: '8', lg: '12' }}
-                    display={isOpen ? undefined : "none"}
+                    display={shouldOpen ? undefined : "none"}
                 >
                     <CardGrid>
                     {sets.map((set) => (

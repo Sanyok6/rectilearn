@@ -18,11 +18,13 @@ import {
 import NextLink from 'next/link';
 import { PasswordField } from "../PasswordField";
 import { FiUser } from "react-icons/fi";
+import { useRouter } from "next/router";
 
 const LoginForm = () => {
     const toast = useToast();
     const bgEmail = useColorModeValue(undefined, 'RGBA(0, 0, 0, 0.16)');
     const guestColor = useColorModeValue("blue", "blue.200");
+    const Router = useRouter();
     return (
         <Box
             py={{ base: '6', sm: '8' }}
@@ -33,22 +35,28 @@ const LoginForm = () => {
         >
             <Formik
                 initialValues={{
-                    email: "",
+                    username: "",
                     password: "",
-                    rememberMe: false
                 }}
                 onSubmit={async (values) => {
-                    const d = new FormData();
-                    Object.entries(values).forEach((val) => {
-                        d.append(val[0], JSON.stringify(val[1]));
-                    });
-                    await fetch("/api/auth/token", {
+                    const res = await fetch("/api/auth/token", {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'multipart/form-data'
+                            'Content-Type': 'application/x-www-form-urlencoded'
                         },
-                        body: d
-                    })
+                        body: new URLSearchParams(values)
+                    }).catch(console.error);
+                    if (res && res.status === 200) {
+                        Router.push("/dashboard");
+                    } else {
+                        toast({
+                            title: "Something went wrong",
+                            description: res ? (await res.json()).detail || "err" : "Something went wrong while trying to sign you up. Please try again.",
+                            status: "error",
+                            isClosable: true,
+                            duration: null
+                        })
+                    }
                     // alert(JSON.stringify(values, null, 2));
                 }}
             >
@@ -58,12 +66,11 @@ const LoginForm = () => {
                             <Stack spacing="5">
                                 <FormControl>
                                     <FormLabel htmlFor="email">Email</FormLabel>
-                                    <Field as={Input} id="email" type="email" name="email" bg={bgEmail} />
+                                    <Field as={Input} id="email" type="email" name="username" bg={bgEmail} />
                                 </FormControl>
                                 <PasswordField errors={errors} touched={touched} />
                             </Stack>
                             <HStack justify="space-between">
-                                <Field as={Checkbox} id="rememberMe" name="rememberMe" defaultIsChecked>Remember me</Field>
                                 <Button
                                     variant="link"
                                     colorScheme="blue"

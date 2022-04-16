@@ -5,7 +5,7 @@ import Head from "next/head";
 import SignUpPage from "../components/SignUp/Prompt";
 import NavBar from "../components/Home/navBar";
 
-const Login: NextPage = () => {
+const SignUp: NextPage = () => {
   return (
     <>
       <Head>
@@ -23,4 +23,4 @@ const Login: NextPage = () => {
   );
 }
 
-export default Login;
+export default SignUp;

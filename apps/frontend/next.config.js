@@ -12,12 +12,37 @@ module.exports = withBundleAnalyzer(withTM({
     return [
       {
         source: '/api/:path*',
-        destination: `http://localhost:3001/:path*`,
+        destination: `http://localhost:8000/:path*`,
       },
       {
         source: '/api/:path*/',
-        destination: `http://localhost:3001/:path*/`,
+        destination: `http://localhost:8000/:path*/`,
       },
     ]
-  }
+  },
+  async headers() {
+		return [
+			{
+				source: "/(.*)",
+				headers: [
+					{
+						key: "X-XSS-Protection",
+						value: "0",
+					},
+					{
+						key: "X-Frame-Options",
+						value: "DENY",
+					},
+					{
+						key: "Permissions-Policy",
+						value: "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=(), interest-cohort=()",
+					},
+					{
+						key: "X-Content-Type-Options",
+						value: "nosniff",
+					},
+				],
+			},
+		];
+	},
 }));

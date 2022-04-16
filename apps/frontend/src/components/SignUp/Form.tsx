@@ -6,14 +6,16 @@ import {
     FormControl,
     FormLabel,
     Input,
-    Checkbox,
-    HStack,
     Button,
+    useToast,
 } from "@chakra-ui/react";
 import { PasswordField } from "../PasswordField";
+import { useRouter } from "next/router";
 
 const SignUpForm = () => {
     const bgFields = useColorModeValue(undefined, 'RGBA(0, 0, 0, 0.16)');
+    const Router = useRouter();
+    const toast = useToast();
     return (
         <Box
             py={{ base: '6', sm: '8' }}
@@ -25,12 +27,29 @@ const SignUpForm = () => {
             <Formik
                 initialValues={{
                     email: "",
-                    username: "",
+                    name: "",
                     password: "",
-                    rememberMe: false
                 }}
-                onSubmit={(values) => {
-                    alert(JSON.stringify(values, null, 2));
+                onSubmit={async (values) => {
+                    const res = await fetch("/api/auth/users/create", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(values)
+                    }).catch(console.error);
+                    if (res && res.status === 200) {
+                        Router.push("/dashboard");
+                    } else {
+                        toast({
+                            title: "Something went wrong",
+                            description: res ? (await res.json()).detail || "err" : "Something went wrong while trying to sign you up. Please try again.",
+                            status: "error",
+                            isClosable: true,
+                            duration: null
+                        })
+                    }
+                    // alert(JSON.stringify(values, null, 2));
                 }}
             >
                 {({ handleSubmit, errors, touched }) => (
@@ -43,13 +62,10 @@ const SignUpForm = () => {
                                 </FormControl>
                                 <FormControl>
                                     <FormLabel htmlFor="username">Username</FormLabel>
-                                    <Field as={Input} id="username" type="username" name="username" bg={bgFields} />
+                                    <Field as={Input} id="username" type="username" name="name" bg={bgFields} />
                                 </FormControl>
                                 <PasswordField errors={errors} touched={touched} />
                             </Stack>
-                            <HStack justify="space-between">
-                                <Field as={Checkbox} id="rememberMe" name="rememberMe" defaultIsChecked>Remember me</Field>
-                            </HStack>
                             <Stack spacing="6">
                                 <Button type="submit" variant="primary" bg={"blue.400"} color={"white"} _hover={{ transform: "scale(1.01)" }}>Sign Up</Button>
                             </Stack>
