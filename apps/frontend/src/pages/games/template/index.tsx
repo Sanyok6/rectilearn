@@ -3,13 +3,17 @@ import { NextPage } from "next";
 
 import Questions from "../../../components/questions";
 
+import { useState } from "react";
+
 const Template: NextPage = () => {
+    const [open, isOpen] = useState<boolean>(false)
+
     return (
       <>
         <Head>
           <title>Games</title>
         </Head>
-        <Questions question="hello in french" answer="bonjour" />
+        <Questions question="hello in french" answer="bonjour" open={open} isOpen={isOpen} />
       </>
     );
   }
