@@ -12,11 +12,7 @@ from models import Base
 # access to the values within the .ini file in use.
 config = context.config
 if settings.PRODUCTION:
-    if settings.USE_HEROKU:
-        config.set_main_option("sqlalchemy.url", "postgresql+psycopg2"+settings.HEROKU_POSTGRESQL_URI)
-
-    else:
-        raise Exception("Migrations not supported in google cloud")
+    config.set_main_option("sqlalchemy.url", "postgresql+psycopg2"+settings.POSTGRESQL_URI)
 
 else:
     # Testing environment
