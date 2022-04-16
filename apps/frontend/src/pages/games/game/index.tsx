@@ -189,7 +189,7 @@ const Game: NextPage = () => {
     return (
         <>
             <canvas ref={cRef}></canvas>
-            <Questions question="t" answer="t" />
+            {/* <Questions question="t" answer="t" /> */}
         </>
     )
 }

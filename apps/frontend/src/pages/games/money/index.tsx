@@ -20,6 +20,7 @@ mapLayout.shift();
 const Game: NextPage = () => {
     const cRef = useRef<HTMLCanvasElement>(null);
     const [reload, setReload] = useState<boolean>(false);
+    const [open, isOpen] = useState<boolean>(false);
     useEffect(() => {
         window.onresize = () => {
             setReload(reload => !reload)
@@ -248,7 +249,7 @@ const Game: NextPage = () => {
     return (
         <>
             <canvas ref={cRef}></canvas>
-            <Questions question="t" answer="t" />
+            <Questions question="t" answer="t" open={open} isOpen={isOpen} />
         </>
     )
 }

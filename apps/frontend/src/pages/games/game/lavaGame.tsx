@@ -181,10 +181,11 @@ const lavaGame = () => {
                     p.dir = -p.dir
                 }
             });
+            player.onCollide("lava", _ => go("gameover"))
             player.onUpdate(() => {
-                if (player.pos.y > get("lava")[0].pos.y) {
-                    go("gameover");
-                }
+                // if (player.pos.y > get("lava")[0].pos.y) {
+                //     go("gameover");
+                // }
                 every("wall", (o) => {
                     if (player.isTouching(o)) {
                         player.moveTo(o.pos.x < player.pos.x ? player.pos.x + 1 : player.pos.x - 1, player.pos.y);
