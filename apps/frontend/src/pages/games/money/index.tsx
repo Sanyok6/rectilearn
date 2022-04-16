@@ -39,7 +39,7 @@ const Game: NextPage = () => {
             await loadSprite("wall", "/sprites/wall.jpeg");
             await loadSprite("water", "/sprites/water.jpeg");
             await loadSprite("grass", "/sprites/grass.png");
-            await loadSprite("bird", "/sprites/bird.png");
+            await loadSprite("fish", "/sprites/fish.png");
             await loadSprite("bg", "/sprites/grassBg.png");
             await loadSprite("rod", "/sprites/rod.png");
 
@@ -170,7 +170,7 @@ const Game: NextPage = () => {
                 text("Bait: 0"),
                     pos(0, 160),
                     fixed(),
-                    { value: 0 },
+                    { value: 10 },
                 ])
                 function spin() {
                     let spinning = false
@@ -221,18 +221,23 @@ const Game: NextPage = () => {
                         }
                     });
                     if (touching && bait.value > 0) {
-                        const bird = add([
-                            sprite("bird", {
+                        const f = add([
+                            sprite("fish", {
                                 width: wallXY
                             }),
-                            pos(player.pos)
+                            pos(rod.pos)
                         ]);
-                        bird.onUpdate(() => {
-                            bird.flipX(Math.random() < 0.5);
-                            bird.moveTo(bird.pos.x - rand(-20, 20), bird.pos.y - rand(-20, 20))
+                        let fPos=100
+                        f.onUpdate(() => {
+                            console.log(-((fPos-100)^2)-50)
+                            fPos-=8;
+                            f.moveTo(player.pos.x + fPos, f.pos.y-((1.2*fPos-100)^2)-50);
+                            if (-((fPos-100)^2)-50 > 52) {
+                                destroy(f);
+                            }
                         })
-                        wait(2, () => {
-                            destroy(bird);
+                        wait(1, () => {
+                            destroy(f);
                         });
                         bait.value --;
                         bait.text = "Bait: " + bait.value
