@@ -1,9 +1,9 @@
 import Head from "next/head";
 import { NextPage } from "next";
 
-import Questions from "./questions";
+import Questions from "../../../components/questions";
 
-const Index: NextPage = () => {
+const Template: NextPage = () => {
     return (
       <>
         <Head>
@@ -14,4 +14,4 @@ const Index: NextPage = () => {
     );
   }
   
-export default Index;
+export default Template;

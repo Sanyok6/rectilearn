@@ -24,7 +24,7 @@ import Typewriter from 'typewriter-effect';
 
 export default function CallToActionWithVideo() {
     return (
-      <Container maxW={'7xl'} height={{ base: "120vh", sm: "100vh" }}>
+      <Container maxW={'7xl'} minHeight={{ base: "120vh", sm: "100vh" }} /* height={{ base: "120vh", sm: "100vh" }} */>
         <Stack
           align={'center'}
           spacing={{ base: 8, md: 10 }}
