@@ -39,8 +39,6 @@ function AskQuestionModal({ question, answer }: {question: string, answer: strin
 
     return (
         <>
-            <Button onClick={onOpen}>Open Modal</Button>
-
             <Modal size={"xl"} closeOnEsc={false} closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
