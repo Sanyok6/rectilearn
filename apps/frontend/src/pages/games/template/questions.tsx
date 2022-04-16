@@ -3,7 +3,8 @@ import {
     Text,
     Button,
     Input, 
-    Modal, 
+    Modal,
+    HStack,
     ModalOverlay, 
     ModalBody,
     ModalHeader, 
@@ -12,6 +13,8 @@ import {
     useDisclosure,  
     InputGroup,
     InputRightElement,
+    Stack,
+    Center,
 } from "@chakra-ui/react"
 
 import { CheckIcon, EditIcon, Icon } from "@chakra-ui/icons"
@@ -124,8 +127,18 @@ function RewriteModal({ question, answer, response, open }: {question:string, an
             <ModalBody>
 
                 <Box margin={5}>
-                    <Text>Correct answer: {answer}</Text>
-                    <Text>You wrote: {response}</Text>
+                    <Center>
+                        <HStack spacing={1}>
+                            <Text>Correct answer: </Text>
+                            <Text color="green.500">{answer}</Text>
+                        </HStack>
+                    </Center>
+                    <Center>
+                        <HStack spacing={1}>
+                            <Text>You wrote: </Text>
+                            <Text color="red.500">{response}</Text>
+                        </HStack>
+                    </Center>
                 </Box>
                 <Box id="rewriteBox" onKeyUp={check}>
                     <InputGroup margin="auto" width={"80%"} size='lg' fontSize="25" textAlign="center" marginBottom={1} >
