@@ -23,7 +23,7 @@ import { useState } from "react"
 import { Field, Formik } from "formik";
 
 function AskQuestionModal({ question, answer }: {question: string, answer: string}) {
-    const { isOpen, onOpen, onClose } = useDisclosure({defaultIsOpen:true});
+    const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: false });
 
     const [open, setOpen] = useState<boolean>(false);
     const [value, setValue] = useState<string>("");
@@ -39,7 +39,7 @@ function AskQuestionModal({ question, answer }: {question: string, answer: strin
 
     return (
         <>
-            <Button onClick={onOpen}>Open Modal</Button>
+            <Button onClick={onOpen} position="fixed" bottom={0} left={0} bg={"black"}>Open Modal</Button>
 
             <Modal size={"xl"} closeOnEsc={false} closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
@@ -150,14 +150,8 @@ function RewriteModal({ question, answer, response, open, setOpen }: { question:
     )
 }
 
-
-export default function Questions() {
-
+export default function Questions({ question, answer }: { question: string, answer: string }) {
     return (
-        <>
-            <AskQuestionModal question="hello" answer="bonjour" />
-            {/* <RewriteModal word="test" /> */}
-        </>
+        <AskQuestionModal question={question} answer={answer} />
     )
-
 }

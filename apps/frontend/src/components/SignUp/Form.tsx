@@ -31,7 +31,7 @@ const SignUpForm = () => {
                     password: "",
                 }}
                 onSubmit={async (values) => {
-                    const res = await fetch("/api/auth/users/create", {
+                    const res = await fetch("/api/auth/users/create/", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'

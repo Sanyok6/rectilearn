@@ -8,12 +8,13 @@ module.exports = withBundleAnalyzer(withTM({
   images: {
     domains: ['media.istockphoto.com', 'images.unsplash.com'],
   },
+  trailingSlash: true,
   async rewrites() {
     return [
-      {
-        source: '/api/:path*',
-        destination: `http://localhost:8000/:path*`,
-      },
+    //   {
+    //     source: '/api/:path*',
+    //     destination: `http://localhost:8000/:path*`,
+    //   },
       {
         source: '/api/:path*/',
         destination: `http://localhost:8000/:path*/`,

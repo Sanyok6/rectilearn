@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import { useState, useEffect, useRef } from "react";
+import Questions from "../../../components/questions";
 
 const mapLayout =
 `
@@ -26,6 +27,7 @@ const Game: NextPage = () => {
         if (cRef.current) {
             cRef.current.style.width = "100vw";
             cRef.current.style.height= "100vh";
+            cRef.current.style.position = "fixed";
             cRef.current.focus();
         }
         async function Launch() {
@@ -187,6 +189,7 @@ const Game: NextPage = () => {
     return (
         <>
             <canvas ref={cRef}></canvas>
+            <Questions question="t" answer="t" />
         </>
     )
 }

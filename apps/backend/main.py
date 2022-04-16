@@ -111,17 +111,19 @@ def login_for_access_token(response: Response, form_data: OAuth2PasswordRequestF
         data={"email": user.email},
         expires_delta=access_token_expires,
     )
-    response.set_cookie(
-        key="access_token",
-        value=access_token,
-        expires=int(access_token_expires.total_seconds()),
-        httponly=True,
-        secure=True,
-    )
+    response.set_cookie(key="access_token", value=access_token)
+    # response.set_cookie(
+    #     key="access_token",
+    #     value=access_token,
+    #     expires=int(access_token_expires.total_seconds()),
+    #     httponly=True,
+    #     secure=True,
+    #     samesite=None
+    # )
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@app.get("/auth/users/me", response_model=schemas.User)
+@app.get("/auth/users/me/", response_model=schemas.User)
 async def read_users_me(current_user: schemas.User = Depends(get_current_user)):
     return current_user
 

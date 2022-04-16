@@ -6,21 +6,23 @@ import {
     FormControl,
     FormLabel,
     Input,
-    Checkbox,
     HStack,
     Button,
     Divider,
     Text,
     chakra,
     Link,
-    useToast
+    useToast,
 } from "@chakra-ui/react";
 import NextLink from 'next/link';
 import { PasswordField } from "../PasswordField";
 import { FiUser } from "react-icons/fi";
 import { useRouter } from "next/router";
+import { useContext } from "react";
+import AuthCtx from "../../lib/auth";
 
 const LoginForm = () => {
+    const ctx = useContext(AuthCtx);
     const toast = useToast();
     const bgEmail = useColorModeValue(undefined, 'RGBA(0, 0, 0, 0.16)');
     const guestColor = useColorModeValue("blue", "blue.200");
@@ -39,7 +41,7 @@ const LoginForm = () => {
                     password: "",
                 }}
                 onSubmit={async (values) => {
-                    const res = await fetch("/api/auth/token", {
+                    const res = await fetch("/api/auth/token/", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
@@ -47,11 +49,23 @@ const LoginForm = () => {
                         body: new URLSearchParams(values)
                     }).catch(console.error);
                     if (res && res.status === 200) {
-                        Router.push("/dashboard");
+                        const pl = await res.json();
+                        if (pl.access_token) {
+                            ctx.setAccessToken(pl.access_token);
+                            Router.push("/dashboard");
+                        } else {
+                            toast({
+                                title: "Auth Failure",
+                                description:  "Endpoint did not provide us with required authentication payload. Please try again.",
+                                status: "error",
+                                isClosable: true,
+                                duration: null
+                            });
+                        }
                     } else {
                         toast({
                             title: "Something went wrong",
-                            description: res ? (await res.json()).detail || "err" : "Something went wrong while trying to sign you up. Please try again.",
+                            description: res ? (await res.json()).detail || "err" : "Something went wrong while trying to log you in. Please try again.",
                             status: "error",
                             isClosable: true,
                             duration: null

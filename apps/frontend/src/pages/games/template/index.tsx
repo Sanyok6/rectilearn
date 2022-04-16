@@ -9,7 +9,7 @@ const Template: NextPage = () => {
         <Head>
           <title>Games</title>
         </Head>
-        <Questions />
+        <Questions question="hello in french" answer="bonjour" />
       </>
     );
   }

@@ -58,7 +58,7 @@ const LinkItems: Array<LinkItemProps> = [
 ];
 
 const LinkItemsBined: Array<LinkItemProps> = [
-  { name: "Sets & ames", icon: FiStar },
+  { name: "Sets & Games", icon: FiStar },
   { name: "Explore", icon: FiCompass },
 ]
 
