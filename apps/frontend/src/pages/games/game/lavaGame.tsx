@@ -44,9 +44,6 @@ const lavaGame = () => {
     const cRef = useRef<HTMLCanvasElement>(null);
     const [reload, setReload] = useState<boolean>(false);
     const [open, setOpen] = useState<boolean>(true);
-    function toggleOpen() {
-        setOpen(open => !open);
-    }
     useEffect(() => {
         window.onresize = () => {
             setReload(reload => !reload)
@@ -211,7 +208,7 @@ const lavaGame = () => {
     return (
         <>
             <canvas ref={cRef}></canvas>
-            <Questions question="What is 2+2" answer="4" open={open} isOpen={toggleOpen} />
+            <Questions question="What is 2+2" answer="4" open={open} isOpen={setOpen} />
         </>
     )}
 

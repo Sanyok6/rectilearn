@@ -8,19 +8,20 @@ const mapLayout =
 |               |
 |SS             |
 |SS             |
-|               |
-|QQ             |
-|QQ        $$$  |
-|          $$$  |
-|          $$$  |
-|               |
+|            $  |
+|QQ         $$  |
+|QQ        $$$$ |
+|          $$$$ |
+|!         $$$$ |
+|           $$  |
+|@              |
 |||||||||||||||||`.split("\n");
 mapLayout.shift();
 
 const Game: NextPage = () => {
     const cRef = useRef<HTMLCanvasElement>(null);
     const [reload, setReload] = useState<boolean>(false);
-    const [open, isOpen] = useState<boolean>(false);
+    const [open, setOpen] = useState<boolean>(false);
     useEffect(() => {
         window.onresize = () => {
             setReload(reload => !reload)
@@ -37,16 +38,20 @@ const Game: NextPage = () => {
             await loadSprite("wall", "/sprites/wall.jpeg");
             await loadSprite("water", "/sprites/water.jpeg");
             await loadSprite("grass", "/sprites/grass.png");
-            await loadSprite("bird", "/sprites/bird.png");
+            await loadSprite("fish", "/sprites/fish.png");
             await loadSprite("bg", "/sprites/grassBg.png");
             await loadSprite("rod", "/sprites/rod.png");
 
             await loadSprite("money", "/sprites/money.png");
             await loadSprite("store", "/sprites/store.png");
-            await loadSprite("questions", "/sprites/questions.png")
+            await loadSprite("questions", "/sprites/questions.png");
+
+            await loadSprite("upgradeM", "/sprites/upgradeMoney.png");
+            await loadSprite("upgradeS", "/sprites/upgradeSpeed.png");
 
             let start = false;
-            const SPEED = 620;
+            let SPEED = 400;
+            let COST = 1
             add([
                 sprite("bg", {
                     width: width(),
@@ -97,6 +102,24 @@ const Game: NextPage = () => {
                         solid(),
                         "store"
                     ],
+                    "!": () => [
+                        sprite("upgradeM", {
+                            width: wallXY,
+                            height: wallXY
+                        }),
+                        area(),
+                        solid(),
+                        "upgradeM"
+                    ],
+                    "@": () => [
+                        sprite("upgradeS", {
+                            width: wallXY,
+                            height: wallXY
+                        }),
+                        area(),
+                        solid(),
+                        "upgradeS"
+                    ],
                     "Q": () => [
                         sprite("questions", {
                             width: wallXY,
@@ -146,7 +169,7 @@ const Game: NextPage = () => {
                 text("Bait: 0"),
                     pos(0, 160),
                     fixed(),
-                    { value: 0 },
+                    { value: 10 },
                 ])
                 function spin() {
                     let spinning = false
@@ -196,30 +219,39 @@ const Game: NextPage = () => {
                             touching = true;
                         }
                     });
-                    if (touching) {
-                        const bird = add([
-                            sprite("bird", {
+                    if (touching && bait.value > 0) {
+                        const f = add([
+                            sprite("fish", {
                                 width: wallXY
                             }),
-                            pos(player.pos)
+                            pos(rod.pos)
                         ]);
-                        bird.onUpdate(() => {
-                            bird.flipX(Math.random() < 0.5);
-                            bird.moveTo(bird.pos.x - rand(-20, 20), bird.pos.y - rand(-20, 20))
+                        let fPos=100
+                        f.onUpdate(() => {
+                            console.log(-((fPos-100)^2)-50)
+                            fPos-=8;
+                            f.moveTo(player.pos.x + fPos, f.pos.y-((1.2*fPos-100)^2)-50);
+                            if (-((fPos-100)^2)-50 > 52) {
+                                destroy(f);
+                            }
                         })
-                        wait(2, () => {
-                            destroy(bird);
+                        wait(1, () => {
+                            destroy(f);
                         });
+                        bait.value --;
+                        bait.text = "Bait: " + bait.value
                         rod.spin();
                         fish.value ++;
                         fish.text = "Fish: " + fish.value
                     }
+
                     touching=false
+
                     every("store", (s) => {
                         if (player.isTouching(s))
                         touching = true;
                     });
-                    if (touching) {
+                    if (touching && fish.value>0) {
                         const dollar = add([
                             sprite("money", {
                                 width: wallXY
@@ -234,10 +266,61 @@ const Game: NextPage = () => {
                         });
                         fish.value --;
                         fish.text = "Fish: " + fish.value;
-                        cash.value ++;
+                        cash.value += COST;
                         cash.text = "Cash: " + cash.value;
                     }
 
+                    touching=false
+
+                    every("questions", (s) => {
+                        if (player.isTouching(s))
+                        touching = true;
+                    });
+                    if (touching) {
+
+                        setOpen(true)
+
+                        bait.value ++;
+                        bait.text = "Bait: " + bait.value;
+                    }
+
+                    touching=false
+
+                    every("upgradeM", (s) => {
+                        if (player.isTouching(s))
+                        touching = true;
+                    });
+                    if (touching) {
+
+                        if (cash.value >= COST*5) {
+                            cash.value -= COST*5 
+                            cash.text = "Cash: " + cash.value;
+                            console.log(COST)
+                            COST += COST;
+                            console.log(COST)
+                         } else {
+                             alert("you need $"+COST*5+" for that!")
+                         }
+                    }
+
+                    touching=false
+
+                    every("upgradeS", (s) => {
+                        if (player.isTouching(s))
+                        touching = true;
+                    });
+                    if (touching) {
+
+                        if (cash.value >= SPEED/20) {
+                           cash.value -= SPEED/20 
+                           cash.text = "Cash: " + cash.value;
+                           SPEED += 200;
+                        } else {
+                            alert("you need $"+SPEED/20+" for that!")
+                        }
+                    }
+
+                    touching=false
                 });
             }
             onTouchEnd(startGame);
@@ -249,7 +332,7 @@ const Game: NextPage = () => {
     return (
         <>
             <canvas ref={cRef}></canvas>
-            <Questions question="t" answer="t" open={open} isOpen={isOpen} />
+            <Questions question="t" answer="t" open={open} isOpen={setOpen} />
         </>
     )
 }
