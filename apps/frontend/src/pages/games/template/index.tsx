@@ -6,7 +6,7 @@ import Questions from "../../../components/questions";
 import { useState } from "react";
 
 const Template: NextPage = () => {
-    const [open, isOpen] = useState<boolean>(false)
+    const [open, isOpen] = useState<boolean>(true)
 
     return (
       <>
