@@ -22,17 +22,17 @@ import { RiEditLine } from "react-icons/ri"
 import { useState } from "react"
 import { Field, Formik } from "formik";
 
-function AskQuestionModal({ question, answer, isOpen, questionOpen }: {question: string, answer: string, isOpen: boolean, questionOpen: any}) {
-    // const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: false });
+function AskQuestionModal({ question, answer, questionOpen }: { question: string, answer: string, questionOpen: boolean }) {
+    const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: questionOpen });
 
     const [open, setOpen] = useState<boolean>(false);
     const [value, setValue] = useState<string>("");
 
     function submit() {
         if (value === answer) {
-            questionOpen(false);
+            onClose()
         } else {
-            questionOpen(false);
+            onClose()
             setOpen(true);
         }
     }
@@ -41,7 +41,7 @@ function AskQuestionModal({ question, answer, isOpen, questionOpen }: {question:
         <>
             {/* <Button onClick={onOpen} position="fixed" bottom={0} left={0} bg={"black"}>Open Modal</Button> */}
 
-            <Modal size={"xl"} closeOnEsc={false} closeOnOverlayClick={false} isOpen={isOpen}  onClose={() => void(0)}>
+            <Modal size={"xl"} closeOnEsc={false} closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
                 <ModalHeader fontSize={30}>{question}</ModalHeader>
@@ -151,8 +151,8 @@ function RewriteModal({ question, answer, response, open, setOpen }: { question:
     )
 }
 
-export default function Questions({ question, answer, open, isOpen }: { question: string, answer: string, open: boolean, isOpen: any }) {
+export default function Questions({ question, answer, open }: { question: string, answer: string, open: boolean, isOpen: any }) {
     return (
-        <AskQuestionModal question={question} answer={answer} isOpen={open} questionOpen={isOpen} />
+        <AskQuestionModal question={question} answer={answer} questionOpen={open} />
     )
 }

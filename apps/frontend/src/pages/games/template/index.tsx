@@ -13,7 +13,7 @@ const Template: NextPage = () => {
         <Head>
           <title>Games</title>
         </Head>
-        <Questions question="hello in french" answer="bonjour" open={open} isOpen={isOpen} />
+        <Questions question="hello in french" answer="bonjour" open={open} />
       </>
     );
   }
