@@ -33,6 +33,7 @@ cloud-sql-python-connector = {extras = ["pg8000"], version = "*"}
 bcrypt = "*"
 alembic = "*"
 psycopg2-binary = "*"
+python-dotenv = "*"
 
 [dev-packages]
 
