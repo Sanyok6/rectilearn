@@ -10,7 +10,7 @@ class User(Base):
     __tablename__ = "users"
     id = Column(Integer, autoincrement=True, primary_key=True, unique=True)
     email = Column(String, unique=True, primary_key=True)
-    name = Column(String, unique=True)
+    name = Column(String)
     hashed_password = Column(String)
     role = Column(String, default="user")  # admin/user
     created_at = Column(DateTime(), default=datetime.utcnow())
