@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 from http import HTTPStatus
-from turtle import settiltangle
 import typing
 import random
 import os
