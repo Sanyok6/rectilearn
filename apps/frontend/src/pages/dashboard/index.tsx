@@ -54,7 +54,7 @@ const Dashboard: NextPage = ({ access_token }: InferGetServerSidePropsType<typeo
       setAccessToken("");
       Router.push("/api/logout");
     } else if (error) {
-      console.log(error.info);
+      console.error(error.info);
       alert(error);
     }
   }, [data, error]);
