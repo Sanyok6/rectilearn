@@ -4,10 +4,7 @@ import Questions from "../../../components/questions";
 import { Button, useToast } from "@chakra-ui/react";
 
 /*
-& = player
-$ = lava
-_ = floor
-question is handled
+    $ = lava
 */
 const gameMap = `
 |                  |

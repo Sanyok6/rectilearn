@@ -7,12 +7,12 @@ import {
     ModalOverlay, 
     ModalBody,
     ModalHeader,
-    ModalContent,
-    useDisclosure,  
+    ModalContent,  
     InputGroup,
     InputRightElement,
     Center,
-    HStack
+    HStack,
+    chakra
 } from "@chakra-ui/react"
 
 import { CheckIcon, Icon } from "@chakra-ui/icons"
@@ -22,9 +22,18 @@ import { RiEditLine } from "react-icons/ri"
 import { useState } from "react"
 import { Field, Formik } from "formik";
 
-function AskQuestionModal({ question, answer, isOpen, questionOpen }: {question: string, answer: string, isOpen: boolean, questionOpen: any}) {
-    // const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: false });
+const InputGroupExt = chakra(InputGroup, {
+    baseStyle: {
+        margin: "auto",
+        width: "80%",
+        size: "lg",
+        fontSize: "25",
+        textAlign: "center",
+        marginBottom: 1
+    }
+})
 
+function AskQuestionModal({ question, answer, isOpen, questionOpen }: {question: string, answer: string, isOpen: boolean, questionOpen: any}) {
     const [open, setOpen] = useState<boolean>(false);
     const [value, setValue] = useState<string>("");
 
@@ -126,20 +135,14 @@ function RewriteModal({ question, answer, response, open, setOpen }: { question:
                 >
                     {({ handleChange, values }) => (
                         <>
-                            <InputGroup margin="auto" width={"80%"} size='lg' fontSize="25" textAlign="center" marginBottom={1} >
-                                <Field as={Input} onChange={(e: any) => [handleChange(e), checkCorrect(values, e)]} value={values.i1} name="i1" placeholder='rewrite' fontSize="25" textAlign={"center"} autoComplete={"off"} />
-                                <InputRightElement>{<Icon as={isCorrect(values.i1) ? CheckIcon : RiEditLine} color={isCorrect(values.i1) ? "green.500" : "yellow.500" } />}</InputRightElement>
-                            </InputGroup>
-
-                            <InputGroup margin="auto" width={"80%"} size='lg' fontSize="25" textAlign="center" marginBottom={1} >
-                                <Field as={Input} onChange={(e: any) => [handleChange(e), checkCorrect(values, e)]} value={values.i2} name="i2" placeholder='rewrite' fontSize="25" textAlign={"center"} autoComplete={"off"} />
-                                <InputRightElement>{<Icon as={isCorrect(values.i2) ? CheckIcon : RiEditLine } color={isCorrect(values.i2) ? "green.500" : "yellow.500" } />}</InputRightElement>
-                            </InputGroup>
-
-                            <InputGroup margin="auto" width={"80%"} size='lg' fontSize="25" textAlign="center" marginBottom={1} >
-                                <Field as={Input} onChange={(e: any) => [handleChange(e), checkCorrect(values, e)]} value={values.i3} name="i3" placeholder='rewrite' fontSize="25" textAlign={"center"} autoComplete={"off"} />
-                                <InputRightElement>{<Icon as={isCorrect(values.i3) ? CheckIcon : RiEditLine } color={isCorrect(values.i3) ? "green.500" : "yellow.500" } />}</InputRightElement>
-                            </InputGroup>
+                            {
+                                [["i1", values.i1], ["i2", values.i2], ["i3", values.i3]].map((i, ind) => (
+                                    <InputGroupExt key={ind}>
+                                        <Field as={Input} onChange={(e: any) => [handleChange(e), checkCorrect(values, e)]} value={i[1]} name={i[0]} placeholder='rewrite' fontSize="25" textAlign={"center"} autoComplete={"off"} />
+                                        <InputRightElement>{<Icon as={isCorrect(i[1]) ? CheckIcon : RiEditLine} color={isCorrect(i[1]) ? "green.500" : "yellow.500" } />}</InputRightElement>
+                                    </InputGroupExt>
+                                ))
+                            }
                         </>
                     )}
                 </Formik>
