@@ -145,6 +145,13 @@ const CreateCardModal = (props: any) => {
         setV("");
         oC();
     }
+
+    const handleSubmission = () => {
+        console.log("called")
+        fetch("/api/studysets/new/").then((res) => console.log("res", res));
+        onClose();
+    };
+
 	return (
         <>
             <Modal isOpen={isOpen} onClose={onClose}>
@@ -212,7 +219,7 @@ const CreateCardModal = (props: any) => {
                         <Button mt={5} width={"80%"} colorScheme="blue" onClick={() => setQuestions(questions => [...questions, { question: "", answers: [] }])} >Add Question</Button>
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme="blue" mr={3} onClick={onClose}>
+                        <Button colorScheme="blue" mr={3} onClick={handleSubmission}>
                             Add
                         </Button>
                         <Button colorScheme="red" mr={3} onClick={onClose}>
