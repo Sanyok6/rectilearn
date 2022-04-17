@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from http import HTTPStatus
+from turtle import settiltangle
 import typing
 import random
 import os
@@ -146,7 +147,7 @@ def login_for_access_token(response: Response, form_data: OAuth2PasswordRequestF
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token_expires = timedelta(weeks=ACCESS_TOKEN_EXPIRE_WEEKS)
     # Store the username and email in the access token, so we can use it later
     access_token = create_access_token(
         data={"email": user.email},
