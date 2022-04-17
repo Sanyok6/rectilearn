@@ -3,16 +3,21 @@ import {
     Button, 
     Container, 
     Heading, 
-    Stack, 
+    Stack,
     Text, 
     useColorModeValue,
 } from '@chakra-ui/react'
+import NextLink from 'next/link';
 
 import "@fontsource/pacifico"
 
 import FadeIn from './fadeIn'
+import { useContext } from 'react';
+import AuthCtx from '../../lib/auth';
 
 export default function Section3() {
+    const ctx = useContext(AuthCtx);
+
     return (
         <FadeIn>
             <Box as="section" bg="bg-surface" minHeight="50vh" my={40}>
@@ -25,6 +30,7 @@ export default function Section3() {
                     </Text>
                     </Stack>
                     <Stack spacing="3" direction={{ base: 'column', sm: 'row' }} justify="center">
+                    <NextLink href={ctx.loggedIn ? "/dashboard" : "/login"}>
                         <Button 
                             padding="10" 
                             borderRadius={20} 
@@ -35,6 +41,7 @@ export default function Section3() {
                         >
                             <Text>Start learning</Text>
                         </Button>
+                    </NextLink>
                     </Stack>
                 </Stack>
                 </Container>

@@ -9,10 +9,11 @@ import {
     VisuallyHidden,
 } from '@chakra-ui/react';
 import { FaGithub, FaDiscord } from 'react-icons/fa';
-import { ReactNode } from 'react';
+import { ReactNode, useContext } from 'react';
 
 import "@fontsource/pacifico";
 import NextLink from 'next/link';
+import AuthCtx from '../../lib/auth';
 
   
 const SocialButton = ({
@@ -47,6 +48,8 @@ const SocialButton = ({
 };
 
 export default function Footer() {
+  const ctx = useContext(AuthCtx);
+
   return (
     <Box
       bg={useColorModeValue('rgba(0, 0, 0, 0.05)', 'rgba(30, 30, 30, 0.5)')}
@@ -60,15 +63,20 @@ export default function Footer() {
         align={'center'}>
         <Text fontSize='40' fontFamily={'pacifico'}>Rectilearn</Text>
         <Stack direction={'row'} spacing={6}>
-          <NextLink href={"#"} passHref> 
+          {/* <NextLink href={"#"} passHref>    /// about page does not exist
             <Link href={'#'}>About</Link>
-          </NextLink>
-          <NextLink href={"#"} passHref> 
-            <Link href={'#'}>Login</Link>
-          </NextLink>
-          <NextLink href={"#"} passHref> 
-            <Link href={'#'}>Signup</Link>
-          </NextLink>
+          </NextLink> */}
+          {ctx.loggedIn ? 
+          <><NextLink href={"/login"} passHref>
+              <Link>Login</Link>
+            </NextLink>
+            <NextLink href={"/signup"} passHref>
+              <Link>Signup</Link>
+            </NextLink></>
+          :
+          <NextLink href={'/Dashboard'} passHref> 
+            <Link>Dashboard</Link>
+          </NextLink>}
         </Stack>
       </Container>
 
@@ -91,7 +99,7 @@ export default function Footer() {
               </NextLink>
           </Text>
           <Stack direction={'row'} spacing={6}>
-            <SocialButton label={'Github'} href={'#'}>
+            <SocialButton label={'Github'} href={'https://github.com/Sanyok6/TWTcodejam-team-Rectifiers'}>
               <FaGithub />
             </SocialButton>
             <SocialButton label={'Discord'} href={'#'}>

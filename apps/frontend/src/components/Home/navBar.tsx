@@ -25,10 +25,10 @@ const links = [
     name: 'Home',
     url: '/'
   },
-  {
-    name: 'About',
-    url: '/about'
-  },
+  // {
+  //   name: 'About',  // about page does not exist currently
+  //   url: '/about'
+  // },
   {
     name: 'Login',
     url: '/login'
