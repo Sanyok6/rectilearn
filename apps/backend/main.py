@@ -296,6 +296,9 @@ def get_random_question(user: schemas.User = Depends(get_current_user)):
 
     return question
 
+    
+
+
 @app.post("/logout/")
 def logout(response: Response):
     response.delete_cookie(key="Authorization")
