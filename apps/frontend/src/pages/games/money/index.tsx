@@ -230,7 +230,8 @@ const Game: NextPage = () => {
                             sprite("fish", {
                                 width: wallXY
                             }),
-                            pos(rod.pos)
+                            pos(rod.pos),
+                            lifespan(1),
                         ]);
                         let fPos=100
                         f.onUpdate(() => {
@@ -241,9 +242,6 @@ const Game: NextPage = () => {
                                 destroy(f);
                             }
                         })
-                        wait(1, () => {
-                            destroy(f);
-                        });
                         bait.value --;
                         bait.text = "Bait: " + bait.value
                         rod.spin();
@@ -261,15 +259,14 @@ const Game: NextPage = () => {
                         const dollar = add([
                             sprite("money", {
                                 width: wallXY
+                                
                             }),
-                            pos(player.pos)
+                            pos(player.pos),
+                            lifespan(1),
                         ]);
                         dollar.onUpdate(() => {
                             dollar.moveTo(dollar.pos.x+1, dollar.pos.y-10)
                         })
-                        wait(2, () => {
-                            destroy(dollar);
-                        });
                         fish.value --;
                         fish.text = "Fish: " + fish.value;
                         cash.value += COST;
