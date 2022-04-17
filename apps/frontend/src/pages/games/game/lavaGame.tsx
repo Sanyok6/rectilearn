@@ -2,10 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import Questions from "../../../components/questions";
 
 /*
-& = player
-$ = lava
-_ = floor
-question is handled
+    $ = lava
 */
 const gameMap = `
 |                  |

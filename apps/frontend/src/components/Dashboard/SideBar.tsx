@@ -44,7 +44,7 @@ import {
 } from "react-icons/fi";
 import { IconType } from "react-icons";
 import { SectionType } from "../../pages/dashboard";
-import DashboardSettingsCtx from "../../lib/dashboardSettings";
+import DashboardCtx from "../../lib/dashboard";
 
 interface LinkItemProps {
   name: string;
@@ -109,8 +109,8 @@ interface SidebarProps extends BoxProps {
 }
 
 const SidebarContent = ({ onClose, alterSection, ...rest }: SidebarProps) => {
-  const { groupGS } = useContext(DashboardSettingsCtx);
-  const LinkItemsArr = groupGS ? LinkItemsBined : LinkItems;
+  const ctx = useContext(DashboardCtx);
+  const LinkItemsArr = ctx.groupGS ? LinkItemsBined : LinkItems;
   return (
     <Box
       transition="0.2s ease"
@@ -124,7 +124,7 @@ const SidebarContent = ({ onClose, alterSection, ...rest }: SidebarProps) => {
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          Username
+          {ctx.user.name ? `Hello, ${ctx.user.name}` : "Loading"}
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
@@ -197,6 +197,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
     onOpen: onStOpen,
     onClose: onStClose,
   } = useDisclosure();
+  const { user } = useContext(DashboardCtx);
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -223,7 +224,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         fontFamily="monospace"
         fontWeight="bold"
       >
-        Username
+        {user.name || "Loading"}
       </Text>
 
       <HStack spacing={{ base: "0", md: "6" }}>
@@ -260,9 +261,9 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   spacing="1px"
                   ml="2"
                 >
-                  <Text fontSize="sm">Name Here</Text>
+                  <Text fontSize="sm">{user.name || "Loading"}</Text>
                   <Text fontSize="xs" color="gray.600">
-                    Role Here
+                    {user.role || "Loading"}
                   </Text>
                 </VStack>
                 <Box display={{ base: "none", md: "flex" }}>
@@ -288,7 +289,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 };
 
 const SettingsModal = ({ isStOpen, onStClose }: { isStOpen: boolean, onStClose: () => void }) => {
-  const { groupGS, setGroupGS } = useContext(DashboardSettingsCtx);
+  const { groupGS, setGroupGS } = useContext(DashboardCtx);
   return (
     <Modal isOpen={isStOpen} onClose={onStClose}>
       <ModalOverlay />
