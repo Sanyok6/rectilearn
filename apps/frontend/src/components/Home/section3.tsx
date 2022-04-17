@@ -30,7 +30,7 @@ export default function Section3() {
                     </Text>
                     </Stack>
                     <Stack spacing="3" direction={{ base: 'column', sm: 'row' }} justify="center">
-                    <NextLink href={ctx.loggedIn ? "/dashboard" : "/login"}>
+                    <NextLink href={ctx.loggedIn ? "/dashboard" : "/login"} passHref>
                         <Button 
                             padding="10" 
                             borderRadius={20} 

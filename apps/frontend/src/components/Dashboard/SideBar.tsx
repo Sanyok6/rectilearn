@@ -312,7 +312,6 @@ const SettingsModal = ({ isStOpen, onStClose }: { isStOpen: boolean, onStClose: 
           <Button colorScheme='blue' mr={3} onClick={onStClose}>
             Close
           </Button>
-          <Button variant='ghost'>Test</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

@@ -27,7 +27,7 @@ const gameMap = `
 |$$$$$$$$$$$$$$$$$$|`.split("\n");
 gameMap.shift();
 
-const lavaGame = () => {
+const LavaGame = () => {
 	const cRef = useRef<HTMLCanvasElement>(null);
 	
 	const [reload, setReload] = useState<boolean>(false);
@@ -320,4 +320,4 @@ const lavaGame = () => {
 	);
 };
 
-export default lavaGame;
+export default LavaGame;
