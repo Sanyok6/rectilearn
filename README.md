@@ -73,11 +73,9 @@ This turborepo uses [pnpm](https://pnpm.io) as a packages manager. It includes t
 
 ### Apps
 
-- `frontend`: another [Next.js](https://nextjs.org) app
+- `frontend`: The [Next.js](https://nextjs.org) app
 - `backend`: The [FastAPI](https://fastapi.tiangolo.com/) app
 
-`ui`, `docs` and `frontend` is 100% [TypeScript](https://www.typescriptlang.org/).
-`backend` is 100% [Python](https://www.python.org)
 
 ### Utilities
 
