@@ -40,7 +40,6 @@ class OAuth2PasswordBearerCookie(OAuth2):
         cookie_scheme, cookie_param = get_authorization_scheme_param(
             cookie_authorization
         )
-        print(cookie_authorization)
 
         # if header_scheme.lower() == "bearer":
         #     authorization = True
