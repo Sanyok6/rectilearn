@@ -10,9 +10,18 @@
     <script src="Build/UnityLoader.js"></script>
     <script>
       var unityInstance = UnityLoader.instantiate("unityContainer", "Build/Bush-Game2.json", {onProgress: UnityProgress});
+      function AddEnergy(){
+        unityInstance.SendMessage("Player", "AddEnergy", 25);
+      }
+      function AnswerQuestion(){
+        unityInstance.SendMessage("GameManager", "EnablePlayerScript");
+      }
     </script>
   </head>
   <body>
+    <button onclick="AddEnergy()">add energy (25)</button>
+    <button onclick="AnswerQuestion()">answer question</button>
+    <p>WASD/Arrow keys to move, double tap to sprint, P to pull objects, Q to answer question</p>
     <div class="webgl-content">
       <div id="unityContainer" style="width: 960px; height: 600px"></div>
       <div class="footer">
