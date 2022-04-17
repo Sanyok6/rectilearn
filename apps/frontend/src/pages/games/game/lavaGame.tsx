@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import Questions from "../../../components/questions";
 
+import { Button, useToast } from "@chakra-ui/react";
+
 /*
 & = player
 $ = lava
@@ -30,8 +32,12 @@ gameMap.shift();
 
 const lavaGame = () => {
 	const cRef = useRef<HTMLCanvasElement>(null);
+	
 	const [reload, setReload] = useState<boolean>(false);
-	const [open, setOpen] = useState<boolean>(true);
+	const [open, setOpen] = useState<boolean>(false);
+
+	const toast = useToast()
+
 	useEffect(() => {
 		window.onresize = () => {
 			setReload((reload) => !reload);
@@ -82,11 +88,10 @@ const lavaGame = () => {
 			const wallXY = Math.max(width() / mapX, height() / mapY);
 
             const SPEED = wallXY * 10;
-			const lavaRaiseSpeed = 10;
 			const JUMP_FORCE = wallXY * 16;
 			const NUM_PLATFORMS = 20;
 
-			add([text("Points: 0"), pos(0, 0), fixed(), { value: 0 }]);
+			let lavaRaiseSpeed = 50;
 
 			scene("gameover", () => {
 				add([
@@ -154,6 +159,12 @@ const lavaGame = () => {
 				spin(),
 				rotate(0),
 			]);
+			const energyText = add([
+				text("Energy: 0"),
+				pos(0, 0),
+				fixed(),
+				{ value: 0 },
+			]);
 
 			player.pos = get("platform")[0].pos.sub(0, 64);
 
@@ -191,9 +202,8 @@ const lavaGame = () => {
 			});
 
 			onUpdate("platform", (p) => {
-                console.log(p);
                 if (p.isOutOfView()) return;
-				if (player.isTouching(p)) {
+				if (player.pos.y > p.pos.y-80 && player.pos.y < p.pos.y+80) {
 					player.move(p.dir * p.speed, 0);
 				}
 				p.move(0, lavaRaiseSpeed);
@@ -222,14 +232,26 @@ const lavaGame = () => {
 				}
 			});
 			player.onUpdate(() => {
-                if (player.pos.y > 1000) go("gameover");
+                // if (player.pos.y > 1000) go("gameover");
 				camPos(player.pos);
 			});
 			player.onDoubleJump(() => {
 				player.spin();
 			});
 			onKeyPress("space", () => {
-				player.doubleJump();
+				if (energyText.value > 0) {
+					energyText.value --;
+					energyText.text = "Energy: "+energyText.value;
+					player.doubleJump();
+				} else {
+					toast({
+						title: 'Out of energy',
+						description: "Press \"z\" to answer questions and gain energy",
+						status: 'error',
+						duration: 5000,
+						isClosable: true,
+					})
+				}
 			});
 			onKeyDown("left", () => {
 				player.flipX(true);
@@ -239,6 +261,11 @@ const lavaGame = () => {
 				player.flipX(false);
 				player.move(SPEED, 0);
 			});
+			onKeyPress("z", () => {
+				setOpen(true)
+				energyText.value ++;
+				energyText.text = "Energy: "+energyText.value;
+			});
 		}
 		Launch();
 		return () => every(destroy);
@@ -246,6 +273,25 @@ const lavaGame = () => {
 	return (
 		<>
 			<canvas ref={cRef}></canvas>
+			<Button 
+				onClick={
+					() => {
+						toast({
+							// title: 'Not enough money',
+							description: "Press \"z\" to answer questions",
+							status: 'info',
+							duration: 5000,
+							isClosable: true,
+						})
+					}}
+				position={"absolute"}
+				top="94vh"
+				left="0"
+				height="6vh"
+				width="100%"
+				backgroundColor={"rgba(123, 123, 123, 0.8)"}
+				>
+					get questions</Button>
 			<Questions
 				question="What is 2+2"
 				answer="4"
