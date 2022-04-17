@@ -45,7 +45,7 @@ const Dashboard: NextPage = ({ access_token }: InferGetServerSidePropsType<typeo
   const Router = useRouter();
   const { accessToken, setAccessToken } = useContext(AuthCtx);
   const guest: boolean = access_token === "guest";
-  const { data, error }: any = useSWR("/api/auth/users/me", (url) => guest ? { name: "guest", email: "guest@guest", role: "guest" } : fetcher(url, access_token));
+  const { data, error }: any = useSWR("/api/auth/users/me/", (url) => guest ? { name: "guest", email: "guest@guest", role: "guest" } : fetcher(url, access_token));
   useEffect(() => {
     if (data) {
       setUser(data);

@@ -226,7 +226,9 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         fontFamily="monospace"
         fontWeight="bold"
         overflow="hidden"
-        whiteSpace="nowrap" textOverflow="ellipsis" width="100%"
+        whiteSpace="nowrap"
+        textOverflow="ellipsis"
+        width="100%"
       >
         {user.name || "Loading"}
       </Text>

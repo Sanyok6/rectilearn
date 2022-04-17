@@ -12,7 +12,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
   useEffect(() => {
     if (loggedIn === null) {
-      fetch("/api/state", {
+      fetch("/api/state/", {
         method: 'GET'
       }).then((res) => res.json())
         .then((res) => {

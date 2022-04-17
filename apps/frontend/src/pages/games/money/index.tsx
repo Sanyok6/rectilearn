@@ -237,7 +237,7 @@ const Game: NextPage = () => {
                         f.onUpdate(() => {
                             console.log(-((fPos-100)^2)-50)
                             fPos-=8;
-                            f.moveTo(player.pos.x + fPos, f.pos.y-((1.2*fPos-100)^2)-50);
+                            (f as any).moveTo(player.pos.x + fPos, (f as any).pos.y-((1.2*fPos-100)^2)-50);
                             if (-((fPos-100)^2)-50 > 52) {
                                 destroy(f);
                             }
@@ -265,7 +265,7 @@ const Game: NextPage = () => {
                             lifespan(1),
                         ]);
                         dollar.onUpdate(() => {
-                            dollar.moveTo(dollar.pos.x+1, dollar.pos.y-10)
+                            (dollar as any).moveTo((dollar as any).pos.x+1, (dollar as any).pos.y-10);
                         })
                         fish.value --;
                         fish.text = "Fish: " + fish.value;

@@ -66,6 +66,7 @@ importers:
       react-dom: 17.0.2
       react-icons: ^4.3.1
       react-intersection-observer: ^8.34.0
+      react-unity-webgl: 7.x
       sharp: ^0.30.3
       swr: ^1.3.0
       tsconfig: workspace:*
@@ -92,6 +93,7 @@ importers:
       react-dom: 17.0.2_react@17.0.2
       react-icons: 4.3.1_react@17.0.2
       react-intersection-observer: 8.34.0_react@17.0.2
+      react-unity-webgl: 7.1.13
       sharp: 0.30.3
       swr: 1.3.0_react@17.0.2
       typewriter-effect: 2.18.2_react-dom@17.0.2+react@17.0.2
@@ -3727,6 +3729,10 @@ packages:
       invariant: 2.2.4
       react: 17.0.2
       tslib: 1.14.1
+    dev: false
+
+  /react-unity-webgl/7.1.13:
+    resolution: {integrity: sha512-uxo007ofvKO72ygsaMJKdEjjBnNvvNEgSCHKN1wvrebY+y4TIA5SIehr/jMQwVDyu5V+N7tOQa+mMPKaMEZEBg==}
     dev: false
 
   /react/17.0.2:
