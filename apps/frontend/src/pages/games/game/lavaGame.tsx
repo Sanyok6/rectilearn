@@ -86,7 +86,7 @@ const lavaGame = () => {
 
             const SPEED = wallXY * 10;
 			const JUMP_FORCE = wallXY * 16;
-			const NUM_PLATFORMS = 20;
+			const NUM_PLATFORMS = 10;
 
 			let lavaRaiseSpeed = 20;
 
@@ -100,7 +100,7 @@ const lavaGame = () => {
 				]);
 			});
 
-			function addPlatform(i=18) {
+			function addPlatform(i=6) {
 				console.log("added")
 				add([
 					sprite("wall", {
@@ -110,7 +110,7 @@ const lavaGame = () => {
 					area(),
 					pos(
 						rand(0 + wallXY * 2, width() - wallXY * 2),
-						(-i * (wallXY * 60)) / NUM_PLATFORMS + wallXY * 12
+						(-i * (wallXY * 30)) / NUM_PLATFORMS + wallXY * 12
 					),
 					solid(),
 					kab.origin("center"),
