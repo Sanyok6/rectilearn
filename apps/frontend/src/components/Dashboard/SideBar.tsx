@@ -48,6 +48,8 @@ import { SectionType } from "../../pages/dashboard";
 import DashboardCtx from "../../lib/dashboard";
 import { useRouter } from "next/router";
 
+import "@fontsource/pacifico"
+
 interface LinkItemProps {
   name: string;
   icon: IconType;
@@ -125,7 +127,7 @@ const SidebarContent = ({ onClose, alterSection, ...rest }: SidebarProps) => {
       {...rest}
     >
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
-            <Box fontFamily={"pacifico"}><NextLink href={"/"}>Rectilearn</NextLink></Box>
+            <Box mx="4" fontFamily={"pacifico"}><NextLink href={"/"}>Rectilearn</NextLink></Box>
         </Flex>
       {LinkItemsArr.map((link) => (
         <NavItem
