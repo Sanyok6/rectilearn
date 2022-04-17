@@ -276,7 +276,7 @@ const lavaGame = () => {
 				energyText.text = "Energy: "+energyText.value;
 			});
 			time.onUpdate(() => {
-				var timeDiff = new Date() - time.startTime;
+				var timeDiff = new Date().valueOf() - time.startTime.valueOf();
 				timeDiff /= 1000;
 				var seconds = Math.round(timeDiff);
 				time.value = seconds;
