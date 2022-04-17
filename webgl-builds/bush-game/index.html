@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | Bush Game</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <script src="TemplateData/UnityProgress.js"></script>
+    <script src="Build/UnityLoader.js"></script>
+    <script>
+      var unityInstance = UnityLoader.instantiate("unityContainer", "Build/Bush-Game2.json", {onProgress: UnityProgress});
+      function AddEnergy(){
+        unityInstance.SendMessage("Player", "AddEnergy", 25);
+      }
+      function AnswerQuestion(){
+        unityInstance.SendMessage("GameManager", "EnablePlayerScript");
+      }
+    </script>
+  </head>
+  <body>
+    <button onclick="AddEnergy()">add energy (25)</button>
+    <button onclick="AnswerQuestion()">answer question</button>
+    <p>WASD/Arrow keys to move, double tap to sprint, P to pull objects, Q to answer question</p>
+    <div class="webgl-content">
+      <div id="unityContainer" style="width: 960px; height: 600px"></div>
+      <div class="footer">
+        <div class="webgl-logo"></div>
+        <div class="fullscreen" onclick="unityInstance.SetFullscreen(1)"></div>
+        <div class="title">Bush Game</div>
+      </div>
+    </div>
+  </body>
+</html>
