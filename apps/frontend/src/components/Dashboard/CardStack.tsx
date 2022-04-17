@@ -8,7 +8,6 @@ import {
     Button,
     AspectRatio,
     Skeleton,
-    useDisclosure,
     Center,
     VStack,
     ScaleFade,
@@ -17,60 +16,35 @@ import React, { useEffect, useRef, useState } from 'react';
 import CardGrid from './CardGrid';
 import Card from './Card';
 import { FiPlus } from 'react-icons/fi';
+import useSWR from 'swr';
+import { exit } from 'process';
 
 interface ICreateCardProps {
     rootProps?: StackProps
 }
 
-const sets = [
-    {
-        id: 1,
-        name: "WWWWWWWWWWWWWWWWWWWWWWW",
-        imageUrl: "https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc="
-    },
-    {
-        id: 2,
-        name: "test2_ezezeze",
-        imageUrl: "https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc="
-    },
-    {
-        id: 3,
-        name: "test3",
-        imageUrl: "https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc="
-    },
-    {
-        id: 4,
-        name: "test4",
-        imageUrl: "https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc="
-    },
-    {
-        id: 5,
-        name: "test5",
-        imageUrl: "https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc="
-    },
-    {
-        id: 6,
-        name: "test6",
-        imageUrl: "https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc="
-    },
-    {
-        id: 7,
-        name: "test7",
-        imageUrl: "https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc="
-    },
-    {
-        id: 8,
-        name: "test8",
-        imageUrl: "https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc="
-    },
-    {
-        id: 9,
-        name: "test9",
-        imageUrl: "https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc="
-    },
-];
+interface StudySetQuestion {
+    question: string,
+    answers: Array<string>
+}
+
+interface StudySet {
+    id: Number,
+    subject: string,
+    questions: Array<StudySetQuestion>
+}
+
+const fetcher = (url: string) => fetch(url, {headers: {"Content-Type": "application/json"}}).then((res) => res.json());
 
 const CardStack = () => {
+    const { data, error } = useSWR<StudySet>(
+        "/api/studysets/",
+        fetcher
+      );
+
+    console.log('errors: ', error)
+    console.log("data: ", data);
+
     const [shouldOpen, setShouldOpen] = useState<boolean>(false);
     useEffect(() => {
         setShouldOpen(true);
@@ -104,8 +78,8 @@ const CardStack = () => {
                     display={shouldOpen ? undefined : "none"}
                 >
                     <CardGrid>
-                    {sets.map((set) => (
-                        <Card key={set.id} sets={set} />
+                    {data.map((set) => (
+                        <Card key={set.id.toString()} sets={{"subject": set.subject}} />
                     ))}
                     <CreateCard />
                     </CardGrid>
