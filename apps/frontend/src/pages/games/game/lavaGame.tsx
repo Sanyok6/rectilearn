@@ -88,7 +88,7 @@ const lavaGame = () => {
 			const JUMP_FORCE = wallXY * 16;
 			const NUM_PLATFORMS = 20;
 
-			let lavaRaiseSpeed = 50;
+			let lavaRaiseSpeed = 20;
 
 			scene("gameover", () => {
 				add([
@@ -100,7 +100,8 @@ const lavaGame = () => {
 				]);
 			});
 
-			for (let i = 1; i < NUM_PLATFORMS; i++) {
+			function addPlatform(i=18) {
+				console.log("added")
 				add([
 					sprite("wall", {
 						width: wallXY,
@@ -123,6 +124,10 @@ const lavaGame = () => {
                         hide: true
                     })
 				]);
+			}
+
+			for (let i = 1; i < NUM_PLATFORMS; i++) {
+				addPlatform(i)
 			}
 
 			function spin(speed = 1200) {
@@ -156,11 +161,17 @@ const lavaGame = () => {
 				spin(),
 				rotate(0),
 			]);
-			const energyText = add([
-				text("Energy: 0"),
+			const time = add([
+				text("Score: 0"),
 				pos(0, 0),
 				fixed(),
-				{ value: 0 },
+				{ value: 0, startTime: new Date() },
+			]);
+			const energyText = add([
+				text("Energy: 3"),
+				pos(0, 80),
+				fixed(),
+				{ value: 300 },
 			]);
 
 			player.pos = get("platform")[0].pos.sub(0, 64);
@@ -208,6 +219,7 @@ const lavaGame = () => {
 				every("lava", (o) => {
 					if (p.isTouching(o)) {
 						destroy(p);
+						addPlatform()
 					}
 				});
 				if (
@@ -262,6 +274,15 @@ const lavaGame = () => {
 				setOpen(true)
 				energyText.value ++;
 				energyText.text = "Energy: "+energyText.value;
+			});
+			time.onUpdate(() => {
+				var timeDiff = new Date() - time.startTime;
+				timeDiff /= 1000;
+				var seconds = Math.round(timeDiff);
+				time.value = seconds;
+				time.text = "Score: "+time.value;
+
+				lavaRaiseSpeed = 20+Math.floor(time.value/2);
 			});
 		}
 		Launch();
