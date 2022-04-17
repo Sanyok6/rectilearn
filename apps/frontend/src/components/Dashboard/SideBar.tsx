@@ -45,6 +45,7 @@ import {
 import { IconType } from "react-icons";
 import { SectionType } from "../../pages/dashboard";
 import DashboardCtx from "../../lib/dashboard";
+import { useRouter } from "next/router";
 
 interface LinkItemProps {
   name: string;
@@ -123,7 +124,7 @@ const SidebarContent = ({ onClose, alterSection, ...rest }: SidebarProps) => {
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
+        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold" overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis" width="100%">
           {ctx.user.name ? `Hello, ${ctx.user.name}` : "Loading"}
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
@@ -198,6 +199,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
     onClose: onStClose,
   } = useDisclosure();
   const { user } = useContext(DashboardCtx);
+  const Router = useRouter();
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -223,6 +225,8 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         fontSize="2xl"
         fontFamily="monospace"
         fontWeight="bold"
+        overflow="hidden"
+        whiteSpace="nowrap" textOverflow="ellipsis" width="100%"
       >
         {user.name || "Loading"}
       </Text>
@@ -279,7 +283,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               <MenuItem onClick={onStOpen}>Settings</MenuItem>
               <SettingsModal isStOpen={isStOpen} onStClose={onStClose} />
               <MenuDivider />
-              <MenuItem onClick={() => void 0}>Sign out</MenuItem>
+              <MenuItem onClick={() => Router.push("/api/logout")}>Sign out</MenuItem>
             </MenuList>
           </Menu>
         </Flex>
