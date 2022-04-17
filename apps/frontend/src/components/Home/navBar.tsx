@@ -78,7 +78,7 @@ export default function NavBar() {
     <>
       <Box bg={useColorModeValue('rgba(0, 0, 0, 0.05)', 'rgba(0, 0, 0, 0.5)')} px={4}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
-            <Box fontFamily={"pacifico"}>Rectilearn</Box>
+            <Box fontFamily={"pacifico"}><NextLink href={"/"}>Rectilearn</NextLink></Box>
             <HStack
               as={'nav'}
               spacing={4}
