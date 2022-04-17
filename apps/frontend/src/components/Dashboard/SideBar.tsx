@@ -42,6 +42,7 @@ import {
   FiSun,
   FiMoon,
 } from "react-icons/fi";
+import NextLink from "next/link";
 import { IconType } from "react-icons";
 import { SectionType } from "../../pages/dashboard";
 import DashboardCtx from "../../lib/dashboard";
@@ -123,12 +124,9 @@ const SidebarContent = ({ onClose, alterSection, ...rest }: SidebarProps) => {
       h="full"
       {...rest}
     >
-      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold" overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis" width="100%">
-          {ctx.user.name ? `Hello, ${ctx.user.name}` : "Loading"}
-        </Text>
-        <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
-      </Flex>
+        <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
+            <Box fontFamily={"pacifico"}><NextLink href={"/"}>Rectilearn</NextLink></Box>
+        </Flex>
       {LinkItemsArr.map((link) => (
         <NavItem
           key={link.name}
