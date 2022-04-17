@@ -175,7 +175,7 @@ def create_user(user: schemas.UserCreate):
     return crud.create_user(user)
 
 
-@app.post("/studysets/new", response_model=schemas.StudySet)
+@app.post("/studysets/new/", response_model=schemas.StudySet)
 def create_study_set(
     study_set: schemas.StudySetCreate, user: schemas.User = Depends(get_current_user)
 ):
@@ -183,13 +183,13 @@ def create_study_set(
     return v
 
 
-@app.get("/studysets", response_model=typing.List[schemas.StudySet])
+@app.get("/studysets/", response_model=typing.List[schemas.StudySet])
 def get_study_set(user: schemas.User = Depends(get_current_user)):
     return crud.get_study_sets(user.id)
 
 
 @app.post(
-    "/studysets/{study_set_id}/add_question", response_model=schemas.StudySetQuestions
+    "/studysets/{study_set_id}/add_question/", response_model=schemas.StudySetQuestions
 )
 def new_question(
     study_set_id: int,
@@ -206,7 +206,7 @@ def new_question(
     return crud.add_question(study_set_id, question)
 
 
-@app.delete("/studysets/{study_set_id}/delete_question")
+@app.delete("/studysets/{study_set_id}/delete_question/")
 def delete_question(
     study_set_id: int,
     question_id: int,
@@ -235,7 +235,7 @@ def delete_question(
         return HTTPStatus(status.HTTP_200_OK)
 
 
-@app.delete("/studysets/{study_set_id}/delete_study_set")
+@app.delete("/studysets/{study_set_id}/delete_study_set/")
 def delete_study_set(
     study_set_id: int,
     user: schemas.User = Depends(get_current_user),
@@ -250,7 +250,7 @@ def delete_study_set(
     if crud.delete_studyset(study_set_id):
         return HTTPStatus(status.HTTP_200_OK)
 
-@app.get("/studysets/public", response_model=typing.List[schemas.StudySet])
+@app.get("/studysets/public/", response_model=typing.List[schemas.StudySet])
 def get_public_study_sets():
     sets=  crud.get_public_study_sets()
     if len(sets) == 0:
@@ -261,7 +261,7 @@ def get_public_study_sets():
         )
     return sets
 
-@app.get("/studysets/{study_set_id}", response_model=schemas.StudySet)  
+@app.get("/studysets/{study_set_id}/", response_model=schemas.StudySet)  
 def get_study_set_by_id(study_set_id: int, user: schemas.User = Depends(get_current_user)):
     set =  crud.get_study_set(study_set_id)
     if set == None:
@@ -279,7 +279,7 @@ def get_study_set_by_id(study_set_id: int, user: schemas.User = Depends(get_curr
             )
     return set
 
-@app.get("/studysets/questions/random", response_model=schemas.StudySetQuestions)
+@app.get("/studysets/questions/random/", response_model=schemas.StudySetQuestions)
 def get_random_question(user: schemas.User = Depends(get_current_user)):
     sets = crud.get_public_study_sets()
     if len(sets) == 0:
@@ -299,7 +299,7 @@ def get_random_question(user: schemas.User = Depends(get_current_user)):
     
 
 
-@app.post("/logout")
+@app.post("/logout/")
 def logout(response: Response):
     response.delete_cookie(key="Authorization")
     return {"message": "Successfully logged out"}
