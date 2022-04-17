@@ -51,20 +51,26 @@ export const FavouriteButton = (props: IconButtonProps) => (
   </LightMode>
 );
 
-interface set {
-    id: number;
-    name: string;
-    imageUrl: string;
+export interface StudySetQuestion {
+    question: string,
+    answers: Array<string>
+}
+
+export interface StudySet {
+    id: Number,
+    subject: string,
+    questions: Array<StudySetQuestion>
 }
 
 interface Props {
-    sets: set;
+    sets: StudySet;
     rootProps?: StackProps
 }
 
 const Card = (props: Props) => {
+    const imageUrl = "https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc="
     const { sets, rootProps } = props;
-    const { name, imageUrl } = sets;
+    const { subject } = sets;
     const [isLoading, setLoading] = useState<boolean>(true);
     return (
         <Stack spacing={useBreakpointValue({ base: '4', md: '5' })} {...rootProps}>
@@ -86,7 +92,7 @@ const Card = (props: Props) => {
                             }
                             <Image
                                 src={imageUrl}
-                                alt={name}
+                                alt={subject}
                                 draggable="false"
                                 layout="fill"
                                 onLoad={() => setLoading(false)}
@@ -99,20 +105,20 @@ const Card = (props: Props) => {
                         position="absolute"
                         top="2"
                         right="2"
-                        aria-label={`Add ${name} to your favourites`}
+                        aria-label={`Add ${subject} to your favourites`}
                     />
                     <InfoButton
                         position="absolute"
                         top="2"
                         right="47"
-                        aria-label={`View ${name} information`}
+                        aria-label={`View ${subject} information`}
                     />
                 </Box>
                 <Stack mt={2} mb={3}>
                     <Stack spacing="1">
-                        <Tooltip label={name} aria-label={`tooltip ${name}`}>
+                        <Tooltip label={subject} aria-label={`tooltip ${subject}`}>
                             <Text fontWeight="medium" color={useColorModeValue('gray.700', 'white')} fontSize="2xl" overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis" width="100%">
-                                {name}
+                                {subject}
                             </Text>
                         </Tooltip>
                     </Stack>

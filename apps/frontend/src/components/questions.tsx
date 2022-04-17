@@ -64,7 +64,7 @@ function AskQuestionModal({ question, answer, isOpen, questionOpen }: {question:
                         textAlign="center"
                         id="ans"
                         value={value}
-                        onKeyPress={(e) => e.key === "Enter" && submit()}
+                        onKeyPress={(e) => e.key === "Enter" && [setValue(""), submit()]}
                         onChange={(e) => setValue(e.target.value)} 
                         autoComplete={"off"}
                     />

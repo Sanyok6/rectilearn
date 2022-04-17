@@ -4,7 +4,7 @@ import {
   IconButton,
   Avatar,
   Box,
-  CloseButton,
+  // CloseButton,
   Flex,
   HStack,
   VStack,
@@ -42,6 +42,7 @@ import {
   FiSun,
   FiMoon,
 } from "react-icons/fi";
+import { IoGameController } from "react-icons/io5";
 import NextLink from "next/link";
 import { IconType } from "react-icons";
 import { SectionType } from "../../pages/dashboard";
@@ -57,7 +58,7 @@ interface LinkItemProps {
 
 const LinkItems: Array<LinkItemProps> = [
   { name: "Sets", icon: FiStar },
-  { name: "Games", icon: FiBell },
+  { name: "Games", icon: IoGameController },
   { name: "Explore", icon: FiCompass },
 ];
 
