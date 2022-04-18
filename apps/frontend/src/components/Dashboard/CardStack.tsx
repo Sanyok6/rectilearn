@@ -231,7 +231,7 @@ const CreateCardModal = (props: any) => {
                                                             answers: newQ[ind].answers.filter((_, i) => i !== idx)
                                                         }
                                                         return newQ;
-                                                    })} children={<CloseIcon />} />
+                                                    })}><CloseIcon /></InputRightElement>
                                                 </InputGroup>
                                             ))}
                                             <Button mt={3} onClick={() => setQuestions(qs => {
