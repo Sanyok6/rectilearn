@@ -73,10 +73,10 @@ This turborepo uses [pnpm](https://pnpm.io) as a packages manager. It includes t
 
 ### Apps
 
-- Frontend: The [`Next.js`](https://nextjs.org) app
+- `frontend`: The [`Next.js`](https://nextjs.org) app
 - `backend`: The [`FastAPI`](https://fastapi.tiangolo.com/) app
 
-`ui`, `docs` and `frontend` is 100% [TypeScript](https://www.typescriptlang.org/).
+`frontend` is 100% [TypeScript](https://www.typescriptlang.org/).
 `backend` is 100% [Python](https://www.python.org)
 
 ### Utilities
@@ -89,14 +89,14 @@ This turborepo has some additional tools already setup for you:
 
 ## Setup
 
-This repository is used in the `npx create-turbo@latest` command, and selected when choosing which package manager you wish to use with your monorepo (PNPM).
+This repository is used in the `pnpx create-turbo@latest` command, and selected when choosing which package manager you wish to use with your monorepo (PNPM).
 
 ### Build
 
 To build all apps and packages, run the following command:
 
 ```
-cd my-turborepo
+cd reponame
 pnpm run build
 ```
 
@@ -105,7 +105,7 @@ pnpm run build
 To develop all apps and packages, run the following command:
 
 ```
-cd root_dir_name
+cd reponame
 pnpm run dev
 ```
 
@@ -116,7 +116,7 @@ Turborepo can use a technique known as [Remote Caching (Beta)](https://turborepo
 By default, Turborepo will cache locally. To enable Remote Caching (Beta) you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
 
 ```
-cd root_dir_name
+cd reponame
 pnpx turbo login
 ```
 
