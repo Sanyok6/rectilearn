@@ -56,7 +56,7 @@ class StudySetQuestionCreate(BaseModel):
 
         for answer in value:
             if len(str(answer)) <= 0:
-                raise HTTPException(status_code=422, detail="Answers must be at least 4 characters long.")
+                raise HTTPException(status_code=422, detail="Answers must be at least 1 characters long.")
 
         return value
 
