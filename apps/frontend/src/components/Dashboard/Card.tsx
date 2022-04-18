@@ -63,15 +63,26 @@ export interface StudySet {
 }
 
 interface Props {
-    sets: StudySet;
+    studySet: StudySet;
     rootProps?: StackProps
 }
 
 const Card = (props: Props) => {
     const imageUrl = "https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc="
-    const { sets, rootProps } = props;
-    const { subject } = sets;
+    const { studySet, rootProps } = props;
+    const { id, subject } = studySet;
     const [isLoading, setLoading] = useState<boolean>(true);
+    
+    const deleteStudySet = async (e: any) => {
+        // e.preventDefault();
+        // console.log("stopped ", e)
+        // const resp = await fetch(`/api/studysets/${id}/delete_study_set/`, {
+        //     method: "DELETE"
+        // });
+        // console.log(resp);
+        await fetch("/");
+    }
+
     return (
         <Stack spacing={useBreakpointValue({ base: '4', md: '5' })} {...rootProps}>
             <Box
@@ -147,6 +158,7 @@ const Card = (props: Props) => {
                         isFullWidth
                         flex={1}
                         fontSize={'sm'}
+                        onClick={deleteStudySet}
                     >
                         Delete
                     </Button>
