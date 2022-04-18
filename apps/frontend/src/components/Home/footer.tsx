@@ -70,10 +70,7 @@ export default function Footer() {
 					Rectilearn
 				</Text>
 				<Stack direction={"row"} spacing={6}>
-					{/* <NextLink href={"#"} passHref>    /// about page does not exist
-            <Link href={'#'}>About</Link>
-          </NextLink> */}
-					{ctx.loggedIn ? (
+					{!ctx.loggedIn ? (
 						<>
 							<NextLink href={"/login"} passHref>
 								<Link>Login</Link>
