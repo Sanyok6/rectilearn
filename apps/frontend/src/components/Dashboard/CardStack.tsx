@@ -26,7 +26,8 @@ import {
     MenuButton,
     MenuList,
     InputGroup,
-    InputRightElement
+    InputRightElement,
+    useToast
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
 import React, { useContext, useEffect, useRef, useState } from "react";
@@ -94,7 +95,7 @@ const CardStack = () => {
 					display={shouldOpen ? undefined : "none"}
 				>
 					<CardGrid>
-						{data
+						{(data)
 							? data.map((set) => (
 									<Card key={set.id.toString()} sets={set} />
 							  ))
@@ -149,15 +150,36 @@ const CreateCardModal = (props: any) => {
     const { isOpen, onClose: oC } = props;
     const [v, setV] = useState<string>("");
     const [questions, setQuestions] = useState<Array<StudySetQuestion>>([]);
+    const toast = useToast();
+
     function onClose() {
         setQuestions([]);
         setV("");
         oC();
     }
 
-    const handleSubmission = () => {
-        console.log("called")
-        fetch("/api/studysets/new/").then((res) => console.log("res", res));
+    const handleSubmission = async () => {
+        const values = {
+            subject: v,
+            questions: questions
+        };
+
+        const res = await fetch("/api/studysets/new/", {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(values)
+        })
+
+        if (!res.ok){
+            toast({
+                title: "Something went wrong",
+                description: res ? (await res.json()).detail || "err" : "Something went wrong while creating studyset. Please try again.",
+                status: "error",
+                isClosable: true,
+                duration: 4000
+            })
+        }
+
         onClose();
     };
 
