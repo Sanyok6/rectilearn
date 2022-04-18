@@ -3,13 +3,14 @@ import { ChakraProvider } from "@chakra-ui/react";
 import theme from "../lib/theme";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import AuthCtx from "../lib/auth";
+import AuthCtx, { IgameSession } from "../lib/auth";
 
 const NextNProgress = dynamic(() => import("nextjs-progressbar"));
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const [accessToken, setAccessToken] = useState<string>("");
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
+  const [gameSession, setGameSession] = useState<IgameSession>();
   useEffect(() => {
     if (loggedIn === null) {
       fetch("/api/state/", {
@@ -41,7 +42,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           accessToken,
           setAccessToken,
           loggedIn,
-          setLoggedIn
+          setLoggedIn,
+          gameSession,
+          setGameSession
         }}>
           <Component {...pageProps} />
         </AuthCtx.Provider>

@@ -36,6 +36,7 @@ import Card, { StudySet, StudySetQuestion } from "./Card";
 import { FiPlus } from "react-icons/fi";
 import useSWR from "swr";
 import AuthCtx from "../../lib/auth";
+import { useRouter } from "next/router";
 
 interface ICreateCardProps {
 	rootProps?: StackProps;
@@ -47,7 +48,6 @@ const fetcher = (url: string) =>
 	);
 
 const CardStack = () => {
-    console.log("page loaded");
     const { accessToken } = useContext(AuthCtx);
 	const { data: d, error } = useSWR<Array<StudySet>>("/api/studysets/", fetcher);
     const [data, setData] = useState<Array<StudySet>>([]);
@@ -59,14 +59,8 @@ const CardStack = () => {
 
         const studySets = [...d];
         const index = studySets.findIndex((s) => s.id === studySet.id);
-        console.log("index: ", index)
         studySets[index] = studySet;
-        console.log("old one ", studySets[index])
-        console.log("new one: ", studySet)
-
-        console.log("studysets (before): ", d)
         setData(studySets);
-        console.log("studysets (after): ", d)
         return true;
     };
 
@@ -113,7 +107,7 @@ const CardStack = () => {
 					display={shouldOpen ? undefined : "none"}
 				>
 					<CardGrid>
-						{(data)
+						{data
 							? data.map((set) => (
 									<Card key={set.id.toString()} studySet={set} updateStudySet={updateStudySet} />
 							  ))
@@ -169,6 +163,7 @@ const CreateCardModal = (props: any) => {
     const [v, setV] = useState<string>("");
     const [questions, setQuestions] = useState<Array<StudySetQuestion>>([]);
     const toast = useToast();
+    const router = useRouter();
 
     function onClose() {
         setQuestions([]);
@@ -197,6 +192,8 @@ const CreateCardModal = (props: any) => {
                 duration: 4000
             })
         }
+
+        router.reload()
 
         onClose();
     };

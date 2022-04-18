@@ -1,11 +1,11 @@
 import {
-    Box, Center, ScaleFade, Skeleton, useBreakpointValue, useDisclosure, VStack,
+    Box, Center, ScaleFade, Skeleton, useBreakpointValue, VStack,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import CardGrid from './CardGrid';
 import GameCard from './GameCard';
 
-const games = [
+export const games = [
     {
         id: 1,
         name: "WWWWWWWWWWWWWWWWWWWWWWW",
