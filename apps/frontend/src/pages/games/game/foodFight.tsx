@@ -7,17 +7,21 @@ import { useToast } from "@chakra-ui/react";
 const mapLayout =
 `
 |||||||||||||||||
-|               |
-|SS             |
-|SS             |
-|            $  |
-|QQ         $$  |
-|QQ        $$$$ |
-|          $$$$ |
-|!         $$$$ |
-|           $$  |
-|@              |
-|||||||||||||||||`.split("\n");
+|               ||||||||||||||||||||
+|                                  |
+|                                  |
+|            $                     |
+|           $$  |            $     |
+|          $$$$ |           $$     |
+|          $$$$ |!          $$$   ||
+|          $$$$ |           $$$  ||
+|           $$  |@           $  ||
+|               |              ||
+|||    ||||||||||             ||
+|                            ||
+|                           ||
+|                          ||
+||||||||||||||||||||||||||||`.split("\n");
 mapLayout.shift();
 
 const Game: NextPage = () => {
@@ -44,20 +48,20 @@ const Game: NextPage = () => {
             await loadSprite("wall", "/sprites/wall.jpeg");
             await loadSprite("water", "/sprites/water.jpeg");
             await loadSprite("grass", "/sprites/grass.png");
-            await loadSprite("fish", "/sprites/fish.png");
-            await loadSprite("bg", "/sprites/grassBg.png");
-            await loadSprite("rod", "/sprites/rod.png");
-
-            await loadSprite("money", "/sprites/money.png");
-            await loadSprite("store", "/sprites/store.png");
-            await loadSprite("questions", "/sprites/questions.png");
+            await loadSprite("bg", "/sprites/spaceBg.jpg");
 
             await loadSprite("upgradeM", "/sprites/upgradeMoney.png");
             await loadSprite("upgradeS", "/sprites/upgradeSpeed.png");
 
+            await loadSprite("apple", "/sprites/apple.png")
+            await loadSprite("badBean", "/sprites/badBean.png");
+
             let start = false;
             let SPEED = 400;
             let COST = 1
+
+
+
             add([
                 sprite("bg", {
                     width: width(),
@@ -82,6 +86,8 @@ const Game: NextPage = () => {
                 const mapObj = addLevel(mapLayout, {
                     width: wallXY,
                     height: wallXY,
+
+        
                     "|": () => [
                         sprite("wall", {
                             width: wallXY,
@@ -98,15 +104,6 @@ const Game: NextPage = () => {
                         area(),
                         solid(),
                         "water"
-                    ],
-                    "S": () => [
-                        sprite("store", {
-                            width: wallXY,
-                            height: wallXY
-                        }),
-                        area(),
-                        solid(),
-                        "store"
                     ],
                     "!": () => [
                         sprite("upgradeM", {
@@ -126,15 +123,6 @@ const Game: NextPage = () => {
                         solid(),
                         "upgradeS"
                     ],
-                    "Q": () => [
-                        sprite("questions", {
-                            width: wallXY,
-                            height: wallXY
-                        }),
-                        area(),
-                        solid(),
-                        "questions"
-                    ],
                     " ": () => [
                         sprite("grass", {
                             width: wallXY,
@@ -142,6 +130,17 @@ const Game: NextPage = () => {
                         })
                     ]
                 });
+                                    
+                scene("gameover", () => {
+                    add([
+                        text("Game Over!", {
+                            size: width() / 25,
+                        }),
+                        pos(center()),
+                        kab.origin("center"),
+                    ])
+                })
+                
                 const player = add([
                     sprite("bean", {
                         width: wallXY,
@@ -150,74 +149,138 @@ const Game: NextPage = () => {
                     area(),
                     solid()
                 ]);
-                const rod = add([
-                    sprite("rod", {
-                        height: wallXY
-                    }),
-                    pos(),
-                    follow(player, vec2(wallXY * 0.7, -wallXY * 0.3)),
-                    rotate(0),
-                    spin()
-                ]);
-                const cash = add([
-                    text("Cash: 0"),
+
+                const health = add([
+                    text("Health: 5"),
                     pos(0, 0),
                     fixed(),
-                    { value: 0 },
+                    { value: 5 },
                 ])
-                const fish = add([
-                    text("Fish: 0"),
-                        pos(0, 80),
-                        fixed(),
-                        { value: 0 },
-                    ])
-                const bait = add([
-                text("Bait: 0"),
+                const ammo = add([
+                    text("Ammo: 10"),
+                    pos(0, 80),
+                    fixed(),
+                    { value: 10 },
+                ])
+                const cash = add([
+                    text("Cash: 0"),
                     pos(0, 160),
                     fixed(),
                     { value: 0 },
                 ])
-                function spin() {
-                    let spinning = false
-                    return {
-                        id: "spin",
-                        update() {
-                            const t = this as any;
-                            if (spinning) {
-                                t.angle += 1200 * dt()
-                                if (t.angle >= 360) {
-                                    t.angle = 0
-                                    spinning = false
+
+                let new_enemy_count = 0
+                let enemies = []
+
+                function addEnemy() {
+                    let e = add([
+                        sprite("badBean", {
+                            width: wallXY,
+                        }),
+                        pos(mapObj.getPos((itemXLen / 20) + rand(1, 3), (itemYLen / 2) + rand(1, 3))),
+                        area(),
+                        { speed: 10}
+                    ]);
+                    enemies.push(e)
+                    for (var i in enemies) {
+                        enemies[i].onUpdate(() => {
+                                let enemy = enemies[i]
+                                let x = -1+2*(enemy.pos.x < player.pos.x)
+                                let y = -1+2*(enemy.pos.y > player.pos.y)
+                                enemy.flipX(enemy.pos.x > player.pos.x)
+                                enemy.move((x)*enemy.speed, (y)*(-enemy.speed))
+    
+                                if (enemy.isTouching(player)) {
+                                    enemy.destroy()
+                                    health.value--;
+                                    health.text = "Health: "+health.value;
+                                    if (health.value <= 0) {
+                                        go("gameover")
+                                    }
                                 }
-                            }
-                        },
-                        spin() {
-                            spinning = true
-                        },
+                        })
+                    }
+                    if (new_enemy_count >= 1) {
+                        new_enemy_count = 0
+                        addEnemy()
                     }
                 }
+
+                for (let i = 0; i < 3; i++) {
+                    addEnemy()
+                }
+
                 beforeStart.destroy();
                 player.onUpdate(() => {
                     camPos(player.pos);
                 });
-                onKeyDown("left", () => {
+
+                onMousePress((p) => {
+                    if (ammo.value <= 0) {
+                        toast({
+                            title: 'Not enough ammo',
+                            description: "press \"e\" to answer questions, and gain ammo",
+                            status: 'error',
+                            duration: 5000,
+                            isClosable: true,
+                          })
+                        return
+                    }
+                    const m = toWorld(p)
+                    const e = add([
+                        sprite("apple", {
+                            width: wallXY,
+                        }),
+                        pos(player.pos.x, player.pos.y),
+                        lifespan(2),
+                        area(),
+                        { speed: 100, di: [(m["x"]-player.pos.x)-50, (m["y"]-player.pos.y)-50]}
+                    ]);
+
+                    ammo.value--;
+                    ammo.text = "Ammo: "+ammo.value
+
+                    e.onUpdate(() => {
+                        e.move(e.di[0], e.di[1])
+    
+                        for (let i in enemies) {
+                            if (e.isTouching(enemies[i])) {
+                                enemies[i].destroy()
+                                e.destroy()
+
+                                cash.value += COST;
+                                cash.text = "Cash: "+cash.value;
+
+                                new_enemy_count += 0.2
+
+                                addEnemy()
+                        }
+                    }
+                    })
+                })
+
+                onKeyDown(["left", "a"], () => {
                     player.flipX(true);
-                    rod.flipX(true);
-                    rod.follow.offset = vec2(-wallXY * 0.7, -wallXY * 0.3);
                     player.move(-SPEED, 0);
                 });
-                onKeyDown("right", () => {
+
+                onKeyPress(["z", "e"], () => {
+                    ammo.value++;
+                    ammo.text = "Ammo: "+ammo.value
+                    setOpen(true)
+                })
+
+                onKeyDown(["right", "d"], () => {
                     player.flipX(false);
-                    rod.flipX(false);
-                    rod.follow.offset = vec2(wallXY * 0.7, -wallXY * 0.3)
                     player.move(SPEED, 0);
                 });
-                onKeyDown("up", () => {
+                onKeyDown(["up", "w"], () => {
                     player.move(0, -SPEED);
                 });
-                onKeyDown("down", () => {
+                onKeyDown(["down", "s"], () => {
                     player.move(0, SPEED);
                 });
+
                 onKeyPress("space", () => {
                     let touching = false;
                     every("water", (s) => {
@@ -225,29 +288,6 @@ const Game: NextPage = () => {
                             touching = true;
                         }
                     });
-                    if (touching && bait.value > 0) {
-                        const f = add([
-                            sprite("fish", {
-                                width: wallXY
-                            }),
-                            pos(rod.pos),
-                            lifespan(1),
-                        ]);
-                        let fPos=100
-                        f.onUpdate(() => {
-                            console.log(-((fPos-100)^2)-50)
-                            fPos-=8;
-                            f.moveTo(player.pos.x + fPos, f.pos.y-((1.2*fPos-100)^2)-50);
-                            if (-((fPos-100)^2)-50 > 52) {
-                                destroy(f);
-                            }
-                        })
-                        bait.value --;
-                        bait.text = "Bait: " + bait.value
-                        rod.spin();
-                        fish.value ++;
-                        fish.text = "Fish: " + fish.value
-                    }
 
                     touching=false
 
@@ -255,37 +295,8 @@ const Game: NextPage = () => {
                         if (player.isTouching(s))
                         touching = true;
                     });
-                    if (touching && fish.value>0) {
-                        const dollar = add([
-                            sprite("money", {
-                                width: wallXY
-                                
-                            }),
-                            pos(player.pos),
-                            lifespan(1),
-                        ]);
-                        dollar.onUpdate(() => {
-                            dollar.moveTo(dollar.pos.x+1, dollar.pos.y-10)
-                        })
-                        fish.value --;
-                        fish.text = "Fish: " + fish.value;
-                        cash.value += COST;
-                        cash.text = "Cash: " + cash.value;
-                    }
 
                     touching=false
-
-                    every("questions", (s) => {
-                        if (player.isTouching(s))
-                        touching = true;
-                    });
-                    if (touching) {
-
-                        setOpen(true)
-
-                        bait.value ++;
-                        bait.text = "Bait: " + bait.value;
-                    }
 
                     touching=false
 
@@ -298,9 +309,7 @@ const Game: NextPage = () => {
                         if (cash.value >= COST*5) {
                             cash.value -= COST*5 
                             cash.text = "Cash: " + cash.value;
-                            console.log(COST)
                             COST += COST;
-                            console.log(COST)
                          } else {
                             toast({
                                 title: 'Not enough money',

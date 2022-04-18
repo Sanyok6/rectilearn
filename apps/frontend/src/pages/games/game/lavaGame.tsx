@@ -171,7 +171,7 @@ const LavaGame = () => {
 				text("Energy: 3"),
 				pos(0, 80),
 				fixed(),
-				{ value: 300 },
+				{ value: 3 },
 			]);
 
 			player.pos = get("platform")[0].pos.sub(0, 64);
