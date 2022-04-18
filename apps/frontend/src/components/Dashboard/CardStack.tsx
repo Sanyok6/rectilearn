@@ -47,6 +47,7 @@ const fetcher = (url: string) =>
 	);
 
 const CardStack = () => {
+    console.log("page loaded");
     const { accessToken } = useContext(AuthCtx);
 	const { data: d, error } = useSWR<Array<StudySet>>("/api/studysets/", fetcher);
     const [data, setData] = useState<Array<StudySet>>([]);
@@ -97,7 +98,7 @@ const CardStack = () => {
 					<CardGrid>
 						{(data)
 							? data.map((set) => (
-									<Card key={set.id.toString()} sets={set} />
+									<Card key={set.id.toString()} studySet={set} />
 							  ))
 							: "Loading"}
 						<CreateCard />
