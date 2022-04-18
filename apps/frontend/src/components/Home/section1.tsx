@@ -74,7 +74,7 @@ export default function CallToActionWithVideo() {
               <chakra.span fontFamily={"pacifico"}>Rectilearn</chakra.span> makes studying a little less ordinary
                with games that let you have fun while studying. 
                But <chakra.span fontFamily={"pacifico"}>Rectileran</chakra.span> is not just another study game, 
-               unlike other study tools, it is <NextLink href="#" passHref><Link textDecor={"underline"}>Open Source</Link></NextLink>,
+               unlike other study tools, it is <NextLink href="https://github.com/Sanyok6/TWTcodejam-team-Rectifiers" passHref><Link textDecor={"underline"}>Open Source</Link></NextLink>,
                it is directed towards language learners, and it makes studying much more enjoyable. 
             </Text>
             <Stack
@@ -93,20 +93,6 @@ export default function CallToActionWithVideo() {
                   Start learning
                 </Button>
               </NextLink>
-              
-              <Button
-                rounded={'full'}
-                size={'lg'}
-                fontWeight={'normal'}
-                px={6}
-                bg={useColorModeValue('blue.100', undefined)}
-                leftIcon={<PlayIcon h={4} w={4} color={useColorModeValue('gray.700', 'gray.300')} />}
-                _hover={{
-                  bg: useColorModeValue('blue.100', undefined)
-                }}
-              >
-                How It Works
-              </Button>
             </Stack>
           </Stack>
           <Flex
