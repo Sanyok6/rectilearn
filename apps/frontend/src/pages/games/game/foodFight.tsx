@@ -167,7 +167,7 @@ const Game: NextPage = () => {
                     text("Ammo: 10"),
                     pos(0, 80),
                     fixed(),
-                    { value: 100 },
+                    { value: 10 },
                 ])
                 const cash = add([
                     text("Cash: 0"),
@@ -273,7 +273,7 @@ const Game: NextPage = () => {
                 });
 
                 onKeyPress(["z", "e"], () => {
-                    ammo.value++;
+                    ammo.value+=2;
                     ammo.text = "Ammo: "+ammo.value
                     setOpen(true)
                 })
