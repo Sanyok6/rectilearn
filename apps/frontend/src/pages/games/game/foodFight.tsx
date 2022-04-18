@@ -167,7 +167,7 @@ const Game: NextPage = () => {
                     text("Ammo: 10"),
                     pos(0, 80),
                     fixed(),
-                    { value: 10 },
+                    { value: 100 },
                 ])
                 const cash = add([
                     text("Cash: 0"),
@@ -184,9 +184,9 @@ const Game: NextPage = () => {
                         sprite("badBean", {
                             width: wallXY,
                         }),
-                        pos(mapObj.getPos((itemXLen / 20) + rand(1, 3), (itemYLen / 2) + rand(1, 3))),
+                        pos(mapObj.getPos((itemXLen / 20) + rand(1, 20), (itemYLen / 10) + rand(1, 10))),
                         area(),
-                        { speed: 10}
+                        { speed: 1}
                     ]);
                     enemies.push(e)
                     for (var i in enemies) {
@@ -195,7 +195,8 @@ const Game: NextPage = () => {
                                 let x = -1+2*+(enemy.pos.x < player.pos.x)
                                 let y = -1+2*+(enemy.pos.y > player.pos.y)
                                 enemy.flipX(enemy.pos.x > player.pos.x)
-                                enemy.move((x)*enemy.speed, (y)*(-enemy.speed))
+                                // enemy.move((x)*10, (y)*(-10))
+                                enemy.moveTo(player.pos, 10)
     
                                 if (enemy.isTouching(player)) {
                                     enemy.destroy()
@@ -258,7 +259,7 @@ const Game: NextPage = () => {
                                 cash.value += COST;
                                 cash.text = "Cash: "+cash.value;
 
-                                new_enemy_count += 0.2
+                                new_enemy_count += 0.1
 
                                 addEnemy()
                         }
