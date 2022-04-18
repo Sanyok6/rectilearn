@@ -13,7 +13,7 @@ import {
   useColorModeValue,
   HStack,
   chakra,
-  Link
+  Link,
 } from '@chakra-ui/react';
 import "@fontsource/pacifico"
 import NextLink from 'next/link';
@@ -22,7 +22,11 @@ import { Image } from '../../utils/next-chakra-image';
 
 import Typewriter from 'typewriter-effect';
 
+import AuthCtx from '../../lib/auth';
+import { useContext } from 'react';
+
 export default function CallToActionWithVideo() {
+    const ctx = useContext(AuthCtx);
     return (
       <Container maxW={'7xl'} minHeight={{ base: "120vh", sm: "100vh" }} /* height={{ base: "120vh", sm: "100vh" }} */>
         <Stack
@@ -76,16 +80,20 @@ export default function CallToActionWithVideo() {
             <Stack
               spacing={{ base: 4, sm: 6 }}
               direction={{ base: 'column', sm: 'row' }}>
-              <Button
-                rounded={'full'}
-                size={'lg'}
-                fontWeight={'normal'}
-                px={6}
-                colorScheme={'blue'}
-                bg={'blue.400'}
-                _hover={{ bg: 'blue.500' }}>
-                Start learning
-              </Button>
+              
+              <NextLink href={ctx.loggedIn ? "/dashboard" : "/login"} passHref>
+                <Button
+                  rounded={'full'}
+                  size={'lg'}
+                  fontWeight={'normal'}
+                  px={6}
+                  colorScheme={'blue'}
+                  bg={'blue.400'}
+                  _hover={{ bg: 'blue.500' }}>
+                  Start learning
+                </Button>
+              </NextLink>
+              
               <Button
                 rounded={'full'}
                 size={'lg'}
