@@ -1,12 +1,9 @@
-import type { NextPage } from "next";
 import { useState, useEffect, useRef } from "react";
-import Questions from "../../../components/questions";
+import Questions from "../../components/questions";
 
 import { useToast } from "@chakra-ui/react";
-import useSWR from "swr";
 import { GameObj, SpriteComp, PosComp, AreaComp } from "kaboom";
-import { StudySetQuestion } from "../../../components/Dashboard/Card";
-import { useRouter } from "next/router";
+import { StudySet } from "../Dashboard/Card";
 
 const mapLayout = `
 |||||||||||||||||
@@ -27,42 +24,13 @@ const mapLayout = `
 ||||||||||||||||||||||||||||`.split("\n");
 mapLayout.shift();
 
-const fetcher = (url: string) =>
-	fetch(url, { headers: { "Content-Type": "application/json" } }).then(
-		(res) => res.json()
-	);
-
-const fetchQuestion = () =>
-	fetch("http://localhost:3000/api/studysets/questions/random/", {
-		headers: { "Content-Type": "application/json" },
-	})
-		.then((res) => res.json())
-		.catch(console.error);
-
-const Game: NextPage = () => {
-	const questionLoading = { question: "Loading", answers: ["Loading"] };
-	const { data: randomQuestion, error } = useSWR<StudySetQuestion>(
-		"http://localhost:3000/api/studysets/questions/random/",
-		fetcher
-	);
-	const [open, setOpen] = useState<boolean>(false);
-	const [question, setQuestion] = useState<StudySetQuestion>(
-		randomQuestion || questionLoading
-	);
-
-	// fetchQuestion().then(data => setQuestion(data));
-	// fetchQuestion().then(setQuestion);
-
+const FoodFight = ({ studySet }: { studySet: StudySet }) => {
 	const cRef = useRef<HTMLCanvasElement>(null);
 	const [reload, setReload] = useState<boolean>(false);
-
+	const [open, isOpen] = useState<boolean>(false);
 	const toast = useToast();
 
 	useEffect(() => {
-		if (randomQuestion) {
-			setQuestion(randomQuestion);
-		}
-		if (error) console.log(error);
 		window.onresize = () => {
 			setReload((reload) => !reload);
 		};
@@ -265,7 +233,7 @@ const Game: NextPage = () => {
 						toast({
 							title: "Not enough ammo",
 							description:
-								'press "e" to answer questions, and gain ammo',
+								'press "e" to answer questions, and gain ammo! You get 10 ammos.',
 							status: "error",
 							duration: 5000,
 							isClosable: true,
@@ -317,13 +285,9 @@ const Game: NextPage = () => {
 				});
 
 				onKeyPress(["z", "e"], () => {
-					ammo.value++;
+					isOpen(true);
+					ammo.value+=10;
 					ammo.text = "Ammo: " + ammo.value;
-
-					fetchQuestion().then((data) => {
-						setQuestion(data || questionLoading);
-						setOpen(true);
-					});
 				});
 
 				onKeyDown(["right", "d"], () => {
@@ -414,13 +378,12 @@ const Game: NextPage = () => {
 		<>
 			<canvas ref={cRef}></canvas>
 			<Questions
-				question={question.question}
-				answer={question.answers[0]}
+				questions={studySet.questions}
 				open={open}
-				isOpen={setOpen}
+				isOpen={isOpen}
 			/>
 		</>
 	);
 };
 
-export default Game;
+export default FoodFight;

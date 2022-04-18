@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef } from "react";
-import Questions from "../../../components/questions";
+import Questions from "../../components/questions";
 
 import { Button, useToast } from "@chakra-ui/react";
+import { StudySet } from "../Dashboard/Card";
 
 /*
     $ = lava
@@ -27,7 +28,7 @@ const gameMap = `
 |$$$$$$$$$$$$$$$$$$|`.split("\n");
 gameMap.shift();
 
-const LavaGame = () => {
+const LavaGame = ({ studySet }: { studySet: StudySet }) => {
 	const cRef = useRef<HTMLCanvasElement>(null);
 	
 	const [reload, setReload] = useState<boolean>(false);
@@ -311,8 +312,7 @@ const LavaGame = () => {
 				>
 					get questions</Button>
 			<Questions
-				question="What is 2+2"
-				answer="4"
+				questions={studySet.questions}
 				open={open}
 				isOpen={setOpen}
 			/>

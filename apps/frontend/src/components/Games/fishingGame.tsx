@@ -1,8 +1,9 @@
 import type { NextPage } from "next";
 import { useState, useEffect, useRef } from "react";
-import Questions from "../../../components/questions";
+import Questions from "../questions";
 
 import { useToast } from "@chakra-ui/react";
+import { StudySet } from "../Dashboard/Card";
 
 const mapLayout =
 `
@@ -20,7 +21,7 @@ const mapLayout =
 |||||||||||||||||`.split("\n");
 mapLayout.shift();
 
-const Game: NextPage = () => {
+const FishingGame = ({ studySet }: { studySet: StudySet }) => {
     const [open, setOpen] = useState<boolean>(false)
 
     const cRef = useRef<HTMLCanvasElement>(null);
@@ -226,7 +227,7 @@ const Game: NextPage = () => {
                         }
                     });
                     if (touching && bait.value > 0) {
-                        const f: any = add([
+                        const f = add([
                             sprite("fish", {
                                 width: wallXY
                             }),
@@ -235,9 +236,8 @@ const Game: NextPage = () => {
                         ]);
                         let fPos=100
                         f.onUpdate(() => {
-                            console.log(-((fPos-100)^2)-50)
                             fPos-=8;
-                            f.moveTo(player.pos.x + fPos, f.pos.y-((1.2*fPos-100)^2)-50);
+                            (f as any).moveTo(player.pos.x + fPos, (f as any).pos.y-((1.2*fPos-100)^2)-50);
                             if (-((fPos-100)^2)-50 > 52) {
                                 destroy(f);
                             }
@@ -256,7 +256,7 @@ const Game: NextPage = () => {
                         touching = true;
                     });
                     if (touching && fish.value>0) {
-                        const dollar: any = add([
+                        const dollar = add([
                             sprite("money", {
                                 width: wallXY
                                 
@@ -265,7 +265,7 @@ const Game: NextPage = () => {
                             lifespan(1),
                         ]);
                         dollar.onUpdate(() => {
-                            dollar.moveTo(dollar.pos.x+1, dollar.pos.y-10)
+                            (dollar as any).moveTo((dollar as any).pos.x+1, (dollar as any).pos.y-10);
                         })
                         fish.value --;
                         fish.text = "Fish: " + fish.value;
@@ -298,9 +298,7 @@ const Game: NextPage = () => {
                         if (cash.value >= COST*5) {
                             cash.value -= COST*5 
                             cash.text = "Cash: " + cash.value;
-                            console.log(COST)
                             COST += COST;
-                            console.log(COST)
                          } else {
                             toast({
                                 title: 'Not enough money',
@@ -347,9 +345,13 @@ const Game: NextPage = () => {
     return (
         <>
             <canvas ref={cRef}></canvas>
-            <Questions question="t" answer="t" open={open} isOpen={setOpen} />
+            <Questions
+				questions={studySet.questions}
+				open={open}
+				isOpen={setOpen}
+			/>
         </>
     )
 }
 
-export default Game;
+export default FishingGame;

@@ -33,12 +33,12 @@ const InputGroupExt = chakra(InputGroup, {
     }
 })
 
-function AskQuestionModal({ question, answer, isOpen, questionOpen }: {question: string, answer: string, isOpen: boolean, questionOpen: any}) {
+function AskQuestionModal({ question, answers, isOpen, questionOpen }: {question: string, answers: string[], isOpen: boolean, questionOpen: any}) {
     const [open, setOpen] = useState<boolean>(false);
     const [value, setValue] = useState<string>("");
 
     function submit() {
-        if (value === answer) {
+        if (answers.map((i) => i.toLowerCase()).includes(question.toLowerCase().trim())) {
             questionOpen(false);
         } else {
             questionOpen(false);
@@ -75,14 +75,15 @@ function AskQuestionModal({ question, answer, isOpen, questionOpen }: {question:
 
                 </ModalContent>
             </Modal>
-            <RewriteModal question={question} answer={answer} response={value} open={open} setOpen={setOpen} />
+            <RewriteModal question={question} answers={answers} response={value} open={open} setOpen={setOpen} />
         </>
     )
 }
 
-function RewriteModal({ question, answer, response, open, setOpen }: { question: string, answer: string, response:string, open: boolean, setOpen: any }) {
+function RewriteModal({ question, answers, response, open, setOpen }: { question: string, answers: string[], response:string, open: boolean, setOpen: any }) {
     function isCorrect(inp: string) {
-        return inp === answer;
+        const answersLowerCase = answers.map((i) => i.toLowerCase());
+        return answersLowerCase.includes(inp.toLowerCase().trim());
     }
 
     function checkCorrect(values: {
@@ -93,8 +94,8 @@ function RewriteModal({ question, answer, response, open, setOpen }: { question:
         if (Object.entries(values).reduce((prev, cur) => {
             if (!prev) return false;
             if (cur[0] === e.target.name) {
-                return e.target.value === answer;
-            } else if (cur[1] === answer) {
+                return isCorrect(e.target.value);
+            } else if (answers.map((i) => i.toLowerCase()).includes(cur[1].trim().toLowerCase())) {
                 return true;
             } else {
                 return false;
@@ -114,8 +115,8 @@ function RewriteModal({ question, answer, response, open, setOpen }: { question:
                 <Box margin={5}>
                     <Center>
                         <HStack spacing={1}>
-                            <Text>Correct answer: </Text>
-                            <Text color="green.500">{answer}</Text>
+                            <Text>Correct answers: </Text>
+                            <Text color="green.500">{answers.join(", ")}</Text>
                         </HStack>
                     </Center>
                     <Center>
@@ -154,8 +155,9 @@ function RewriteModal({ question, answer, response, open, setOpen }: { question:
     )
 }
 
-export default function Questions({ question, answer, open, isOpen }: { question: string, answer: string, open: boolean, isOpen: any }) {
+export default function Questions({ questions, open, isOpen }: { questions: any[], open: boolean, isOpen: any }) {
+    const question = questions[Math.floor(Math.random() * questions.length)];
     return (
-        <AskQuestionModal question={question} answer={answer} isOpen={open} questionOpen={isOpen} />
+        <AskQuestionModal question={question.question} answers={question.answers} isOpen={open} questionOpen={isOpen} />
     )
 }

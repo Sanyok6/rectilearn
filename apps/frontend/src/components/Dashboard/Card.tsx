@@ -101,6 +101,7 @@ const Card = (props: Props) => {
 		await fetch(`/api/studysets/${id}/delete_study_set/`, {
 			method: "DELETE",
 		});
+        Router.reload();
 	};
 	function playSession() {
         setGameSession({

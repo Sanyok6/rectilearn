@@ -10,6 +10,8 @@ import useSWR from 'swr';
 import AuthCtx from "../../lib/auth";
 import { useRouter } from "next/router";
 
+import { Text, Link } from "@chakra-ui/react";
+
 export type SectionType = 'sets' | 'games' | 'explore' | 'sets & games ';
 
 const CardStack = dynamic(() => import("../../components/Dashboard/CardStack"));
@@ -84,7 +86,7 @@ const Dashboard: NextPage = ({ access_token }: InferGetServerSidePropsType<typeo
             : curSection === 'games' ?
               <GameCardStack />
             : //  explore
-              <></>
+              <><Text marginTop={"10"} size="xl">Choose a study set from <Link color="blue.400" href="https://quizlet.com/search">Quizlet</Link> and import it!</Text></>
           :
             curSection === 'explore' ?
               <></>
