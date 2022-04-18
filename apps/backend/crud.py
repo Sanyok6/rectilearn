@@ -93,6 +93,7 @@ def delete_question(question_id: int):
 def get_questions(study_set_id: int):
     with Session(database.engine) as session:
         return (session.query(models.StudySetQuestions).filter(models.StudySetQuestions.study_set == study_set_id).all())
+
 def get_question(question_id: int):
     with Session(database.engine) as session:
         return (
@@ -109,6 +110,7 @@ def delete_studyset(study_set_id: int):
         ).delete()
         session.commit()
         return True
+
 def get_public_study_sets():
     with Session(database.engine) as session:
         return (
@@ -116,5 +118,3 @@ def get_public_study_sets():
             .filter(models.StudySets.is_public == True).filter(models.StudySets.questions!=None)
             .all()
         )
-
-
