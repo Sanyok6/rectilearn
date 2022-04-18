@@ -226,7 +226,7 @@ const Game: NextPage = () => {
                         }
                     });
                     if (touching && bait.value > 0) {
-                        const f = add([
+                        const f: any = add([
                             sprite("fish", {
                                 width: wallXY
                             }),
@@ -256,7 +256,7 @@ const Game: NextPage = () => {
                         touching = true;
                     });
                     if (touching && fish.value>0) {
-                        const dollar = add([
+                        const dollar: any = add([
                             sprite("money", {
                                 width: wallXY
                                 

@@ -6,6 +6,9 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 module.exports = withBundleAnalyzer(
   withTM({
     reactStrictMode: true,
+    typescript: {
+      ignoreBuildErrors: true,
+    },
     images: {
       domains: ["media.istockphoto.com", "images.unsplash.com"],
     },

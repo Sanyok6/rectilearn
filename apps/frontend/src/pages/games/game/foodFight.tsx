@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import Questions from "../../../components/questions";
 
 import { useToast } from "@chakra-ui/react";
+import { GameObj, SpriteComp, PosComp, AreaComp } from "kaboom";
 
 const mapLayout =
 `
@@ -24,8 +25,14 @@ const mapLayout =
 ||||||||||||||||||||||||||||`.split("\n");
 mapLayout.shift();
 
+const getQuestion = () => {
+    const res = fetch("/studysets/questions/random/").then(res => console.log(res));
+    return "";
+}
+
 const Game: NextPage = () => {
     const [open, setOpen] = useState<boolean>(false)
+    const [question, setQuestion] = useState<string>(getQuestion());
 
     const cRef = useRef<HTMLCanvasElement>(null);
     const [reload, setReload] = useState<boolean>(false);
@@ -170,7 +177,7 @@ const Game: NextPage = () => {
                 ])
 
                 let new_enemy_count = 0
-                let enemies = []
+                let enemies: GameObj<SpriteComp | PosComp | AreaComp | { speed: number; }>[] = []
 
                 function addEnemy() {
                     let e = add([
@@ -185,8 +192,8 @@ const Game: NextPage = () => {
                     for (var i in enemies) {
                         enemies[i].onUpdate(() => {
                                 let enemy = enemies[i]
-                                let x = -1+2*(enemy.pos.x < player.pos.x)
-                                let y = -1+2*(enemy.pos.y > player.pos.y)
+                                let x = -1+2*+(enemy.pos.x < player.pos.x)
+                                let y = -1+2*+(enemy.pos.y > player.pos.y)
                                 enemy.flipX(enemy.pos.x > player.pos.x)
                                 enemy.move((x)*enemy.speed, (y)*(-enemy.speed))
     
@@ -227,7 +234,7 @@ const Game: NextPage = () => {
                         return
                     }
                     const m = toWorld(p)
-                    const e = add([
+                    const e: any = add([
                         sprite("apple", {
                             width: wallXY,
                         }),
