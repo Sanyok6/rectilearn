@@ -3,7 +3,9 @@ import { useState, useEffect, useRef } from "react";
 import Questions from "../../../components/questions";
 
 import { useToast } from "@chakra-ui/react";
+import useSWR from "swr";
 import { GameObj, SpriteComp, PosComp, AreaComp } from "kaboom";
+import { StudySetQuestion } from "../../../components/Dashboard/Card";
 
 const mapLayout =
 `
@@ -25,14 +27,21 @@ const mapLayout =
 ||||||||||||||||||||||||||||`.split("\n");
 mapLayout.shift();
 
-const getQuestion = () => {
-    const res = fetch("/studysets/questions/random/").then(res => console.log(res));
-    return "";
-}
+
+const fetcher = (url: string) => fetch(url, {headers: {"Content-Type": "application/json"}}).then((res) => res.json());
+
+const fetchQuestion = () => fetch(window.location.host+"/api/studysets/questions/random/", { headers: { "Content-Type": "application/json" } }).then(
+		(res) => res.json()
+	).catch(console.error);
 
 const Game: NextPage = () => {
+    const questionLoading = {question: "Loading", answers: ["Loading"]};
+    const {data: randomQuestion, error } = useSWR<StudySetQuestion>(window.location.host+"/api/studysets/questions/random/", fetcher);
     const [open, setOpen] = useState<boolean>(false)
-    const [question, setQuestion] = useState<string>(getQuestion());
+    const [question, setQuestion] = useState<StudySetQuestion>(randomQuestion || questionLoading);
+
+    // fetchQuestion().then(data => setQuestion(data));
+    fetchQuestion().then(setQuestion);
 
     const cRef = useRef<HTMLCanvasElement>(null);
     const [reload, setReload] = useState<boolean>(false);
@@ -40,6 +49,10 @@ const Game: NextPage = () => {
     const toast = useToast()
 
     useEffect(() => {
+        if (randomQuestion) {
+            setQuestion(randomQuestion)
+        }
+        if (error) console.log(error)
         window.onresize = () => {
             setReload(reload => !reload)
         }
@@ -167,7 +180,7 @@ const Game: NextPage = () => {
                     text("Ammo: 10"),
                     pos(0, 80),
                     fixed(),
-                    { value: 100 },
+                    { value: 10 },
                 ])
                 const cash = add([
                     text("Cash: 0"),
@@ -231,7 +244,7 @@ const Game: NextPage = () => {
                             status: 'error',
                             duration: 5000,
                             isClosable: true,
-                          })
+                            })
                         return
                     }
                     const m = toWorld(p)
@@ -275,7 +288,11 @@ const Game: NextPage = () => {
                 onKeyPress(["z", "e"], () => {
                     ammo.value++;
                     ammo.text = "Ammo: "+ammo.value
-                    setOpen(true)
+                    
+                    fetchQuestion().then(data => {
+                        setQuestion(data || questionLoading);
+                        setOpen(true)
+                    })
                 })
 
                 onKeyDown(["right", "d"], () => {
@@ -318,15 +335,15 @@ const Game: NextPage = () => {
                             cash.value -= COST*5 
                             cash.text = "Cash: " + cash.value;
                             COST += COST;
-                         } else {
+                            } else {
                             toast({
                                 title: 'Not enough money',
                                 description: "you need $"+COST*5+" for that upgrade!",
                                 status: 'warning',
                                 duration: 5000,
                                 isClosable: true,
-                              })
-                         }
+                                })
+                            }
                     }
 
                     touching=false
@@ -338,9 +355,9 @@ const Game: NextPage = () => {
                     if (touching) {
 
                         if (cash.value >= SPEED/20) {
-                           cash.value -= SPEED/20 
-                           cash.text = "Cash: " + cash.value;
-                           SPEED += 200;
+                            cash.value -= SPEED/20 
+                            cash.text = "Cash: " + cash.value;
+                            SPEED += 200;
                         } else {
                             toast({
                                 title: 'Not enough money',
@@ -348,7 +365,7 @@ const Game: NextPage = () => {
                                 status: 'warning',
                                 duration: 5000,
                                 isClosable: true,
-                              })
+                                })
                         }
                     }
 
@@ -364,7 +381,7 @@ const Game: NextPage = () => {
     return (
         <>
             <canvas ref={cRef}></canvas>
-            <Questions question="t" answer="t" open={open} isOpen={setOpen} />
+            <Questions question={question.question} answer={question.answers[0]} open={open} isOpen={setOpen} />
         </>
     )
 }
