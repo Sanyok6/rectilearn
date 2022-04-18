@@ -9,22 +9,26 @@ export const games = [
     {
         id: 1,
         name: "Fishillionare",
-        imageUrl: "/screenshots/fishing.png"
+        imageUrl: "/screenshots/fishing.png",
+        gameName: "fishGame"
     },
     {
         id: 2,
         name: "Food Fight",
-        imageUrl: "https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc="
+        imageUrl: "https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc=",
+        gameName: "foodFight"
     },
     {
         id: 3,
         name: "The floor is lava",
-        imageUrl: "/screenshots/lavaGame.png"
+        imageUrl: "/screenshots/lavaGame.png",
+        gameName: "lavaGame"
     },
     {
         id: 4,
-        name: "Escape",
-        imageUrl: "/screenshots/bushGame.png"
+        name: "Escape the room as a bush",
+        imageUrl: "/screenshots/bushGame.png",
+        gameName: "bushGame"
     },
 ];
 
