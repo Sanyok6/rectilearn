@@ -172,6 +172,7 @@ const CreateCardModal = (props: any) => {
     const { isOpen, onClose: oC } = props;
     const [v, setV] = useState<string>("");
     const [questions, setQuestions] = useState<Array<StudySetQuestion>>([]);
+    const [textAreaVal, setTextAreaVal] = useState<string>("");
     const toast = useToast();
     const router = useRouter();
 
@@ -179,6 +180,20 @@ const CreateCardModal = (props: any) => {
         setQuestions([]);
         setV("");
         oC();
+    }
+
+    function onTextAreaChange(e: any) {
+        setTextAreaVal(e.target.value);
+    }
+
+    function onImport() {
+        const values = textAreaVal.split("\n");
+        const importedQuestions = values.map((v) => {
+            const [question, answer] = v.split("    ");
+            return { question, answers: [answer] };
+        });
+        setQuestions(importedQuestions);
+        console.log(importedQuestions)
     }
 
     const handleSubmission = async () => {
@@ -230,12 +245,15 @@ const CreateCardModal = (props: any) => {
                             <TabPanel>
                                 <FormControl>
                                     <Text>Import from quizlet</Text>
-                                    {/* <Image src="../../public/site/how2export.png" w={'full'}></Image> */}
+                                    <Image src="/site/how2export.png" width={2000} height={1800} w="auto"></Image>
                                 </FormControl>
                                 
-                                <Textarea placeholder="exported study set"></Textarea>
+                                <Textarea placeholder="exported study set"
+                                    value={textAreaVal}
+                                    onChange={onTextAreaChange}
+                                ></Textarea>
                                 
-                                <Button marginTop="2" width='100%' colorScheme="blue">Import</Button>
+                                <Button marginTop="2" width='100%' colorScheme="blue" onClick={onImport}>Import</Button>
                             </TabPanel>
                             <TabPanel>
                                 <FormControl>

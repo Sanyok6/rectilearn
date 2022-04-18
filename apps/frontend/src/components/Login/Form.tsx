@@ -113,7 +113,7 @@ const LoginForm = () => {
                                     <Link maxW="40%" alignSelf="center" _hover={{
                                         textDecor: "none",
                                     }}>
-                                        <HStack>
+                                        <HStack onClick={() => Router.push("/api/guest")}>
                                             <FiUser />
                                             <Text>Login as<chakra.span
                                                 color={guestColor}
