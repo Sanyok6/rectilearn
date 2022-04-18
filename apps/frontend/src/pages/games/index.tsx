@@ -5,6 +5,7 @@ import BushGame from "../../components/Games/bushGame";
 import FishingGame from "../../components/Games/fishingGame";
 import FoodFight from "../../components/Games/foodFight";
 import LavaGame from "../../components/Games/lavaGame";
+import Questions from "../../components/questions";
 import AuthCtx from "../../lib/auth";
 
 const Games: NextPage = () => {
@@ -28,6 +29,9 @@ const Games: NextPage = () => {
                 break;
             case "foodFight":
                 setGameObj(() => <FoodFight studySet={gameSession.studySet}></FoodFight>)
+                break;
+            case "practice":
+                setGameObj(() => <Questions studySet={gameSession.studySet}></Questions>)
                 break;
             default:
                 setGameObj(() => <BushGame studySet={gameSession.studySet} />)
