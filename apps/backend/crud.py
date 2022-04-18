@@ -43,9 +43,8 @@ def create_study_set(study_set: schemas.StudySetCreate, creator_id: int):
         session.add(db_study_set)
         session.commit()
 
-        if study_set.questions:
-            for question in study_set.questions:
-                add_question(db_study_set.id, question)
+        for question in study_set.questions:
+            add_question(db_study_set.id, question)
 
         session.refresh(db_study_set)
         return db_study_set
@@ -58,6 +57,23 @@ def get_study_sets(creator_id: int):
             .filter(models.StudySets.creator == creator_id)
             .all()
         )
+
+
+def update_study_set(study_set_id: int, study_set: schemas.StudySetCreate):
+    with Session(database.engine) as session:
+        db_study_set = session.query(models.StudySets).filter(models.StudySets.id == study_set_id).first()
+        db_study_set.subject = study_set.subject
+        db_study_set.is_public = study_set.is_public
+
+        session.query(models.StudySetQuestions).filter(models.StudySetQuestions.study_set == study_set_id).delete()
+        session.commit()
+
+        for question in study_set.questions:
+            add_question(db_study_set.id, question)
+
+        session.refresh(db_study_set)
+
+        return db_study_set
 
 
 def get_study_set(study_set_id: int):

@@ -206,6 +206,28 @@ def new_question(
     return crud.add_question(study_set_id, question)
 
 
+
+@app.put(
+    "/studysets/{study_set_id}/update/", response_model=schemas.StudySet
+)
+def update_studyset(
+    study_set_id: int,
+    new_study_set: schemas.StudySetCreate,
+    user: schemas.User = Depends(get_current_user),
+):
+    study_set = crud.get_study_set(study_set_id)
+    if study_set.creator != user.id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authorized to add question to this study set",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    return crud.update_study_set(study_set_id, new_study_set)
+    # return stu
+
+
+
 @app.delete("/studysets/{study_set_id}/delete_question/")
 def delete_question(
     study_set_id: int,
