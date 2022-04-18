@@ -53,6 +53,23 @@ const CardStack = () => {
     const [data, setData] = useState<Array<StudySet>>([]);
 
 	const [shouldOpen, setShouldOpen] = useState<boolean>(false);
+
+    const updateStudySet = (studySet: StudySet) => {
+        if (!d) return null;
+
+        const studySets = [...d];
+        const index = studySets.findIndex((s) => s.id === studySet.id);
+        console.log("index: ", index)
+        studySets[index] = studySet;
+        console.log("old one ", studySets[index])
+        console.log("new one: ", studySet)
+
+        console.log("studysets (before): ", d)
+        setData(studySets);
+        console.log("studysets (after): ", d)
+        return true;
+    };
+
 	useEffect(() => {
 		setShouldOpen(true);
 	}, []);
@@ -98,7 +115,7 @@ const CardStack = () => {
 					<CardGrid>
 						{(data)
 							? data.map((set) => (
-									<Card key={set.id.toString()} studySet={set} />
+									<Card key={set.id.toString()} studySet={set} updateStudySet={updateStudySet} />
 							  ))
 							: "Loading"}
 						<CreateCard />
