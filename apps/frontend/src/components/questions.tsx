@@ -33,12 +33,13 @@ const InputGroupExt = chakra(InputGroup, {
     }
 })
 
+
 function AskQuestionModal({ question, answers, isOpen, questionOpen }: {question: string, answers: string[], isOpen: boolean, questionOpen: any}) {
     const [open, setOpen] = useState<boolean>(false);
     const [value, setValue] = useState<string>("");
 
     function submit() {
-        if (answers.map((i) => i.toLowerCase()).includes(question.toLowerCase().trim())) {
+        if (answers.map((i) => i.toLowerCase()).includes(value.toLowerCase().trim())) {
             questionOpen(false);
         } else {
             questionOpen(false);
@@ -48,7 +49,6 @@ function AskQuestionModal({ question, answers, isOpen, questionOpen }: {question
 
     return (
         <>
-            {/* <Button onClick={onOpen} position="fixed" bottom={0} left={0} bg={"black"}>Open Modal</Button> */}
 
             <Modal size={"xl"} closeOnEsc={false} closeOnOverlayClick={false} isOpen={isOpen}  onClose={() => void(0)}>
                 <ModalOverlay />

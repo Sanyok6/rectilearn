@@ -26,6 +26,7 @@ import {
 	InputGroup,
 	InputRightElement,
 	useToast,
+	Select,
 } from "@chakra-ui/react";
 import React, { useState, useContext } from "react";
 import { CloseIcon } from "@chakra-ui/icons";
@@ -35,6 +36,7 @@ import { Icon, IconButton, IconButtonProps, LightMode } from "@chakra-ui/react";
 import { FiInfo, FiPlay, FiStar } from "react-icons/fi";
 import AuthCtx from "../../lib/auth";
 import { useRouter } from "next/router";
+import { games } from "./GameCardStack";
 
 export const InfoButton = (props: IconButtonProps) => (
 	<LightMode>
@@ -95,6 +97,9 @@ const Card = (props: Props) => {
 	const [isLoading, setLoading] = useState<boolean>(true);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { setGameSession } = useContext(AuthCtx);
+	const [selected, setSelected] = useState<string>("");
+	const { isOpen: isDOpen, onOpen: onDOpen, onClose: onDClose } = useDisclosure();
+	const toast = useToast();
     const Router = useRouter();
 
 	const deleteStudySet = async (e: any) => {
@@ -103,13 +108,20 @@ const Card = (props: Props) => {
 		});
         Router.reload();
 	};
-	function playSession() {
-        setGameSession({
-            game: "lava",
+	function onDComplete() {
+		if (selected === "") {
+			toast({
+				title: "Please select a game",
+				variant: "warning"
+			})
+			return;
+		}
+		setGameSession({
+            game: selected,
             studySet
         });
         Router.push("/games");
-    }
+	}
 	return (
 		<Stack
 			spacing={useBreakpointValue({ base: "4", md: "5" })}
@@ -168,11 +180,32 @@ const Card = (props: Props) => {
 						colorScheme="blue"
 						isFullWidth
 						fontSize={"sm"}
-						onClick={playSession}
+						onClick={onDOpen}
 					>
 						<FiPlay />
 						<Text ml="0.5em">{"Play"}</Text>
 					</Button>
+					<Modal isOpen={isDOpen} onClose={onDClose}>
+						<ModalOverlay />
+						<ModalContent>
+							<ModalHeader>Select a game to play</ModalHeader>
+							<ModalBody>
+								<Select placeholder="select a game to play" value={selected} onChange={(e) => setSelected(e.target.value)}>
+									{games.map((i, ind) => (
+										<option key={ind} value={i.gameName}>{i.name}</option>
+									))}
+								</Select>
+							</ModalBody>
+							<ModalFooter>
+								<Button colorScheme="blue" mr={3} onClick={onDComplete}>
+									Play
+								</Button>
+								<Button colorScheme="red" mr={3} onClick={onDClose}>
+									Cancel
+								</Button>
+							</ModalFooter>
+						</ModalContent>
+					</Modal>
 				</Stack>
 				<Stack align="center" direction="row">
 					<Button

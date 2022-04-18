@@ -7,7 +7,7 @@ const Index: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Page</title>
+        <title>Home Page</title>
       </Head>
       <WelcomePage />
     </>

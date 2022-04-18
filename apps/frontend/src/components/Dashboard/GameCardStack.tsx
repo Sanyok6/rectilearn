@@ -4,18 +4,20 @@ import {
 import React, { useEffect, useState } from 'react';
 import CardGrid from './CardGrid';
 import GameCard from './GameCard';
+import useSWR from 'swr';
+import { StudySet } from './Card';
 
 export const games = [
     {
         id: 1,
         name: "Fishillionare",
         imageUrl: "/screenshots/fishing.png",
-        gameName: "fishGame"
+        gameName: "fishingGame"
     },
     {
         id: 2,
         name: "Food Fight",
-        imageUrl: "https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc=",
+        imageUrl: "/screenshots/foodFight.png",
         gameName: "foodFight"
     },
     {
@@ -32,11 +34,26 @@ export const games = [
     },
 ];
 
+const fetcher = (url: string) =>
+	fetch(url, { headers: { "Content-Type": "application/json" } }).then(
+		(res) => res.json()
+	);
+
 const GameCardStack = () => {
     const [shouldOpen, setShouldOpen] = useState<boolean>(false);
+	const { data: d, error } = useSWR<Array<StudySet>>("/api/studysets/", fetcher);
+    const [data, setData] = useState<Array<StudySet>>([]);
     useEffect(() => {
         setShouldOpen(true);
     }, []);
+    useEffect(() => {
+        if (d) {
+            setData(d);
+        }
+        if (error) {
+            console.error(error);
+        }
+    }, [d, error]);
     return (
         <>
             {!shouldOpen && (
@@ -67,14 +84,15 @@ const GameCardStack = () => {
                 >
                     <CardGrid autoRows="1fr">
                         <GameCard
-                            games={{ id: 10, name: "GAME OF THE DAY", imageUrl: "https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc=" }}
+                            games={games[Math.floor(Math.random() * games.length)]}
                             rootProps={{
                                 gridRow: "1 / 3",
                                 gridColumn: useBreakpointValue({ base: "1 / 3 ", md: "1 / 4" }),
                             }}
+                            studySets={data}
                         />
                         {games.map((game, index) => (
-                            <GameCard games={game} key={index} />
+                            <GameCard games={game} key={index} studySets={data} />
                         ))}
                     </CardGrid>
                 </Box>

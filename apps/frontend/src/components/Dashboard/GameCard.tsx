@@ -9,9 +9,21 @@ import {
     useBreakpointValue,
     useColorModeValue,
     Tooltip,
+    useDisclosure,
+    Modal,
+	ModalBody,
+	ModalContent,
+	ModalHeader,
+	ModalOverlay,
+	ModalFooter,
+    Select,
+    useToast
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Image } from '../../utils/next-chakra-image';
+import { StudySet } from './Card';
+import AuthCtx from "../../lib/auth";
+import { useRouter } from "next/router";
 
 interface game {
     id: number;
@@ -21,13 +33,33 @@ interface game {
 
 interface Props {
     games: game;
-    rootProps?: StackProps
+    rootProps?: StackProps,
+    studySets: Array<StudySet>
 }
 
 const GameCard = (props: Props) => {
-    const { games, rootProps } = props;
+    const { games, rootProps, studySets } = props;
     const { name, imageUrl } = games;
     const [isLoading, setLoading] = useState<boolean>(true);
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [selected, setSelected] = useState<string>("");
+    const { setGameSession } = useContext(AuthCtx);
+    const toast = useToast();
+    const Router = useRouter();
+    function onComplete() {
+		if (selected === "") {
+			toast({
+				title: "Please select a set",
+				variant: "warning"
+			})
+			return;
+		}
+		setGameSession({
+            game: name,
+            studySet: studySets.find((i) => i.id === Number(selected)) || studySets[0]
+        });
+        Router.push("/games");
+	}
     return (
         <Stack spacing={useBreakpointValue({ base: '4', md: '5' })} {...rootProps}>
             <Box
@@ -68,7 +100,28 @@ const GameCard = (props: Props) => {
                         </Tooltip>
                     </Stack>
                     <Stack>
-                        <Button>PLAY</Button>
+                        <Button onClick={onOpen}>PLAY</Button>
+                        <Modal isOpen={isOpen} onClose={onClose}>
+                            <ModalOverlay />
+                            <ModalContent>
+                                <ModalHeader>Select a game to play</ModalHeader>
+                                <ModalBody>
+                                    <Select placeholder="select a game to play" value={selected} onChange={(e) => setSelected(e.target.value)}>
+                                        {studySets.map((i, ind) => (
+                                            <option key={ind} value={String(i.id)}>{i.subject}</option>
+                                        ))}
+                                    </Select>
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Button colorScheme="blue" mr={3} onClick={onComplete}>
+                                        Play
+                                    </Button>
+                                    <Button colorScheme="red" mr={3} onClick={onClose}>
+                                        Cancel
+                                    </Button>
+                                </ModalFooter>
+                            </ModalContent>
+                        </Modal>
                     </Stack>
                 </Stack>
             </Box>
