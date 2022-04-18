@@ -29,11 +29,12 @@ import {
     InputRightElement
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import CardGrid from "./CardGrid";
 import Card, { StudySet, StudySetQuestion } from "./Card";
 import { FiPlus } from "react-icons/fi";
 import useSWR from "swr";
+import AuthCtx from "../../lib/auth";
 
 interface ICreateCardProps {
 	rootProps?: StackProps;
@@ -45,17 +46,25 @@ const fetcher = (url: string) =>
 	);
 
 const CardStack = () => {
-	const { data, error } = useSWR<Array<StudySet>>("/api/studysets/", fetcher);
+    const { accessToken } = useContext(AuthCtx);
+	const { data: d, error } = useSWR<Array<StudySet>>("/api/studysets/", fetcher);
+    const [data, setData] = useState<Array<StudySet>>([]);
 
 	const [shouldOpen, setShouldOpen] = useState<boolean>(false);
 	useEffect(() => {
 		setShouldOpen(true);
 	}, []);
     useEffect(() => {
+        if (accessToken && accessToken === "guest") {
+            setData([]);
+            alert("Note: Guests cannot create any studysets or play any games. Please make an account to get access to all features");
+        } else if (accessToken && d) {
+            setData(d);
+        }
         if (error) {
             console.error(error);
         }
-    }, [error]);
+    }, [d, error]);
 	return (
 		<>
 			{!shouldOpen && (
