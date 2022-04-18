@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import Questions from "../../../components/questions";
 
 import { useToast } from "@chakra-ui/react";
+import { GameObj, SpriteComp, PosComp, AreaComp } from "kaboom";
 
 const mapLayout =
 `
@@ -170,7 +171,7 @@ const Game: NextPage = () => {
                 ])
 
                 let new_enemy_count = 0
-                let enemies = []
+                let enemies: GameObj<SpriteComp | PosComp | AreaComp | { speed: number; }>[] = []
 
                 function addEnemy() {
                     let e = add([
