@@ -1,7 +1,8 @@
 import typing
 from datetime import datetime
 
-from pydantic import BaseModel
+from fastapi import HTTPException
+from pydantic import BaseModel, validator
 
 
 class UserBase(BaseModel):
@@ -36,6 +37,29 @@ class StudySetQuestionCreate(BaseModel):
     question: str
     answers: typing.List[str]
 
+    @validator("question")
+    def validate_question(cls, value):
+        value = str(value)
+
+        if len(value) <= 3:
+            raise HTTPException(status_code=422, detail="Question must be at least 4 characters long.")
+
+        return value
+
+    @validator("answers")
+    def validate_answers(cls, value):
+        if not value:
+            raise HTTPException(status_code=422, detail="Answers cannot be empty")
+
+        elif len(value) > 7:
+            raise HTTPException(status_code=422, detail="There cannot be more than 7 answers for a question")
+
+        for answer in value:
+            if len(str(answer)) <= 0:
+                raise HTTPException(status_code=422, detail="Answers must be at least 4 characters long.")
+
+        return value
+
     class Config:
         orm_mode = True
 
@@ -51,6 +75,15 @@ class StudySetCreate(BaseModel):
     subject: str
     questions: typing.Optional[typing.List[StudySetQuestionCreate]] = None
     is_public: typing.Optional[bool]=None
+
+    @validator("subject")
+    def validate_subject(cls, value):
+        value = str(value)
+
+        if len(value) <= 1:
+            raise HTTPException(status_code=422, detail="Subject must be at least 2 characters long.")
+
+        return value
     class Config:
         orm_mode = True
 
