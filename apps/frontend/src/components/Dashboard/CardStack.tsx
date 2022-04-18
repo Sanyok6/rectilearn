@@ -34,6 +34,7 @@ import {
     TabPanel,
     TabPanels,
     Textarea,
+    Checkbox,
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
 import React, { useContext, useEffect, useRef, useState } from "react";
@@ -173,12 +174,16 @@ const CreateCardModal = (props: any) => {
     const [v, setV] = useState<string>("");
     const [questions, setQuestions] = useState<Array<StudySetQuestion>>([]);
     const [textAreaVal, setTextAreaVal] = useState<string>("");
+    const [checked, setChecked] = useState<boolean>(false);
     const toast = useToast();
     const router = useRouter();
 
     function onClose() {
         setQuestions([]);
         setV("");
+        setChecked(false);
+        setTextAreaVal("");
+        setTabIndex(0);
         oC();
     }
 
@@ -189,11 +194,14 @@ const CreateCardModal = (props: any) => {
     function onImport() {
         const values = textAreaVal.split("\n");
         const importedQuestions = values.map((v) => {
-            const [question, answer] = v.split("    ");
+            const [question, answer] = checked ? v.split("\t").reverse() : v.split("\t"); // v.split("\t") or v.split("    ")
             return { question, answers: [answer] };
-        });
+        }).filter((i) => i.question.trim());
         setQuestions(importedQuestions);
-        console.log(importedQuestions)
+        setTabIndex(2);
+        toast({
+            title: "Now, add a subject! It has to be at least 2 letters long."
+        });
     }
 
     const handleSubmission = async () => {
@@ -244,9 +252,11 @@ const CreateCardModal = (props: any) => {
                             </TabPanel>
                             <TabPanel>
                                 <FormControl>
-                                    <Text>Import from quizlet</Text>
+                                    <Text>{"Import from quizlet)"}</Text>
+                                    <Text>{"(Note: please choose the default settings)"}</Text>
                                     <Image src="/site/how2export.png" width={2000} height={1800} w="auto"></Image>
                                 </FormControl>
+                                <Checkbox checked={checked} onChange={() => setChecked(checked => !checked)}>Reverse Question and Answer</Checkbox>
                                 
                                 <Textarea placeholder="exported study set"
                                     value={textAreaVal}
