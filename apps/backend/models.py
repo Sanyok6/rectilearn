@@ -21,7 +21,7 @@ class StudySets(Base):
     __tablename__ = "study_sets"
     id = Column(Integer, autoincrement=True, primary_key=True, unique=True)
     subject = Column(String(255))
-    creator = Column(Integer, ForeignKey("users.id"))
+    creator = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
     questions = relationship("StudySetQuestions", lazy="subquery")
     created_at = Column(DateTime(), default=datetime.utcnow())
     is_public = Column(Boolean, default=False)
@@ -29,6 +29,6 @@ class StudySets(Base):
 class StudySetQuestions(Base):
     __tablename__ = "studyset_questions"
     id = Column(Integer, autoincrement=True, primary_key=True, unique=True)
-    study_set = Column(Integer, ForeignKey("study_sets.id"))
+    study_set = Column(Integer, ForeignKey("study_sets.id", ondelete="CASCADE"))
     question = Column(String(4096))
     answers = Column(ARRAY(String(1000)))
