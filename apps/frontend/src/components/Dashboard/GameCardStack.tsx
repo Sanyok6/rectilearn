@@ -1,11 +1,12 @@
 import {
     Box, Center, ScaleFade, Skeleton, useBreakpointValue, VStack,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import CardGrid from './CardGrid';
 import GameCard from './GameCard';
 import useSWR from 'swr';
 import { StudySet } from './Card';
+import AuthCtx from '../../lib/auth';
 
 export const games = [
     {
@@ -40,6 +41,7 @@ const fetcher = (url: string) =>
 	);
 
 const GameCardStack = () => {
+    const { accessToken } = useContext(AuthCtx);
     const [shouldOpen, setShouldOpen] = useState<boolean>(false);
 	const { data: d, error } = useSWR<Array<StudySet>>("/api/studysets/", fetcher);
     const [data, setData] = useState<Array<StudySet>>([]);
@@ -47,7 +49,10 @@ const GameCardStack = () => {
         setShouldOpen(true);
     }, []);
     useEffect(() => {
-        if (d) {
+        if (accessToken && accessToken === "guest") {
+            setData([]);
+            alert("Note: Guests cannot create any studysets or play any games. Please make an account to get access to all features");
+        } else if (accessToken && d) {
             setData(d);
         }
         if (error) {

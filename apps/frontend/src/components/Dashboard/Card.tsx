@@ -259,6 +259,13 @@ const EditStudySetModal = (props: any) => {
 	}
 
 	const handleSubmission = async () => {
+		if (questions.length < 1) {
+			toast({
+				title: "Please fill in something.",
+				variant: "warning"
+			});
+			return;
+		}
 		const values = {
 			subject: v,
 			questions: questions,
@@ -293,7 +300,7 @@ const EditStudySetModal = (props: any) => {
 			<Modal isOpen={isOpen} onClose={onClose}>
 				<ModalOverlay />
 				<ModalContent>
-					<ModalHeader>Create study set</ModalHeader>
+					<ModalHeader>Edit study set</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
 						<FormControl>
@@ -312,21 +319,21 @@ const EditStudySetModal = (props: any) => {
 								<FormLabel htmlFor={`q${ind}`}>
 									Question
 								</FormLabel>
-								<Input
-									id={`q${ind}`}
-									placeholder="Your question here"
-									value={i.question}
-									onChange={(e) =>
-										setQuestions((qs) => {
-											let newQ = [...qs];
-											newQ[ind] = {
-												...newQ[ind],
-												question: e.target.value,
-											};
-											return newQ;
-										})
-									}
-								/>
+								<InputGroup display="flex" flexDir="row" alignItems="center" justifyContent="center">
+									<Input id={`q${ind}`} placeholder="Your question here" value={i.question} onChange={(e) => setQuestions(qs => {
+										let newQ = [...qs];
+										newQ[ind] = {
+											...newQ[ind],
+											question: e.target.value
+										}
+										return newQ;
+									})} />
+									<InputRightElement onClick={() => setQuestions(qs => {
+										let newQ = [...qs];
+										newQ = newQ.filter((_, i) => i !== ind);
+										return newQ;
+									})}><CloseIcon /></InputRightElement>
+                            	</InputGroup>
 								<Menu>
 									<MenuButton as={Button} mt={3}>
 										View Answers

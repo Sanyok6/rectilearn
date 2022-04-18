@@ -21,6 +21,7 @@ import { RiEditLine } from "react-icons/ri"
 
 import { useState } from "react"
 import { Field, Formik } from "formik";
+import { StudySetQuestion } from "./Dashboard/Card";
 
 const InputGroupExt = chakra(InputGroup, {
     baseStyle: {
@@ -34,12 +35,11 @@ const InputGroupExt = chakra(InputGroup, {
 })
 
 
-function AskQuestionModal({ question, answers, isOpen, questionOpen }: {question: string, answers: string[], isOpen: boolean, questionOpen: any}) {
-    const [open, setOpen] = useState<boolean>(false);
-    const [value, setValue] = useState<string>("");
-
+function AskQuestionModal({ newQ, question, answers, isOpen, questionOpen, setOpen, value, setValue }: { newQ: () => void, question: string, answers: string[], isOpen: boolean, questionOpen: any, setOpen: any, value: any, setValue: any }) {
     function submit() {
         if (answers.map((i) => i.toLowerCase()).includes(value.toLowerCase().trim())) {
+            newQ();
+            setValue("");
             questionOpen(false);
         } else {
             questionOpen(false);
@@ -64,7 +64,7 @@ function AskQuestionModal({ question, answers, isOpen, questionOpen }: {question
                         textAlign="center"
                         id="ans"
                         value={value}
-                        onKeyPress={(e) => e.key === "Enter" && [setValue(""), submit()]}
+                        onKeyPress={(e) => e.key === "Enter" && submit()}
                         onChange={(e) => setValue(e.target.value)} 
                         autoComplete={"off"}
                     />
@@ -75,12 +75,11 @@ function AskQuestionModal({ question, answers, isOpen, questionOpen }: {question
 
                 </ModalContent>
             </Modal>
-            <RewriteModal question={question} answers={answers} response={value} open={open} setOpen={setOpen} />
         </>
     )
 }
 
-function RewriteModal({ question, answers, response, open, setOpen }: { question: string, answers: string[], response:string, open: boolean, setOpen: any }) {
+function RewriteModal({ newQ, question, answers, response, open, setOpen, setValue }: { newQ: () => void, question: string, answers: string[], response:string, open: boolean, setOpen: any, setValue: any }) {
     function isCorrect(inp: string) {
         const answersLowerCase = answers.map((i) => i.toLowerCase());
         return answersLowerCase.includes(inp.toLowerCase().trim());
@@ -101,6 +100,8 @@ function RewriteModal({ question, answers, response, open, setOpen }: { question
                 return false;
             }
         }, true)) {
+            newQ();
+            setValue("");
             setOpen(false);
         }
     }
@@ -156,8 +157,16 @@ function RewriteModal({ question, answers, response, open, setOpen }: { question
 }
 
 export default function Questions({ questions, open, isOpen }: { questions: any[], open: boolean, isOpen: any }) {
-    const question = questions[Math.floor(Math.random() * questions.length)];
+    const [question, setQ] = useState<StudySetQuestion>(questions[Math.floor(Math.random() * questions.length)]);
+    const [op, setOpen] = useState<boolean>(false);
+    const [value, setValue] = useState<string>("");
+    function newQ() {
+        setQ(questions[Math.floor(Math.random() * questions.length)]);
+    }
     return (
-        <AskQuestionModal question={question.question} answers={question.answers} isOpen={open} questionOpen={isOpen} />
+        <>
+            <AskQuestionModal newQ={newQ} question={question.question} answers={question.answers} isOpen={open} questionOpen={isOpen} setOpen={setOpen} value={value} setValue={setValue} />
+            <RewriteModal newQ={newQ} question={question.question} answers={question.answers} response={value} open={op} setOpen={setOpen} setValue={setValue} />
+        </>
     )
 }

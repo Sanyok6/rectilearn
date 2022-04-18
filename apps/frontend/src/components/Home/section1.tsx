@@ -129,6 +129,7 @@ export default function CallToActionWithVideo() {
                 top={'50%'}
                 transform={'translateX(-50%) translateY(-50%)'}
                 zIndex={1}
+                onClick={() => {window.location.href = "https://github.com/Sanyok6/rectilearn"}}
               />
               <Image
                 alt={'Hero Image'}

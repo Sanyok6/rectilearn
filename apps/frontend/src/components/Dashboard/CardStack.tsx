@@ -274,14 +274,21 @@ const CreateCardModal = (props: any) => {
                                     questions.map((i, ind) => (
                                         <FormControl key={ind}>
                                             <FormLabel htmlFor={`q${ind}`}>Question</FormLabel>
-                                            <Input id={`q${ind}`} placeholder="Your question here" value={i.question} onChange={(e) => setQuestions(qs => {
-                                                let newQ = [...qs];
-                                                newQ[ind] = {
-                                                    ...newQ[ind],
-                                                    question: e.target.value
-                                                }
-                                                return newQ;
-                                            })} />
+                                            <InputGroup display="flex" flexDir="row" alignItems="center" justifyContent="center">
+                                                <Input id={`q${ind}`} placeholder="Your question here" value={i.question} onChange={(e) => setQuestions(qs => {
+                                                    let newQ = [...qs];
+                                                    newQ[ind] = {
+                                                        ...newQ[ind],
+                                                        question: e.target.value
+                                                    }
+                                                    return newQ;
+                                                })} />
+                                                <InputRightElement onClick={() => setQuestions(qs => {
+                                                    let newQ = [...qs];
+                                                    newQ = newQ.filter((_, i) => i !== ind);
+                                                    return newQ;
+                                                })}><CloseIcon /></InputRightElement>
+                                            </InputGroup>
                                             <Menu>
                                                 <MenuButton as={Button} mt={3}>
                                                     View Answers
