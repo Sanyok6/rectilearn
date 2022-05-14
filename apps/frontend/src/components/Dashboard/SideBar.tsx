@@ -242,12 +242,12 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           icon={useColorModeValue(<FiSun />, <FiMoon />)}
           onClick={toggleColorMode}
         />
-        <IconButton
+        {/* <IconButton
           size="lg"
           variant="ghost"
           aria-label="open menu"
           icon={<FiBell />}
-        />
+        /> */}
         <Flex alignItems={"center"}>
           <Menu>
             <MenuButton
@@ -282,7 +282,6 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               bg={useColorModeValue("white", "gray.900")}
               borderColor={useColorModeValue("gray.200", "gray.700")}
             >
-              <MenuItem>Profile</MenuItem>
               <MenuItem onClick={onStOpen}>Settings</MenuItem>
               <SettingsModal isStOpen={isStOpen} onStClose={onStClose} />
               <MenuDivider />

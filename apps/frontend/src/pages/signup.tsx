@@ -9,7 +9,7 @@ const SignUp: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Sign Up</title>
+        <title>Page</title>
       </Head>
       <Flex flexDir="column" height="100vh">
         <Box flex="0 1 auto">

@@ -29,6 +29,7 @@ interface game {
     id: number;
     name: string;
     imageUrl: string;
+    gameName: string;
 }
 
 interface Props {
@@ -39,7 +40,7 @@ interface Props {
 
 const GameCard = (props: Props) => {
     const { games, rootProps, studySets } = props;
-    const { name, imageUrl } = games;
+    const { name, imageUrl, gameName } = games;
     const [isLoading, setLoading] = useState<boolean>(true);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [selected, setSelected] = useState<string>("");
@@ -55,7 +56,7 @@ const GameCard = (props: Props) => {
 			return;
 		}
 		setGameSession({
-            game: name,
+            game: gameName,
             studySet: studySets.find((i) => i.id === Number(selected)) || studySets[0]
         });
         Router.push("/games");
@@ -104,9 +105,9 @@ const GameCard = (props: Props) => {
                         <Modal isOpen={isOpen} onClose={onClose}>
                             <ModalOverlay />
                             <ModalContent>
-                                <ModalHeader>Select a game to play</ModalHeader>
+                                <ModalHeader>Select a set to study</ModalHeader>
                                 <ModalBody>
-                                    <Select placeholder="select a game to play" value={selected} onChange={(e) => setSelected(e.target.value)}>
+                                    <Select placeholder="select a set to study" value={selected} onChange={(e) => setSelected(e.target.value)}>
                                         {studySets.map((i, ind) => (
                                             <option key={ind} value={String(i.id)}>{i.subject}</option>
                                         ))}

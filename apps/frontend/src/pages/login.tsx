@@ -9,7 +9,7 @@ const Login: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Login</title>
+        <title>Page</title>
       </Head>
       <Flex flexDir="column" height="100vh">
         <Box flex="0 1 auto">

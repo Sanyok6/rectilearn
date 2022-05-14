@@ -39,7 +39,7 @@ const SignUpForm = () => {
                         body: JSON.stringify(values)
                     }).catch(console.error);
                     if (res && res.status === 200) {
-                        Router.push("/dashboard");
+                        Router.replace("/login")
                     } else {
                         toast({
                             title: "Something went wrong",
