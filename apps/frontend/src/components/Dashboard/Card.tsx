@@ -88,6 +88,7 @@ interface Props {
 	studySet: StudySet;
 	rootProps?: StackProps;
 	updateStudySet: Function;
+	deleteStudySet: Function;
 }
 
 const Card = (props: Props) => {
@@ -105,11 +106,13 @@ const Card = (props: Props) => {
     const Router = useRouter();
 
 	const deleteStudySet = async () => {
+		props.deleteStudySet(id);  // Lets update the ui before actually deleting it from the database
+		// hopefully this doesn't cause any issues
 		await fetch(`/api/studysets/${id}/delete_study_set/`, {
 			method: "DELETE",
 		});
-        Router.reload();
 	};
+
 	function onDComplete() {
 		if (selected === "") {
 			toast({
