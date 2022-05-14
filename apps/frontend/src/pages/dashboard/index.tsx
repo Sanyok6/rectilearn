@@ -16,6 +16,8 @@ export type SectionType = 'sets' | 'games' | 'explore' | 'sets & games ';
 
 const CardStack = dynamic(() => import("../../components/Dashboard/CardStack"));
 const GameCardStack = dynamic(() => import("../../components/Dashboard/GameCardStack"));
+// Dynamically import to reduce bundle size
+
 const fetcher = async (url: string, token: string) => {
   const res = await fetch(url, {
     headers: {
