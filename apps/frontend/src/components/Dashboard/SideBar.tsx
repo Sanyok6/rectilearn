@@ -305,7 +305,7 @@ const SettingsModal = ({ isStOpen, onStClose }: { isStOpen: boolean, onStClose: 
         <ModalBody>
           <HStack align="center" justify="center">
             <Text>Show Games and Sets in same panel</Text>
-            <Switch isChecked={groupGS} onChange={(e) => setGroupGS(e.target.checked)}></Switch>
+            <Switch isChecked={groupGS} onChange={(e: any) => setGroupGS(e.target.checked)}></Switch>
           </HStack>
         </ModalBody>
         <ModalFooter>

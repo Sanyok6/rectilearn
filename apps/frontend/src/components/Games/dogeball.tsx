@@ -1,12 +1,9 @@
-import type { NextPage } from "next";
 import { useState, useEffect, useRef } from "react";
 import Questions from "../questions";
 
 import { useToast } from "@chakra-ui/react";
 import { StudySet } from "../Dashboard/Card";
-import { GameObj, SpriteComp, PosComp, AreaComp, Vec2, TextComp, OriginComp } from "kaboom";
-
-import { games } from "../Dashboard/GameCardStack";
+import { GameObj, SpriteComp, PosComp, AreaComp, TextComp, OriginComp } from "kaboom";
 
 const mapLayout = //26x9
 `

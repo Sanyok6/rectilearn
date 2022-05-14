@@ -114,7 +114,7 @@ const CardStack = () => {
 					py={{ base: "6", md: "8", lg: "12" }}
 					display={shouldOpen ? undefined : "none"}
 				>
-					<CardGrid>
+					<CardGrid autoRows="1fr">
 						{data
 							? data.map((set) => (
 									<Card key={set.id.toString()} studySet={set} updateStudySet={updateStudySet} />
@@ -239,7 +239,7 @@ const CreateCardModal = (props: any) => {
                     <ModalHeader>Create study set</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                    <Tabs index={tabIndex} onChange={(i) => {setTabIndex(i)}} isFitted variant='enclosed'>
+                    <Tabs index={tabIndex} onChange={(i: any) => {setTabIndex(i)}} isFitted variant='enclosed'>
                         <TabList marginBottom={6}>
                             <Tab>Start</Tab>
                             <Tab>Import</Tab>
@@ -268,14 +268,14 @@ const CreateCardModal = (props: any) => {
                             <TabPanel>
                                 <FormControl>
                                     <FormLabel htmlFor="subject">Subject or Name</FormLabel>
-                                    <Input id="subject" placeholder="Your subject/name here" value={v} onChange={(e) => setV(e.target.value)} />
+                                    <Input id="subject" placeholder="Your subject/name here" value={v} onChange={(e: any) => setV(e.target.value)} />
                                 </FormControl>
                                 {
                                     questions.map((i, ind) => (
                                         <FormControl key={ind}>
                                             <FormLabel htmlFor={`q${ind}`}>Question</FormLabel>
                                             <InputGroup display="flex" flexDir="row" alignItems="center" justifyContent="center">
-                                                <Input id={`q${ind}`} placeholder="Your question here" value={i.question} onChange={(e) => setQuestions(qs => {
+                                                <Input id={`q${ind}`} placeholder="Your question here" value={i.question} onChange={(e: any) => setQuestions(qs => {
                                                     let newQ = [...qs];
                                                     newQ[ind] = {
                                                         ...newQ[ind],
@@ -296,7 +296,7 @@ const CreateCardModal = (props: any) => {
                                                 <MenuList maxWidth={"20vw"}>
                                                     {i.answers.map((ite, idx) => (
                                                         <InputGroup key={idx} display="flex" flexDir="row" alignItems="center" justifyContent="center">
-                                                            <Input alignSelf="center" mx={3} value={ite} onChange={(e) => setQuestions(qs => {
+                                                            <Input alignSelf="center" mx={3} value={ite} onChange={(e: any) => setQuestions(qs => {
                                                                 let newQ = [...qs];
                                                                 if (newQ[ind].answers[idx] !== undefined) {
                                                                 newQ[ind] = {
