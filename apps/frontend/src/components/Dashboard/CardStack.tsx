@@ -194,6 +194,7 @@ const CreateCardModal = (props: any) => {
     const router = useRouter();
 
     function onClose() {
+        setCreatePressed(false);
         setQuestions([]);
         setV("");
         setChecked(false);
