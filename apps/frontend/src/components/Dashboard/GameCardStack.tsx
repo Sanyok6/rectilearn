@@ -23,12 +23,18 @@ export const games = [
     },
     {
         id: 3,
+        name: "Dogeball",
+        imageUrl: "/screenshots/dogeball.png",
+        gameName: "dogeball"
+    },
+    {
+        id: 4,
         name: "The floor is lava",
         imageUrl: "/screenshots/lavaGame.png",
         gameName: "lavaGame"
     },
     {
-        id: 4,
+        id: 5,
         name: "Escape the room as a bush",
         imageUrl: "/screenshots/bushGame.png",
         gameName: "bushGame"

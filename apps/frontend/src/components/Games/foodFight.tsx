@@ -5,9 +5,10 @@ import { useToast } from "@chakra-ui/react";
 import { GameObj, SpriteComp, PosComp, AreaComp } from "kaboom";
 import { StudySet } from "../Dashboard/Card";
 
-const mapLayout = `
+const layouts = [
+`
 |||||||||||||||||
-|               ||||||||||||||||||||
+|A             A||||||||||||||||||||
 |                                  |
 |                                  |
 |            $                     |
@@ -16,13 +17,18 @@ const mapLayout = `
 |          $$$$ |!          $$$   ||
 |          $$$$ |           $$$  ||
 |           $$  |@           $  ||
-|               |              ||
+|A              |              ||
 |||    ||||||||||             ||
 |                            ||
 |                           ||
-|                          ||
-||||||||||||||||||||||||||||`.split("\n");
+|                         A||
+||||||||||||||||||||||||||||`.split("\n"),
+]
+
+const mapLayout = layouts[Math.floor(Math.random() * layouts.length)]
+
 mapLayout.shift();
+
 
 const FoodFight = ({ studySet }: { studySet: StudySet }) => {
 	const cRef = useRef<HTMLCanvasElement>(null);
@@ -61,6 +67,8 @@ const FoodFight = ({ studySet }: { studySet: StudySet }) => {
 			await loadSprite("apple", "/sprites/apple.png");
 			await loadSprite("badBean", "/sprites/badBean.png");
 
+			await loadSprite("spawnArea", "/sprites/spawnArea.png");
+
 			let start = false;
 			let SPEED = 400;
 			let COST = 1;
@@ -73,16 +81,31 @@ const FoodFight = ({ studySet }: { studySet: StudySet }) => {
 				pos(0, 0),
 				fixed(),
 			]);
-			const beforeStart = add([
-				text("Click Anywhere To Start", {
-					size: width() / 25,
-				}),
-				pos(center()),
-				kab.origin("center"),
-			]);
+
+			const beforeStart = [
+				add([
+					text("Click Anywhere To Start", {
+						size: width() / 25
+					}),
+					pos(center().x, center().y-60),
+					kab.origin("center"),
+				]), 
+				add([
+					text('use "w", "a", "s" and "d" or arrow keys to move around\npress "space", "e", or "q" to answer questions\nclick to shoot at enemies', {
+						size: width() / 50,
+						lineSpacing: 10
+					}),
+					pos(center().x, center().y+100),
+					kab.origin("center"),
+				])
+			];
+			
 			async function startGame() {
 				if (start) return;
 				start = true;
+
+				beforeStart.forEach((e) => {e.destroy()})
+
 				const itemXLen = mapLayout[0].length;
 				const itemYLen = mapLayout.length;
 				const wallXY = Math.max(
@@ -127,6 +150,12 @@ const FoodFight = ({ studySet }: { studySet: StudySet }) => {
 						area(),
 						solid(),
 						"upgradeS",
+					],
+					"A": () => [
+						sprite("spawnArea", {
+							width: wallXY,
+							height: wallXY,
+						}),
 					],
 					" ": () => [
 						sprite("grass", {
@@ -176,54 +205,81 @@ const FoodFight = ({ studySet }: { studySet: StudySet }) => {
 
 				let new_enemy_count = 0;
 				let enemies: GameObj<
-					SpriteComp | PosComp | AreaComp | { speed: number }
+					SpriteComp | PosComp | AreaComp | { speed: number, destroyed: boolean }
 				>[] = [];
 
 				function addEnemy() {
+					const p = [[1, 1], [15, 1], [1, 10], [26, 14]][Math.floor(Math.random() * 4)]
 					let e = add([
 						sprite("badBean", {
 							width: wallXY,
 						}),
 						pos(
 							mapObj.getPos(
-								itemXLen / 20 + rand(1, 20),
-								itemYLen / 10 + rand(1, 10)
+									p[0],
+									p[1]
+								// itemXLen / 20 + rand(1, 20),
+								// itemYLen / 10 + rand(1, 10)
 							)
 						),
 						area(),
-						{ speed: 1 },
+						{ speed: rand(10, 25), destroyed: false },
 					]);
 					enemies.push(e);
-					for (var i in enemies) {
-						enemies[i].onUpdate(() => {
-							let enemy = enemies[i];
-							let x = -1 + 2 * +(enemy.pos.x < player.pos.x);
-							let y = -1 + 2 * +(enemy.pos.y > player.pos.y);
-							enemy.flipX(enemy.pos.x > player.pos.x);
-							// enemy.move((x)*10, (y)*(-10))
-							enemy.moveTo(player.pos, 10);
 
-							if (enemy.isTouching(player)) {
-								enemy.destroy();
+					e.onUpdate(() => {
+						let enemy = e;
+						let x = -1 + 2 * +(enemy.pos.x < player.pos.x);
+						let y = -1 + 2 * +(enemy.pos.y > player.pos.y);
+						enemy.flipX(enemy.pos.x > player.pos.x);
+						// enemy.move((x)*10, (y)*(-10))
+						enemy.moveTo(player.pos, enemy.speed);
+
+						if (enemy.isTouching(player)) {
+							enemy.destroy();
+							if (!enemy.destroyed) {
 								health.value--;
 								health.text = "Health: " + health.value;
 								if (health.value <= 0) {
 									go("gameover");
 								}
+								enemy.destroyed = true
 							}
-						});
-					}
+							shake(100)
+						}
+					});
+					// for (var i in enemies) {
+					// 	enemies[i].onUpdate(() => {
+					// 		let enemy = enemies[i];
+					// 		let x = -1 + 2 * +(enemy.pos.x < player.pos.x);
+					// 		let y = -1 + 2 * +(enemy.pos.y > player.pos.y);
+					// 		enemy.flipX(enemy.pos.x > player.pos.x);
+					// 		// enemy.move((x)*10, (y)*(-10))
+					// 		enemy.moveTo(player.pos, 10);
+
+					// 		if (enemy.isTouching(player)) {
+					// 			enemy.destroy();
+					// 			if (!enemy.destroyed) {
+					// 				health.value--;
+					// 				health.text = "Health: " + health.value;
+					// 				if (health.value <= 0) {
+					// 					go("gameover");
+					// 				}
+					// 				enemy.destroyed = true
+					// 			}
+					// 		}
+					// 	});
+					// }
 					if (new_enemy_count >= 1) {
 						new_enemy_count = 0;
 						addEnemy();
 					}
 				}
 
-				for (let i = 0; i < 3; i++) {
+				for (let i = 0; i < 5; i++) {
 					addEnemy();
 				}
 
-				beforeStart.destroy();
 				player.onUpdate(() => {
 					camPos(player.pos);
 				});
@@ -232,8 +288,7 @@ const FoodFight = ({ studySet }: { studySet: StudySet }) => {
 					if (ammo.value <= 0) {
 						toast({
 							title: "Not enough ammo",
-							description:
-								'press "e" to answer questions, and gain ammo! You get 10 ammos.',
+							description: 'Press "e" to answer questions, and gain ammo!',
 							status: "error",
 							duration: 5000,
 							isClosable: true,
@@ -271,7 +326,7 @@ const FoodFight = ({ studySet }: { studySet: StudySet }) => {
 								cash.value += COST;
 								cash.text = "Cash: " + cash.value;
 
-								new_enemy_count += 0.1;
+								new_enemy_count += 0.25;
 
 								addEnemy();
 							}
@@ -284,9 +339,9 @@ const FoodFight = ({ studySet }: { studySet: StudySet }) => {
 					player.move(-SPEED, 0);
 				});
 
-				onKeyPress(["z", "e"], () => {
+				onKeyPress(["space", "q", "e", "z"], () => {
 					isOpen(true);
-					ammo.value+=10;
+					ammo.value+=5;
 					ammo.text = "Ammo: " + ammo.value;
 				});
 
@@ -301,23 +356,8 @@ const FoodFight = ({ studySet }: { studySet: StudySet }) => {
 					player.move(0, SPEED);
 				});
 
-				onKeyPress("space", () => {
+				onKeyPress("f", () => {
 					let touching = false;
-					every("water", (s) => {
-						if (player.isTouching(s)) {
-							touching = true;
-						}
-					});
-
-					touching = false;
-
-					every("store", (s) => {
-						if (player.isTouching(s)) touching = true;
-					});
-
-					touching = false;
-
-					touching = false;
 
 					every("upgradeM", (s) => {
 						if (player.isTouching(s)) touching = true;
@@ -367,6 +407,43 @@ const FoodFight = ({ studySet }: { studySet: StudySet }) => {
 
 					touching = false;
 				});
+
+
+                every("upgradeM", (s) => {
+                    var enabled = false
+                    s.onUpdate(() => {
+                        if (player.isTouching(s) && enabled == false) {
+                            enabled = true
+                            toast({
+                                title: 'Upgrade Money Per Hit',
+                                description: "Press \"F\" to upgrade money earned after hitting an enemy.",
+                                status: 'info',
+								variant: "left-accent",
+                                duration: 3000,
+                                isClosable: true,
+                            })
+                            wait(3.1, () => {enabled = false})
+                        }
+                    })
+                });
+
+                every("upgradeS", (s) => {
+                    var enabled = false
+                    s.onUpdate(() => {
+                        if (player.isTouching(s) && enabled == false) {
+                            enabled = true
+                            toast({
+                                title: 'Upgrade Speed',
+                                description: "Press \"F\" to upgrade your running speed.",
+                                status: 'info',
+								variant: "left-accent",
+                                duration: 3000,
+                                isClosable: true,
+                            })
+                            wait(3.1, () => {enabled = false})
+                        }
+                    })
+                });
 			}
 			onTouchEnd(startGame);
 			onClick(startGame);

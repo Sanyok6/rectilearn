@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import BushGame from "../../components/Games/bushGame";
+import Dogeball from "../../components/Games/dogeball";
 import FishingGame from "../../components/Games/fishingGame";
 import FoodFight from "../../components/Games/foodFight";
 import LavaGame from "../../components/Games/lavaGame";
@@ -35,6 +36,11 @@ const Games: NextPage = () => {
 			case "foodFight":
 				setGameObj(() => (
 					<FoodFight studySet={gameSession.studySet}></FoodFight>
+				));
+				break;
+			case "dogeball":
+				setGameObj(() => (
+					<Dogeball studySet={gameSession.studySet}></Dogeball>
 				));
 				break;
 			default:
