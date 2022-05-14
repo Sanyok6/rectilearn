@@ -149,6 +149,7 @@ const CreateCard = (props: ICreateCardProps) => {
 				textAlign={"center"}
 				height="100%"
 				onClick={() => AddRef.current && AddRef.current.focus()}
+                minHeight="350px"
 			>
                 <>
                     <Button ref={AddRef} height="100%" width="100%" onClick={onOpen}>
