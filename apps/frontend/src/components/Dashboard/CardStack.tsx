@@ -46,9 +46,11 @@ import useSWR from "swr";
 import AuthCtx from "../../lib/auth";
 import { useRouter } from "next/router";
 import { Image } from '../../utils/next-chakra-image';
+import { MdTurnedInNot } from "react-icons/md";
 
 interface ICreateCardProps {
 	rootProps?: StackProps;
+    createStudySet: Function;
 }
 
 const fetcher = (url: string) =>
@@ -72,6 +74,22 @@ const CardStack = () => {
         setData(studySets);
         return true;
     };
+    
+    const deleteStudySet = (id: Number) => {
+        if (!d) return null;
+
+        const studySets = d.filter((studyset) => id !== studyset.id);
+        setData(studySets);
+        return true;
+    };
+
+    const createStudySet = (newStudySet: StudySet) => {
+        if (!d) return null;
+
+        const studySets = [...d, newStudySet];
+        setData(studySets);
+        return true;
+    }
 
 	useEffect(() => {
 		setShouldOpen(true);
@@ -118,10 +136,10 @@ const CardStack = () => {
 					<CardGrid>
 						{data
 							? data.map((set) => (
-									<Card key={set.id.toString()} studySet={set} updateStudySet={updateStudySet} />
+									<Card key={set.id.toString()} studySet={set} updateStudySet={updateStudySet} deleteStudySet={deleteStudySet} />
 							  ))
 							: "Loading"}
-						<CreateCard />
+						<CreateCard createStudySet={createStudySet} />
 					</CardGrid>
 				</Box>
 			</ScaleFade>
@@ -155,7 +173,7 @@ const CreateCard = (props: ICreateCardProps) => {
                     <Button ref={AddRef} height="100%" width="100%" onClick={onOpen}>
                         <FiPlus size={120} />
                     </Button>
-                    <CreateCardModal isOpen={isOpen} onClose={onClose} />
+                    <CreateCardModal isOpen={isOpen} onClose={onClose} createStudySet={props.createStudySet} />
                 </>
 			</Box>
 		</Stack>
@@ -164,7 +182,7 @@ const CreateCard = (props: ICreateCardProps) => {
 
 const CreateCardModal = (props: any) => {
 
-    const [tabIndex, setTabIndex] = React.useState(0)
+    const [tabIndex, setTabIndex] = useState(0)
 
     const { isOpen, onClose: oC } = props;
     const [v, setV] = useState<string>("");
@@ -223,8 +241,10 @@ const CreateCardModal = (props: any) => {
             })
         }
 
-        router.reload()
-
+        const data = await res.json();
+        console.log(data)
+        props.createStudySet(data);
+        setCreatePressed(false);
         onClose();
     };
 
