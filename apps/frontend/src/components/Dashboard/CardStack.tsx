@@ -35,6 +35,7 @@ import {
     TabPanels,
     Textarea,
     Checkbox,
+    Spinner,
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
 import React, { useContext, useEffect, useRef, useState } from "react";
@@ -45,9 +46,11 @@ import useSWR from "swr";
 import AuthCtx from "../../lib/auth";
 import { useRouter } from "next/router";
 import { Image } from '../../utils/next-chakra-image';
+import { MdTurnedInNot } from "react-icons/md";
 
 interface ICreateCardProps {
 	rootProps?: StackProps;
+    createStudySet: Function;
 }
 
 const fetcher = (url: string) =>
@@ -71,6 +74,22 @@ const CardStack = () => {
         setData(studySets);
         return true;
     };
+    
+    const deleteStudySet = (id: Number) => {
+        if (!d) return null;
+
+        const studySets = d.filter((studyset) => id !== studyset.id);
+        setData(studySets);
+        return true;
+    };
+
+    const createStudySet = (newStudySet: StudySet) => {
+        if (!d) return null;
+
+        const studySets = [...d, newStudySet];
+        setData(studySets);
+        return true;
+    }
 
 	useEffect(() => {
 		setShouldOpen(true);
@@ -117,10 +136,10 @@ const CardStack = () => {
 					<CardGrid autoRows="1fr">
 						{data
 							? data.map((set) => (
-									<Card key={set.id.toString()} studySet={set} updateStudySet={updateStudySet} />
+									<Card key={set.id.toString()} studySet={set} updateStudySet={updateStudySet} deleteStudySet={deleteStudySet} />
 							  ))
 							: "Loading"}
-						<CreateCard />
+						<CreateCard createStudySet={createStudySet} />
 					</CardGrid>
 				</Box>
 			</ScaleFade>
@@ -140,27 +159,22 @@ const CreateCard = (props: ICreateCardProps) => {
 			{...rootProps}
 		>
 			<Box
-				maxW={"420px"}
+				maxW={"320px"}
 				w={"full"}
 				bg={useColorModeValue("white", "gray.700")}
 				boxShadow={"2xl"}
 				rounded={"xl"}
-				p={5}
 				textAlign={"center"}
 				height="100%"
 				onClick={() => AddRef.current && AddRef.current.focus()}
+                minHeight="350px"
 			>
-				<AspectRatio ratio={10 / 9}>
-                    <>
-                        <Button ref={AddRef} height="10em" width="10em" onClick={onOpen}>
-                            <FiPlus size={120} />
-                        </Button>
-                        <CreateCardModal isOpen={isOpen} onClose={onClose} />
-                    </>
-				</AspectRatio>
-				<Text fontWeight="bold" fontSize="2xl" mt="2em">
-					{"Create New"}
-				</Text>
+                <>
+                    <Button ref={AddRef} height="100%" width="100%" onClick={onOpen}>
+                        <FiPlus size={120} />
+                    </Button>
+                    <CreateCardModal isOpen={isOpen} onClose={onClose} createStudySet={props.createStudySet} />
+                </>
 			</Box>
 		</Stack>
 	);
@@ -168,13 +182,14 @@ const CreateCard = (props: ICreateCardProps) => {
 
 const CreateCardModal = (props: any) => {
 
-    const [tabIndex, setTabIndex] = React.useState(0)
+    const [tabIndex, setTabIndex] = useState(0)
 
     const { isOpen, onClose: oC } = props;
     const [v, setV] = useState<string>("");
     const [questions, setQuestions] = useState<Array<StudySetQuestion>>([]);
     const [textAreaVal, setTextAreaVal] = useState<string>("");
     const [checked, setChecked] = useState<boolean>(false);
+    const [createPressed, setCreatePressed] = useState<boolean>(false);
     const toast = useToast();
     const router = useRouter();
 
@@ -226,8 +241,10 @@ const CreateCardModal = (props: any) => {
             })
         }
 
-        router.reload()
-
+        const data = await res.json();
+        console.log(data)
+        props.createStudySet(data);
+        setCreatePressed(false);
         onClose();
     };
 
@@ -335,8 +352,17 @@ const CreateCardModal = (props: any) => {
                         </Tabs>
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme="blue" mr={3} onClick={handleSubmission}>
-                            Add
+                        <Button 
+                            colorScheme="blue" 
+                            mr={3} 
+                            disabled={createPressed}
+                            onClick={() => {
+                                setCreatePressed(true)
+                                handleSubmission()
+                            }}
+                        >
+                            <Text hidden={createPressed}>Create</Text>
+                            <Spinner hidden={!createPressed} />
                         </Button>
                         <Button colorScheme="red" mr={3} onClick={onClose}>
                             Cancel

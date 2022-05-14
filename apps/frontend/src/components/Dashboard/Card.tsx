@@ -27,6 +27,7 @@ import {
 	InputRightElement,
 	useToast,
 	Select,
+	Spinner,
 } from "@chakra-ui/react";
 import React, { useState, useContext } from "react";
 import { CloseIcon } from "@chakra-ui/icons";
@@ -87,6 +88,7 @@ interface Props {
 	studySet: StudySet;
 	rootProps?: StackProps;
 	updateStudySet: Function;
+	deleteStudySet: Function;
 }
 
 const Card = (props: Props) => {
@@ -98,16 +100,19 @@ const Card = (props: Props) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { setGameSession } = useContext(AuthCtx);
 	const [selected, setSelected] = useState<string>("");
+	const [deletePressed, setDeletePressed] = useState<boolean>(false);
 	const { isOpen: isDOpen, onOpen: onDOpen, onClose: onDClose } = useDisclosure();
 	const toast = useToast();
     const Router = useRouter();
 
-	const deleteStudySet = async (e: any) => {
+	const deleteStudySet = async () => {
+		props.deleteStudySet(id);  // Lets update the ui before actually deleting it from the database
+		// hopefully this doesn't cause any issues
 		await fetch(`/api/studysets/${id}/delete_study_set/`, {
 			method: "DELETE",
 		});
-        Router.reload();
 	};
+
 	function onDComplete() {
 		if (selected === "") {
 			toast({
@@ -128,12 +133,13 @@ const Card = (props: Props) => {
 			{...rootProps}
 		>
 			<Box
-				maxW={"420px"}
+				maxW={"320px"}
+				minW={"280px"}
 				w={"full"}
 				bg={useColorModeValue("white", "gray.700")}
 				boxShadow={"2xl"}
 				rounded={"xl"}
-				p={5}
+				p={4}
 				textAlign={"center"}
 			>
 				<Box position="relative">
@@ -228,9 +234,13 @@ const Card = (props: Props) => {
 						isFullWidth
 						flex={1}
 						fontSize={"sm"}
-						onClick={deleteStudySet}
+						onClick={() => {
+							setDeletePressed(true)
+							deleteStudySet()
+						}}
 					>
 						Delete
+						<Spinner ml="3" hidden={!deletePressed} />
 					</Button>
 				</Stack>
 			</Box>
