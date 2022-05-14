@@ -31,15 +31,15 @@ gameMap.shift();
 const LavaGame = ({ studySet }: { studySet: StudySet }) => {
 	const cRef = useRef<HTMLCanvasElement>(null);
 	
-	const [reload, setReload] = useState<boolean>(false);
+	// const [reload, setReload] = useState<boolean>(false);
 	const [open, setOpen] = useState<boolean>(false);
 
 	const toast = useToast()
 
 	useEffect(() => {
-		window.onresize = () => {
-			setReload((reload) => !reload);
-		};
+		// window.onresize = () => {
+		// 	setReload((reload) => !reload);
+		// };
 
 		if (cRef.current) {
 			cRef.current.style.width = "100vw";
@@ -322,7 +322,7 @@ const LavaGame = ({ studySet }: { studySet: StudySet }) => {
 		}
 		Launch();
 		return () => every(destroy);
-	}, [reload]);
+	}, []);
 	return (
 		<>
 			<canvas ref={cRef}></canvas>

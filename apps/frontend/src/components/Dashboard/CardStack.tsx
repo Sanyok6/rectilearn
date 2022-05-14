@@ -1,4 +1,5 @@
 import {
+    AspectRatio,
 	Box,
 	Text,
 	Stack,
@@ -6,7 +7,6 @@ import {
 	useBreakpointValue,
 	useColorModeValue,
 	Button,
-	AspectRatio,
 	Skeleton,
 	Center,
 	VStack,
@@ -46,7 +46,6 @@ import useSWR from "swr";
 import AuthCtx from "../../lib/auth";
 import { useRouter } from "next/router";
 import { Image } from '../../utils/next-chakra-image';
-import { MdTurnedInNot } from "react-icons/md";
 
 interface ICreateCardProps {
 	rootProps?: StackProps;
@@ -133,7 +132,7 @@ const CardStack = () => {
 					py={{ base: "6", md: "8", lg: "12" }}
 					display={shouldOpen ? undefined : "none"}
 				>
-					<CardGrid autoRows="1fr">
+					<CardGrid autoRows="1fr" autoFlow="row">
 						{data
 							? data.map((set) => (
 									<Card key={set.id.toString()} studySet={set} updateStudySet={updateStudySet} deleteStudySet={deleteStudySet} />
@@ -159,7 +158,7 @@ const CreateCard = (props: ICreateCardProps) => {
 			{...rootProps}
 		>
 			<Box
-				maxW={"320px"}
+				maxW={"420px"}
 				w={"full"}
 				bg={useColorModeValue("white", "gray.700")}
 				boxShadow={"2xl"}
@@ -167,14 +166,14 @@ const CreateCard = (props: ICreateCardProps) => {
 				textAlign={"center"}
 				height="100%"
 				onClick={() => AddRef.current && AddRef.current.focus()}
-                minHeight="350px"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
 			>
-                <>
-                    <Button ref={AddRef} height="100%" width="100%" onClick={onOpen}>
-                        <FiPlus size={120} />
-                    </Button>
-                    <CreateCardModal isOpen={isOpen} onClose={onClose} createStudySet={props.createStudySet} />
-                </>
+                <Button ref={AddRef} height="100%" width="100%" onClick={onOpen}>
+                    <FiPlus size={120} />
+                </Button>
+                <CreateCardModal isOpen={isOpen} onClose={onClose} createStudySet={props.createStudySet} />
 			</Box>
 		</Stack>
 	);
@@ -191,7 +190,6 @@ const CreateCardModal = (props: any) => {
     const [checked, setChecked] = useState<boolean>(false);
     const [createPressed, setCreatePressed] = useState<boolean>(false);
     const toast = useToast();
-    const router = useRouter();
 
     function onClose() {
         setQuestions([]);

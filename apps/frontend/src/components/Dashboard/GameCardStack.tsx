@@ -98,7 +98,7 @@ const GameCardStack = () => {
                             games={games[Math.floor(Math.random() * games.length)]}
                             rootProps={{
                                 gridRow: "1 / 3",
-                                gridColumn: useBreakpointValue({ base: "1 / 3 ", md: "1 / 4" }),
+                                gridColumn: useBreakpointValue({ base: "1 / 2", md: "1 / 3" }),
                             }}
                             studySets={data}
                         />

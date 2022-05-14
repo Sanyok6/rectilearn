@@ -107,7 +107,7 @@ const GameCard = (props: Props) => {
                             <ModalContent>
                                 <ModalHeader>Select a set to study</ModalHeader>
                                 <ModalBody>
-                                    <Select placeholder="select a set to study" value={selected} onChange={(e) => setSelected(e.target.value)}>
+                                    <Select placeholder="select a set to study" value={selected} onChange={(e: any) => setSelected(e.target.value)}>
                                         {studySets.map((i, ind) => (
                                             <option key={ind} value={String(i.id)}>{i.subject}</option>
                                         ))}

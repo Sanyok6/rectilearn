@@ -106,8 +106,7 @@ const Card = (props: Props) => {
     const Router = useRouter();
 
 	const deleteStudySet = async () => {
-		props.deleteStudySet(id);  // Lets update the ui before actually deleting it from the database
-		// hopefully this doesn't cause any issues
+		props.deleteStudySet(id);
 		await fetch(`/api/studysets/${id}/delete_study_set/`, {
 			method: "DELETE",
 		});
@@ -133,8 +132,7 @@ const Card = (props: Props) => {
 			{...rootProps}
 		>
 			<Box
-				maxW={"320px"}
-				minW={"280px"}
+				maxW={"420px"}
 				w={"full"}
 				bg={useColorModeValue("white", "gray.700")}
 				boxShadow={"2xl"}
@@ -196,7 +194,7 @@ const Card = (props: Props) => {
 						<ModalContent>
 							<ModalHeader>Select a game to play</ModalHeader>
 							<ModalBody>
-								<Select placeholder="select a game to play" value={selected} onChange={(e) => setSelected(e.target.value)}>
+								<Select placeholder="select a game to play" value={selected} onChange={(e: any) => setSelected(e.target.value)}>
 									{games.map((i, ind) => (
 										<option key={ind} value={i.gameName}>{i.name}</option>
 									))}
@@ -321,7 +319,7 @@ const EditStudySetModal = (props: any) => {
 								id="subject"
 								placeholder="Your subject/name here"
 								value={v}
-								onChange={(e) => setV(e.target.value)}
+								onChange={(e: any) => setV(e.target.value)}
 							/>
 						</FormControl>
 						{questions.map((i, ind) => (
@@ -330,7 +328,7 @@ const EditStudySetModal = (props: any) => {
 									Question
 								</FormLabel>
 								<InputGroup display="flex" flexDir="row" alignItems="center" justifyContent="center">
-									<Input id={`q${ind}`} placeholder="Your question here" value={i.question} onChange={(e) => setQuestions(qs => {
+									<Input id={`q${ind}`} placeholder="Your question here" value={i.question} onChange={(e: any) => setQuestions(qs => {
 										let newQ = [...qs];
 										newQ[ind] = {
 											...newQ[ind],
@@ -361,7 +359,7 @@ const EditStudySetModal = (props: any) => {
 													alignSelf="center"
 													mx={3}
 													value={ite}
-													onChange={(e) =>
+													onChange={(e: any) =>
 														setQuestions((qs) => {
 															let newQ = [...qs];
 															if (
