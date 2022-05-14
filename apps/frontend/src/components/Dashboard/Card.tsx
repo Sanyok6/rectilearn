@@ -106,11 +106,20 @@ const Card = (props: Props) => {
     const Router = useRouter();
 
 	const deleteStudySet = async () => {
-		props.deleteStudySet(id);  // Lets update the ui before actually deleting it from the database
-		// hopefully this doesn't cause any issues
-		await fetch(`/api/studysets/${id}/delete_study_set/`, {
+		const response = await fetch(`/api/studysets/${id}/delete_study_set/`, {
 			method: "DELETE",
+			headers: {'Content-Type': 'application/json'}
 		});
+		
+		if (response.status === 200) {
+			props.deleteStudySet(id);
+		} else {
+			toast({
+				title: "Error while deleting studyset",
+				variant: "warning",
+				description: (await response.json()).detail[0].msg
+			})
+		}
 	};
 
 	function onDComplete() {

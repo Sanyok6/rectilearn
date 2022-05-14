@@ -239,13 +239,12 @@ const CreateCardModal = (props: any) => {
                 isClosable: true,
                 duration: 4000
             })
+        } else {
+            props.createStudySet(await res.json());
+            onClose();
         }
 
-        const data = await res.json();
-        console.log(data)
-        props.createStudySet(data);
         setCreatePressed(false);
-        onClose();
     };
 
 	return (
