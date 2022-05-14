@@ -116,7 +116,7 @@ const Card = (props: Props) => {
 		} else {
 			toast({
 				title: "Error while deleting studyset",
-				variant: "warning",
+                status: "error",
 				description: (await response.json()).detail[0].msg
 			})
 		}
