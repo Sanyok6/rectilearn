@@ -258,9 +258,12 @@ const EditStudySetModal = (props: any) => {
 	const [v, setV] = useState<string>(currentSubject);
 	const [questions, setQuestions] =
 		useState<Array<StudySetQuestion>>(currentQuestions);
+	const [editPressed, setEditPressed] = useState<boolean>(false);
+
 	const toast = useToast();
 
 	function onClose() {
+		setEditPressed(false)
 		setQuestions(currentQuestions);
 		setV(currentSubject);
 		oC();
@@ -457,9 +460,14 @@ const EditStudySetModal = (props: any) => {
 						<Button
 							colorScheme="blue"
 							mr={3}
-							onClick={handleSubmission}
+							disabled={editPressed}
+							onClick={() => {
+								setEditPressed(true)
+								handleSubmission()
+							}}
 						>
-							Edit
+							<Text hidden={editPressed}>Save edit</Text>
+							<Spinner hidden={!editPressed} />
 						</Button>
 						<Button colorScheme="red" mr={3} onClick={onClose}>
 							Cancel

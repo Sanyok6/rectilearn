@@ -192,6 +192,7 @@ const CreateCardModal = (props: any) => {
     const toast = useToast();
 
     function onClose() {
+        setCreatePressed(false);
         setQuestions([]);
         setV("");
         setChecked(false);
