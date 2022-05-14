@@ -32,14 +32,14 @@ mapLayout.shift();
 
 const FoodFight = ({ studySet }: { studySet: StudySet }) => {
 	const cRef = useRef<HTMLCanvasElement>(null);
-	const [reload, setReload] = useState<boolean>(false);
+	// const [reload, setReload] = useState<boolean>(false);
 	const [open, isOpen] = useState<boolean>(false);
 	const toast = useToast();
 
 	useEffect(() => {
-		window.onresize = () => {
-			setReload((reload) => !reload);
-		};
+		// window.onresize = () => {
+		// 	setReload((reload) => !reload);
+		// };
 		if (cRef.current) {
 			cRef.current.style.width = "100vw";
 			cRef.current.style.height = "100vh";
@@ -450,7 +450,7 @@ const FoodFight = ({ studySet }: { studySet: StudySet }) => {
 		}
 		Launch();
 		return () => every(destroy);
-	}, [reload]);
+	}, []);
 	return (
 		<>
 			<canvas ref={cRef}></canvas>

@@ -1,12 +1,9 @@
-import type { NextPage } from "next";
 import { useState, useEffect, useRef } from "react";
 import Questions from "../questions";
 
 import { useToast } from "@chakra-ui/react";
 import { StudySet } from "../Dashboard/Card";
-import { GameObj, SpriteComp, PosComp, AreaComp, Vec2, TextComp, OriginComp } from "kaboom";
-
-import { games } from "../Dashboard/GameCardStack";
+import { GameObj, SpriteComp, PosComp, AreaComp, TextComp, OriginComp } from "kaboom";
 
 const mapLayout = //26x9
 `
@@ -25,14 +22,14 @@ const Dogeball = ({ studySet }: { studySet: StudySet }) => {
     const [open, setOpen] = useState<boolean>(false)
 
     const cRef = useRef<HTMLCanvasElement>(null);
-    const [reload, setReload] = useState<boolean>(false);
+    // const [reload, setReload] = useState<boolean>(false);
 
     const toast = useToast()
 
     useEffect(() => {
-        window.onresize = () => {
-            setReload(reload => !reload)
-        }
+        // window.onresize = () => {
+        //     setReload(reload => !reload)
+        // }
         if (cRef.current) {
             cRef.current.style.width = "100vw";
             cRef.current.style.height= "100vh";
@@ -553,7 +550,7 @@ const Dogeball = ({ studySet }: { studySet: StudySet }) => {
         }
         Launch();
         return () => every(destroy);
-    }, [reload]);
+    }, []);
     return (
         <>
             <canvas ref={cRef}></canvas>
