@@ -128,12 +128,13 @@ const Card = (props: Props) => {
 			{...rootProps}
 		>
 			<Box
-				maxW={"420px"}
+				maxW={"320px"}
+				minW={"280px"}
 				w={"full"}
 				bg={useColorModeValue("white", "gray.700")}
 				boxShadow={"2xl"}
 				rounded={"xl"}
-				p={5}
+				p={4}
 				textAlign={"center"}
 			>
 				<Box position="relative">

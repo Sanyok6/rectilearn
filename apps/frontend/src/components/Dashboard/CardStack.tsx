@@ -140,27 +140,21 @@ const CreateCard = (props: ICreateCardProps) => {
 			{...rootProps}
 		>
 			<Box
-				maxW={"420px"}
+				maxW={"320px"}
 				w={"full"}
 				bg={useColorModeValue("white", "gray.700")}
 				boxShadow={"2xl"}
 				rounded={"xl"}
-				p={5}
 				textAlign={"center"}
 				height="100%"
 				onClick={() => AddRef.current && AddRef.current.focus()}
 			>
-				<AspectRatio ratio={10 / 9}>
-                    <>
-                        <Button ref={AddRef} height="10em" width="10em" onClick={onOpen}>
-                            <FiPlus size={120} />
-                        </Button>
-                        <CreateCardModal isOpen={isOpen} onClose={onClose} />
-                    </>
-				</AspectRatio>
-				<Text fontWeight="bold" fontSize="2xl" mt="2em">
-					{"Create New"}
-				</Text>
+                <>
+                    <Button ref={AddRef} height="100%" width="100%" onClick={onOpen}>
+                        <FiPlus size={120} />
+                    </Button>
+                    <CreateCardModal isOpen={isOpen} onClose={onClose} />
+                </>
 			</Box>
 		</Stack>
 	);
