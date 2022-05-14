@@ -35,6 +35,7 @@ import {
     TabPanels,
     Textarea,
     Checkbox,
+    Spinner,
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
 import React, { useContext, useEffect, useRef, useState } from "react";
@@ -169,6 +170,7 @@ const CreateCardModal = (props: any) => {
     const [questions, setQuestions] = useState<Array<StudySetQuestion>>([]);
     const [textAreaVal, setTextAreaVal] = useState<string>("");
     const [checked, setChecked] = useState<boolean>(false);
+    const [createPressed, setCreatePressed] = useState<boolean>(false);
     const toast = useToast();
     const router = useRouter();
 
@@ -329,8 +331,17 @@ const CreateCardModal = (props: any) => {
                         </Tabs>
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme="blue" mr={3} onClick={handleSubmission}>
-                            Add
+                        <Button 
+                            colorScheme="blue" 
+                            mr={3} 
+                            disabled={createPressed}
+                            onClick={() => {
+                                setCreatePressed(true)
+                                handleSubmission()
+                            }}
+                        >
+                            <Text hidden={createPressed}>Create</Text>
+                            <Spinner hidden={!createPressed} />
                         </Button>
                         <Button colorScheme="red" mr={3} onClick={onClose}>
                             Cancel
