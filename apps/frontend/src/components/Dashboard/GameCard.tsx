@@ -98,6 +98,12 @@ const GameCard = (props: Props) => {
                             <Text fontWeight="medium" color={useColorModeValue('gray.700', 'white')} fontSize="2xl" overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis" width="100%">
                                 {name}
                             </Text>
+
+                        </Tooltip>
+                        <Tooltip label={1000000000000000} aria-label={`tooltip ${name}`}>
+                            <Text color={useColorModeValue('gray.500', 'gray.200')} fontSize="lg" overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis" width="100%">
+                                Highscore: 1000 {/* <- do something here */}
+                            </Text>
                         </Tooltip>
                     </Stack>
                     <Stack>
