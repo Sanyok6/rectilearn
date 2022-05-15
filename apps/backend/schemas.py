@@ -25,6 +25,9 @@ class HighScores(BaseModel):
     validator("dogeball_highscore", allow_reuse=True)(_validate_score)
     validator("thefloorislava_highscore", allow_reuse=True)(_validate_score)
 
+    class Config:
+        orm_mode = True
+
 
 class UserBase(BaseModel):
     email: str
