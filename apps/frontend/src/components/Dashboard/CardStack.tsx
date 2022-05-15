@@ -290,10 +290,10 @@ const CreateCardModal = (props: any) => {
                                         <FormLabel htmlFor="subject">Subject or Name</FormLabel>
                                         <Input id="subject" placeholder="Your subject/name here" value={v} onChange={(e: any) => setV(e.target.value)} />
                                     </FormControl>
-                                    <Accordion>
+                                    <Accordion defaultIndex={[0]}>
                                         {
                                             questions.map((i, ind) => (
-                                                <AccordionItem defaultIndex={[0]}>
+                                                <AccordionItem>
                                                     <FormControl key={ind} mt={4}>
                                                         <FormLabel htmlFor={`q${ind}`}>Question {ind+1}</FormLabel>
                                                         <AccordionButton>
