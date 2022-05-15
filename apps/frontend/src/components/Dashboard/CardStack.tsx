@@ -317,7 +317,7 @@ const CreateCardModal = (props: any) => {
                                                                 {i.answers.map((ite, idx) => (
                                                                     <Box borderLeft={"solid"} borderColor={useColorModeValue("blue.300", "blue.500")} >
                                                                         <InputGroup key={idx} display="flex" flexDir="row" alignItems="center" justifyContent="center">
-                                                                            <Input alignSelf="center" placeholder="Answer here" value={ite} onChange={(e: any) => setQuestions(qs => {
+                                                                            <Input ml={1} alignSelf="center" placeholder="Answer here" value={ite} onChange={(e: any) => setQuestions(qs => {
                                                                                 let newQ = [...qs];
                                                                                 if (newQ[ind].answers[idx] !== undefined) {
                                                                                 newQ[ind] = {

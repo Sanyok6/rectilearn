@@ -28,6 +28,10 @@ import {
 	useToast,
 	Select,
 	Spinner,
+	AccordionButton,
+	Accordion,
+	AccordionItem,
+	AccordionPanel,
 } from "@chakra-ui/react";
 import React, { useState, useContext } from "react";
 import { CloseIcon } from "@chakra-ui/icons";
@@ -157,8 +161,8 @@ const Card = (props: Props) => {
 							<Image
 								src={imageUrl}
 								alt={subject}
-								draggable="false"
 								layout="fill"
+								pointerEvents="none"
 								onLoad={() => setLoading(false)}
 								display={isLoading ? "none" : undefined}
 								borderRadius={useBreakpointValue({
@@ -335,123 +339,125 @@ const EditStudySetModal = (props: any) => {
 								onChange={(e: any) => setV(e.target.value)}
 							/>
 						</FormControl>
-						{questions.map((i, ind) => (
-							<FormControl key={ind}>
-								<FormLabel htmlFor={`q${ind}`}>
-									Question
-								</FormLabel>
-								<InputGroup display="flex" flexDir="row" alignItems="center" justifyContent="center">
-									<Input id={`q${ind}`} placeholder="Your question here" value={i.question} onChange={(e: any) => setQuestions(qs => {
-										let newQ = [...qs];
-										newQ[ind] = {
-											...newQ[ind],
-											question: e.target.value
-										}
-										return newQ;
-									})} />
-									<InputRightElement onClick={() => setQuestions(qs => {
-										let newQ = [...qs];
-										newQ = newQ.filter((_, i) => i !== ind);
-										return newQ;
-									})}><CloseIcon /></InputRightElement>
-                            	</InputGroup>
-								<Menu>
-									<MenuButton as={Button} mt={3}>
-										View Answers
-									</MenuButton>
-									<MenuList maxWidth={"20vw"}>
-										{i.answers.map((ite, idx) => (
-											<InputGroup
-												key={idx}
-												display="flex"
-												flexDir="row"
-												alignItems="center"
-												justifyContent="center"
-											>
-												<Input
-													alignSelf="center"
-													mx={3}
-													value={ite}
-													onChange={(e: any) =>
-														setQuestions((qs) => {
-															let newQ = [...qs];
-															if (
-																newQ[ind]
-																	.answers[
-																	idx
-																] !== undefined
-															) {
-																newQ[ind] = {
-																	...newQ[
-																		ind
-																	],
-																	answers:
-																		newQ[
-																			ind
-																		].answers.map(
-																			(
-																				answer,
-																				i
-																			) =>
-																				i ===
-																				idx
-																					? e
-																							.target
-																							.value
-																					: answer
-																		),
-																};
-															}
-															return newQ;
-														})
+						<Accordion>
+							{questions.map((i, ind) => (
+								<AccordionItem>
+									<FormControl key={ind} mt={4}>
+										<FormLabel htmlFor={`q${ind}`}>Question {ind+1}</FormLabel>
+										<AccordionButton>
+											<InputGroup display="flex" flexDir="row" alignItems="center" justifyContent="center">
+												<Input id={`q${ind}`} placeholder="Your question here" value={i.question} onChange={(e: any) => setQuestions(qs => {
+													let newQ = [...qs];
+													newQ[ind] = {
+														...newQ[ind],
+														question: e.target.value
 													}
-													my={3}
-												/>
-												<InputRightElement
+													return newQ;
+												})} />
+												<InputRightElement onClick={() => setQuestions(qs => {
+													let newQ = [...qs];
+													newQ = newQ.filter((_, i) => i !== ind);
+													return newQ;
+												})}><CloseIcon /></InputRightElement>
+											</InputGroup>
+										</AccordionButton>
+
+											<AccordionPanel mt="1">
+												{i.answers.map((ite, idx) => (
+                                                    <Box borderLeft={"solid"} borderColor={useColorModeValue("blue.300", "blue.500")} >
+														<InputGroup
+															key={idx}
+															display="flex"
+															flexDir="row"
+															alignItems="center"
+															justifyContent="center"
+														>
+															<Input
+																alignSelf="center"
+																ml={1}
+																value={ite}
+																onChange={(e: any) =>
+																	setQuestions((qs) => {
+																		let newQ = [...qs];
+																		if (
+																			newQ[ind]
+																				.answers[
+																				idx
+																			] !== undefined
+																		) {
+																			newQ[ind] = {
+																				...newQ[
+																					ind
+																				],
+																				answers:
+																					newQ[
+																						ind
+																					].answers.map(
+																						(
+																							answer,
+																							i
+																						) =>
+																							i ===
+																							idx
+																								? e
+																										.target
+																										.value
+																								: answer
+																					),
+																			};
+																		}
+																		return newQ;
+																	})
+																}
+															/>
+															<InputRightElement
+																mt="auto"
+																onClick={() =>
+																	setQuestions((qs) => {
+																		let newQ = [...qs];
+																		newQ[ind] = {
+																			...newQ[ind],
+																			answers: newQ[
+																				ind
+																			].answers.filter(
+																				(_, i) =>
+																					i !==
+																					idx
+																			),
+																		};
+																		return newQ;
+																	})
+																}
+															>
+																<CloseIcon />
+															</InputRightElement>
+														</InputGroup>
+													</Box>
+												))}
+												<Button
+													m={3}
 													onClick={() =>
 														setQuestions((qs) => {
 															let newQ = [...qs];
 															newQ[ind] = {
 																...newQ[ind],
-																answers: newQ[
-																	ind
-																].answers.filter(
-																	(_, i) =>
-																		i !==
-																		idx
-																),
+																answers: [
+																	...newQ[ind]
+																		.answers,
+																	"",
+																],
 															};
 															return newQ;
 														})
 													}
 												>
-													<CloseIcon />
-												</InputRightElement>
-											</InputGroup>
-										))}
-										<Button
-											mt={3}
-											onClick={() =>
-												setQuestions((qs) => {
-													let newQ = [...qs];
-													newQ[ind] = {
-														...newQ[ind],
-														answers: [
-															...newQ[ind]
-																.answers,
-															"",
-														],
-													};
-													return newQ;
-												})
-											}
-										>
-											Add Answer
-										</Button>
-									</MenuList>
-								</Menu>
-							</FormControl>
-						))}
+													Add Answer
+												</Button>
+											</AccordionPanel>
+										</FormControl>
+								</AccordionItem>
+							))}
+						</Accordion>
 						<Button
 							mt={5}
 							width={"80%"}
