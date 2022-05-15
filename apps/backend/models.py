@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import ARRAY, Column, Integer, String, DateTime, ForeignKey, Boolean
+from sqlalchemy import ARRAY, BigInteger, Column, Integer, String, DateTime, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
 from database import Base
@@ -15,7 +15,17 @@ class User(Base):
     role = Column(String, default="user")  # admin/user
     created_at = Column(DateTime(), default=datetime.utcnow())
     study_sets = relationship("StudySets")
+    high_scores = relationship("HightScores")
 
+
+class HightScores(Base):
+    __tablename__ = "high_scores"
+    id = Column(Integer, autoincrement=True, primary_key=True, unique=True)
+    user = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
+    fishillionare_highscore = Column(BigInteger, default=0)
+    foodfight_highscore = Column(BigInteger, default=0)
+    dogeball_highscore = Column(BigInteger, default=0)
+    thefloorislava_highscore = Column(BigInteger, default=0)
 
 class StudySets(Base):
     __tablename__ = "study_sets"

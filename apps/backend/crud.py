@@ -134,3 +134,19 @@ def get_public_study_sets():
             .filter(models.StudySets.is_public == True).filter(models.StudySets.questions!=None)
             .all()
         )
+
+
+def update_high_score(user: models.User, game_mode: str, new_high_score: int):
+    full_gamemode = game_mode + "_highscore"
+    if current_highscore := getattr(user.high_scores, full_gamemode):
+        raise HTTPException("Invalid gamemode")
+
+    if new_high_score <= current_highscore:
+        raise HTTPException("New high score cannot be lower than previous high score")
+
+    with Session(database.engine) as session:
+            setattr(user.high_scores, game_mode + "_highscore")
+            session.commit()
+            session.refresh(user)
+
+    return user

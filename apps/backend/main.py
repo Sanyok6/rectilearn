@@ -318,14 +318,17 @@ def get_random_question(user: schemas.User = Depends(get_current_user)):
 
     return question
 
-    
-
 
 @app.post("/logout/")
 def logout(response: Response):
     response.delete_cookie(key="Authorization")
     return {"message": "Successfully logged out"}
 
+
+@app.post("/set-high-score/{game_mode}/", response_model=schemas.User)
+def set_high_score(game_mode: str, new_high_score: int, user: schemas.User = Depends(get_current_user)):
+    crud.update_high_score(user, game_mode, new_high_score)
+    return user
 
 if __name__ == "__main__":
     uvicorn.run(

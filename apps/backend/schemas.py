@@ -5,9 +5,31 @@ from fastapi import HTTPException
 from pydantic import BaseModel, validator
 
 
+class HighScores(BaseModel):
+    id: int
+    user: int
+    fishillionare_highscore: int
+    foodfight_highscore: int
+    dogeball_highscore: int
+    thefloorislava_highscore: int
+
+    @staticmethod
+    def _validate_score(score):
+        if score > 9_223_372_036_854_000_000:
+            raise HTTPException(status_code=422, detail="Score cannot be more than 9 223 372 036 854 000 000")
+        
+        return score
+
+    validator("fishillionare_highscore")(_validate_score)
+    validator("foodfight_highscore")(_validate_score)
+    validator("dogeball_highscore")(_validate_score)
+    validator("thefloorislava_highscore")(_validate_score)
+
+
 class UserBase(BaseModel):
     email: str
     name: str
+    high_scores: HighScores
 
     class Config:
         orm_mode = True
