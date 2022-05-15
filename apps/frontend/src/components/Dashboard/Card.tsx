@@ -178,6 +178,7 @@ const Card = (props: Props) => {
 						<Tooltip
 							label={subject}
 							aria-label={`tooltip ${subject}`}
+							hasArrow
 						>
 							<Text
 								fontWeight="medium"
