@@ -13,17 +13,17 @@ class HighScores(BaseModel):
     dogeball_highscore: int
     thefloorislava_highscore: int
 
-    @staticmethod
-    def _validate_score(score):
+    @classmethod
+    def _validate_score(cls, score):
         if score > 9_223_372_036_854_000_000:
             raise HTTPException(status_code=422, detail="Score cannot be more than 9 223 372 036 854 000 000")
         
         return score
 
-    validator("fishillionare_highscore")(_validate_score)
-    validator("foodfight_highscore")(_validate_score)
-    validator("dogeball_highscore")(_validate_score)
-    validator("thefloorislava_highscore")(_validate_score)
+    validator("fishillionare_highscore", allow_reuse=True)(_validate_score)
+    validator("foodfight_highscore", allow_reuse=True)(_validate_score)
+    validator("dogeball_highscore", allow_reuse=True)(_validate_score)
+    validator("thefloorislava_highscore", allow_reuse=True)(_validate_score)
 
 
 class UserBase(BaseModel):
