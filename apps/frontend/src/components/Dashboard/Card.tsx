@@ -365,7 +365,7 @@ const EditStudySetModal = (props: any) => {
 
 											<AccordionPanel mt="1">
 												{i.answers.map((ite, idx) => (
-                                                    <Box borderLeft={"solid"} borderColor={useColorModeValue("blue.300", "blue.500")} >
+                                                    <Box borderLeft={"solid"} borderColor={"blue.300"} >
 														<InputGroup
 															key={idx}
 															display="flex"

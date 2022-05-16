@@ -315,7 +315,7 @@ const CreateCardModal = (props: any) => {
                                                         </AccordionButton>
                                                         <AccordionPanel mt="1">
                                                                 {i.answers.map((ite, idx) => (
-                                                                    <Box borderLeft={"solid"} borderColor={useColorModeValue("blue.300", "blue.500")} >
+                                                                    <Box borderLeft={"solid"} borderColor={"blue.300"} >
                                                                         <InputGroup key={idx} display="flex" flexDir="row" alignItems="center" justifyContent="center">
                                                                             <Input ml={1} alignSelf="center" placeholder="Answer here" value={ite} onChange={(e: any) => setQuestions(qs => {
                                                                                 let newQ = [...qs];
