@@ -23,9 +23,10 @@ import { Image } from '../../utils/next-chakra-image';
 import Typewriter from 'typewriter-effect';
 
 import AuthCtx from '../../lib/auth';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 
 export default function CallToActionWithVideo() {
+    const [playing, setPlaying] = useState<boolean>(false);
     const ctx = useContext(AuthCtx);
     return (
       <Container maxW={'7xl'} minHeight={{ base: "120vh", sm: "100vh" }} /* height={{ base: "120vh", sm: "100vh" }} */>
@@ -129,19 +130,10 @@ export default function CallToActionWithVideo() {
                 top={'50%'}
                 transform={'translateX(-50%) translateY(-50%)'}
                 zIndex={1}
-                onClick={() => {window.location.href = "https://github.com/Sanyok6/rectilearn"}}
+                hidden={playing}
+                onClick={setPlaying}
               />
-              <Image
-                alt={'Hero Image'}
-                objectFit={'cover'}
-                layout={'fill'}
-                alignItems={'center'}
-                w={'100%'}
-                h={'100%'}
-                src={
-                  'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=800&q=80'
-                }
-              />
+              <video autoPlay={playing} src="/site/rectilearn.mp4" muted={true} onClick={setPlaying} />
             </Box>
           </Flex>
         </Stack>
