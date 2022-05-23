@@ -29,7 +29,7 @@ export default function CallToActionWithVideo() {
     const [playing, setPlaying] = useState<boolean>(false);
     const ctx = useContext(AuthCtx);
     return (
-      <Container maxW={'7xl'} minHeight={{ base: "120vh", sm: "100vh" }} /* height={{ base: "120vh", sm: "100vh" }} */>
+      <Container maxW={'7xl'} minHeight={{ base: "100vh", sm: "80vh" }} /* height={{ base: "120vh", sm: "100vh" }} */>
         <Stack
           align={'center'}
           spacing={{ base: 8, md: 10 }}
