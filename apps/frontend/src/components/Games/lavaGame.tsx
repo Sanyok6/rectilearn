@@ -65,7 +65,17 @@ const LavaGame = ({ studySet }: { studySet: StudySet }) => {
 					height: cRef.current?.scrollHeight,
 				})
 			);
-			await loadBean();
+            await loadSprite("bean", "/sprites/character.png", {
+                sliceX: 8,
+                anims: {
+                    "run": {
+                        from: 0,
+                        to: 7,
+                        speed: 45,
+                        loop: true,
+                    }
+                }
+            });			
 			await loadSprite("grayBg", "/sprites/grayBg.webp");
 			await loadSprite("lava", "/sprites/lava.jpeg");
 			await loadSprite("wall", "/sprites/wall.jpeg");
@@ -279,6 +289,15 @@ const LavaGame = ({ studySet }: { studySet: StudySet }) => {
 				player.onDoubleJump(() => {
 					player.spin();
 				});
+
+                onKeyDown(["left", "right", "up", "down", "w", "a", "s", "d"], () => {
+                    if (player.curAnim() != "run") { player.play("run") }
+                })
+                onKeyRelease(["left", "right", "up", "down", "w", "a", "s", "d"], () => {
+                    player.frame = 0;
+                    player.stop();
+                })
+
 				onKeyPress(["space", "w", "up"], () => {
 					if (energyText.value > 0) {
 						energyText.value --;
