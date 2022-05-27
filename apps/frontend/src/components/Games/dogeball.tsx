@@ -45,7 +45,17 @@ const Dogeball = ({ studySet }: { studySet: StudySet }) => {
 
         async function Launch() {
             const kab = await import("kaboom").then((mod) => mod.default({ canvas: cRef.current || undefined, background: [137, 142, 140], width: cRef.current?.scrollWidth, height: cRef.current?.scrollHeight }));
-            await loadSprite("bean", "/sprites/bean.png");
+            await loadSprite("bean", "/sprites/character.png", {
+                sliceX: 8,
+                anims: {
+                    "run": {
+                        from: 0,
+                        to: 7,
+                        speed: 45,
+                        loop: true,
+                    }
+                }
+            });
             await loadSprite("wall", "/sprites/wall.jpeg");
             await loadSprite("water", "/sprites/water.jpeg");
             await loadSprite("grass", "/sprites/grass.png");
@@ -350,6 +360,14 @@ const Dogeball = ({ studySet }: { studySet: StudySet }) => {
                     camPos(p)
 
                 });
+
+                onKeyDown(["left", "right", "up", "down", "w", "a", "s", "d"], () => {
+                    if (player.curAnim() != "run") { player.play("run") }
+                })
+                onKeyRelease(["left", "right", "up", "down", "w", "a", "s", "d"], () => {
+                    player.frame = 0;
+                    player.stop();
+                })
 
                 onKeyDown(["left", "a"], () => {
                     player.flipX(true);
