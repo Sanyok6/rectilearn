@@ -1,4 +1,6 @@
+from textwrap import indent
 import sqlalchemy
+from apps.backend.settings import PROFILE_PICTURE_INDEXES
 import schemas
 import database
 import models
@@ -148,5 +150,17 @@ def update_high_score(user: models.User, game_mode: str, new_high_score: int):
             setattr(user.high_scores, game_mode + "_highscore")
             session.commit()
             session.refresh(user)
+
+    return user
+
+
+def set_profile_picture_index(user: models.User, new_index: int):
+    if new_index not in PROFILE_PICTURE_INDEXES:
+        raise HTTPException(status_code=422, detail=f"profile_picture_index only can be the following: {PROFILE_PICTURE_INDEXES}")
+    
+    with Session(database.engine) as session:
+        user.profile_picture_index = new_index
+        session.commit()
+        session.refresh(user)
 
     return user

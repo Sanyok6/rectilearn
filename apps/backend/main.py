@@ -330,6 +330,12 @@ def set_high_score(game_mode: str, new_high_score: int, user: schemas.User = Dep
     crud.update_high_score(user, game_mode, new_high_score)
     return user
 
+
+@app.post("/set-profile-picture/{profile_picture_index}/", response_model=schemas.User)
+def set_profile_picture(profile_picture_index: int, user: schemas.User = Depends(get_current_user)):
+    return crud.set_profile_picture_index(user, profile_picture_index)
+
+
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
