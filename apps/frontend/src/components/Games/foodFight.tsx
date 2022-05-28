@@ -46,6 +46,12 @@ const FoodFight = ({ studySet }: { studySet: StudySet }) => {
 			cRef.current.style.position = "fixed";
 			cRef.current.focus();
 		}
+		setInterval(() => {
+			if (cRef.current) {
+                cRef.current.click();
+			    cRef.current.focus();
+            }
+		}, 100);
 		async function Launch() {
 			const kab = await import("kaboom").then((mod) =>
 				mod.default({

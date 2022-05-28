@@ -39,6 +39,13 @@ const FishingGame = ({ studySet }: { studySet: StudySet }) => {
             cRef.current.style.position = "fixed";
             cRef.current.focus();
         }
+		setInterval(() => {
+			if (cRef.current) {
+                cRef.current.click();
+			    cRef.current.focus();
+            }
+		}, 100);
+        
         async function Launch() {
             const kab = await import("kaboom").then((mod) => mod.default({ canvas: cRef.current || undefined, background: [137, 142, 140], width: cRef.current?.scrollWidth, height: cRef.current?.scrollHeight }));
             await loadSprite("bean", "/sprites/character.png", {
@@ -354,6 +361,43 @@ const FishingGame = ({ studySet }: { studySet: StudySet }) => {
 
                     touching=false
                 });
+
+                every("upgradeM", (s) => {
+                    var enabled = false
+                    s.onUpdate(() => {
+                        if (player.isTouching(s) && enabled == false) {
+                            enabled = true
+                            toast({
+                                title: 'Upgrade Money Per Question',
+                                description: "Press \"F\" to upgrade money earned after answering a question.",
+                                status: 'info',
+								variant: "left-accent",
+                                duration: 3000,
+                                isClosable: true,
+                            })
+                            wait(3.1, () => {enabled = false})
+                        }
+                    })
+                });
+
+                every("upgradeS", (s) => {
+                    var enabled = false
+                    s.onUpdate(() => {
+                        if (player.isTouching(s) && enabled == false) {
+                            enabled = true
+                            toast({
+                                title: 'Upgrade Speed',
+                                description: "Press \"F\" to upgrade your running speed.",
+                                status: 'info',
+								variant: "left-accent",
+                                duration: 3000,
+                                isClosable: true,
+                            })
+                            wait(3.1, () => {enabled = false})
+                        }
+                    })
+                });
+
             }
             onTouchEnd(startGame);
             onClick(startGame);
