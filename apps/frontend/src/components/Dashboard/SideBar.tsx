@@ -1,4 +1,4 @@
-import React, { Dispatch, ReactNode, ReactText, SetStateAction, useContext } from "react";
+import React, { Dispatch, ReactNode, ReactText, SetStateAction, useContext, useState } from "react";
 import {
   Button,
   IconButton,
@@ -31,6 +31,7 @@ import {
   ModalBody,
   ModalFooter,
   Switch,
+  Image,
 } from "@chakra-ui/react";
 
 import {
@@ -194,6 +195,11 @@ interface MobileProps extends FlexProps {
 
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const { toggleColorMode } = useColorMode();
+  const { 
+    isOpen: isAvOpen, 
+    onOpen: onAvOpen, 
+    onClose: onAvClose 
+  } = useDisclosure()
   const {
     isOpen: isStOpen,
     onOpen: onStOpen,
@@ -201,6 +207,11 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   } = useDisclosure();
   const { user } = useContext(DashboardCtx);
   const Router = useRouter();
+
+  const [avatarIndex, setAvatarIndex] = useState(user.profile_picture_index);
+
+  const avatars = ["/avatars/avatar_b.png", "/avatars/avatar_g.png", "/avatars/avatar_o.png", "/avatars/avatar_p.png"];
+  
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -259,8 +270,9 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                 <Avatar
                   size={"sm"}
                   bg="inherit"
+                  borderRadius="0"
                   src={
-                    "/avatars/avatar_o.png"
+                    avatars[avatarIndex] || avatars[user.profile_picture_index]
                   }
                 />
                 <VStack
@@ -283,6 +295,8 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               bg={useColorModeValue("white", "gray.900")}
               borderColor={useColorModeValue("gray.200", "gray.700")}
             >
+              <MenuItem onClick={onAvOpen}>Avatar</MenuItem>
+              <AvatarModal isAvOpen={isAvOpen} onAvClose={onAvClose} avatars={avatars} avatarIndex={avatarIndex} setAvatarIndex={setAvatarIndex}/>
               <MenuItem onClick={onStOpen}>Settings</MenuItem>
               <SettingsModal isStOpen={isStOpen} onStClose={onStClose} />
               <MenuDivider />
@@ -316,5 +330,41 @@ const SettingsModal = ({ isStOpen, onStClose }: { isStOpen: boolean, onStClose: 
         </ModalFooter>
       </ModalContent>
     </Modal>
+  )
+}
+
+function AvatarModal({ isAvOpen, onAvClose, avatars, avatarIndex, setAvatarIndex}: { isAvOpen: boolean, onAvClose: () => void, avatars: Array<string>, avatarIndex: number, setAvatarIndex: (index: number) => void }) {
+  return (
+    <>
+      <Modal isOpen={isAvOpen} onClose={onAvClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>select an avatar</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody my={3}>
+            <Flex justify="center" align="center" flexWrap="wrap">
+              {avatars.map((avatar, index) => (
+                <Image 
+                  p={1} 
+                  bgColor={index == avatarIndex && "rgba(0, 212, 255, 0.4)"} 
+                  onClick={() => {
+                    setAvatarIndex(index)                  
+                    fetch("/api/set-profile-picture/"+index, {method: 'POST'})
+                  }} 
+                  borderRadius="30%" 
+                  width="20" 
+                  src={avatar} />
+              ))}
+            </Flex>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button w="70%" margin="auto" colorScheme='blue' onClick={onAvClose}>
+              Select
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   )
 }
