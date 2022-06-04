@@ -127,7 +127,7 @@ const LavaGame = ({ studySet }: { studySet: StudySet }) => {
 				const JUMP_FORCE = wallXY * 16;
 				const NUM_PLATFORMS = 5;
 
-				let lavaRaiseSpeed = 20;
+				let lavaRaiseSpeed = height()/100;
 
 				scene("gameover", () => {
 					add([
@@ -219,7 +219,7 @@ const LavaGame = ({ studySet }: { studySet: StudySet }) => {
 
 				player.pos = get("platform")[0].pos.sub(0, 64);
 
-				addLevel(gameMap, {
+				const mapObj = addLevel(gameMap, {
 					width: wallXY,
 					height: wallXY,
 					"|": () => [
@@ -272,19 +272,22 @@ const LavaGame = ({ studySet }: { studySet: StudySet }) => {
 					}
 				});
 				player.onCollide("lava", (_) => go("gameover"));
+
 				player.onCollide("wall", (o) => {
 					if (player.isTouching(o)) {
 						player.moveTo(
 							o.pos.x < player.pos.x
-								? player.pos.x + 1
-								: player.pos.x - 1,
+								? player.pos.x += 10
+								: player.pos.x -= 10,
 							player.pos.y
 						);
 					}
 				});
+				
 				player.onUpdate(() => {
 					// if (player.pos.y > 1000) go("gameover");
 					camPos(player.pos);
+					if (player.pos.y > mapObj.height()) {go("gameover")}
 				});
 				player.onDoubleJump(() => {
 					player.spin();
@@ -333,7 +336,7 @@ const LavaGame = ({ studySet }: { studySet: StudySet }) => {
 					time.value = seconds;
 					time.text = "Score: "+time.value;
 
-					lavaRaiseSpeed = 20+Math.floor(time.value/2);
+					lavaRaiseSpeed += Math.floor(time.value/2)-lavaRaiseSpeed;
 				});
 			}
 			onTouchEnd(startGame);

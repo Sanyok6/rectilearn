@@ -146,7 +146,7 @@ const Card = (props: Props) => {
 			{...rootProps}
 		>
 			<Box
-				maxW={"420px"}
+				maxW={"320px"}
 				w={"full"}
 				bg={useColorModeValue("white", "gray.700")}
 				boxShadow={"2xl"}
