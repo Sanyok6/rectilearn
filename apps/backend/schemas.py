@@ -4,7 +4,7 @@ from datetime import datetime
 from fastapi import HTTPException
 from pydantic import BaseModel, validator, root_validator
 
-from apps.backend.settings import PROFILE_PICTURE_INDEXES
+from settings import PROFILE_PICTURE_INDEXES
 
 
 class HighScores(BaseModel):
@@ -34,7 +34,6 @@ class HighScores(BaseModel):
 class UserBase(BaseModel):
     email: str
     name: str
-    high_scores: HighScores
 
     class Config:
         orm_mode = True
@@ -43,6 +42,7 @@ class UserBase(BaseModel):
 class User(UserBase):
     id: int
     role: typing.Optional[str] = None
+    high_scores: HighScores
     profile_picture_index: int
 
     @validator("profile_picture_index")

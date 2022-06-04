@@ -1,11 +1,13 @@
 from textwrap import indent
+
 import sqlalchemy
-from apps.backend.settings import PROFILE_PICTURE_INDEXES
-import schemas
-import database
-import models
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
+
+import database
+import models
+import schemas
+from settings import PROFILE_PICTURE_INDEXES
 
 
 def get_user(email: str):
@@ -23,8 +25,13 @@ def create_user(user: schemas.UserCreate):
     try:
         with Session(database.engine) as session:
             session.add(db_user)
-            session.commit()
             session.refresh(db_user)
+            highscore = models.HightScores(user=db_user.id)
+            session.add(highscore)
+            session.commit()
+            session.refresh(user)
+            session.refresh(highscore)
+
             return db_user
     except (sqlalchemy.exc.IntegrityError, sqlalchemy.exc.DatabaseError):
         # The pg8000 library will raise DatabaseError instead of IntegrityError
@@ -138,27 +145,30 @@ def get_public_study_sets():
         )
 
 
-def update_high_score(user: models.User, game_mode: str, new_high_score: int):
-    full_gamemode = game_mode + "_highscore"
-    if current_highscore := getattr(user.high_scores, full_gamemode):
-        raise HTTPException("Invalid gamemode")
-
-    if new_high_score <= current_highscore:
-        raise HTTPException("New high score cannot be lower than previous high score")
-
+def update_high_score(user_id: int, game_mode: str, new_high_score: int):
     with Session(database.engine) as session:
-            setattr(user.high_scores, game_mode + "_highscore")
-            session.commit()
-            session.refresh(user)
+        user = session.query(models.User).filter(models.User.id == user_id).first()
+
+        full_gamemode = game_mode + "_highscore"
+        if current_highscore := getattr(user.high_scores, full_gamemode, None) is None:
+            raise HTTPException(detail="Invalid gamemode", status_code=422)
+
+        if new_high_score <= current_highscore:
+            raise HTTPException(detail="New high score cannot be lower than previous high score", status_code=422)
+
+        setattr(user.high_scores, full_gamemode, new_high_score)
+        session.commit()
+        session.refresh(user.high_scores)
 
     return user
 
 
-def set_profile_picture_index(user: models.User, new_index: int):
+def set_profile_picture_index(user_id: int, new_index: int):
     if new_index not in PROFILE_PICTURE_INDEXES:
         raise HTTPException(status_code=422, detail=f"profile_picture_index only can be the following: {PROFILE_PICTURE_INDEXES}")
     
     with Session(database.engine) as session:
+        user = session.query(models.User).filter(models.User.id == user_id).first()
         user.profile_picture_index = new_index
         session.commit()
         session.refresh(user)

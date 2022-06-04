@@ -325,15 +325,14 @@ def logout(response: Response):
     return {"message": "Successfully logged out"}
 
 
-@app.post("/set-high-score/{game_mode}/", response_model=schemas.User)
+@app.post("/set-high-score/{game_mode}/{new_high_score}/", response_model=schemas.User)
 def set_high_score(game_mode: str, new_high_score: int, user: schemas.User = Depends(get_current_user)):
-    crud.update_high_score(user, game_mode, new_high_score)
-    return user
+    return crud.update_high_score(user.id, game_mode, new_high_score)
 
 
 @app.post("/set-profile-picture/{profile_picture_index}/", response_model=schemas.User)
 def set_profile_picture(profile_picture_index: int, user: schemas.User = Depends(get_current_user)):
-    return crud.set_profile_picture_index(user, profile_picture_index)
+    return crud.set_profile_picture_index(user.id, profile_picture_index)
 
 
 if __name__ == "__main__":
