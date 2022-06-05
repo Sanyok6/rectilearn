@@ -296,7 +296,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               borderColor={useColorModeValue("gray.200", "gray.700")}
             >
               <MenuItem onClick={onAvOpen}>Avatar</MenuItem>
-              <AvatarModal isAvOpen={isAvOpen} onAvClose={onAvClose} avatars={avatars} avatarIndex={avatarIndex} setAvatarIndex={setAvatarIndex}/>
+              <AvatarModal isAvOpen={isAvOpen} onAvClose={onAvClose} avatars={avatars} avatarIndex={avatarIndex || user.profile_picture_index} setAvatarIndex={setAvatarIndex}/>
               <MenuItem onClick={onStOpen}>Settings</MenuItem>
               <SettingsModal isStOpen={isStOpen} onStClose={onStClose} />
               <MenuDivider />

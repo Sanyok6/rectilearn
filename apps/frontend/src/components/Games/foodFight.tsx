@@ -30,7 +30,7 @@ const mapLayout = layouts[Math.floor(Math.random() * layouts.length)]
 mapLayout.shift();
 
 
-const FoodFight = ({ studySet }: { studySet: StudySet }) => {
+const FoodFight = ({ studySet, avatar }: { studySet: StudySet, avatar: number }) => {
 	const cRef = useRef<HTMLCanvasElement>(null);
 	// const [reload, setReload] = useState<boolean>(false);
 	const [open, isOpen] = useState<boolean>(false);
@@ -61,7 +61,7 @@ const FoodFight = ({ studySet }: { studySet: StudySet }) => {
 					height: cRef.current?.scrollHeight,
 				})
 			);
-            await loadSprite("bean", "/sprites/character.png", {
+            await loadSprite("bean", "/avatars/animations/"+avatar+".png", {
                 sliceX: 8,
                 anims: {
                     "run": {
