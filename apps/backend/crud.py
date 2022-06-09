@@ -25,16 +25,14 @@ def create_user(user: schemas.UserCreate):
     try:
         with Session(database.engine) as session:
             session.add(db_user)
-            session.refresh(db_user)
+            session.commit()
             highscore = models.HightScores(user=db_user.id)
             session.add(highscore)
             session.commit()
-            session.refresh(user)
-            session.refresh(highscore)
+            session.refresh(db_user)
 
             return db_user
-    except (sqlalchemy.exc.IntegrityError, sqlalchemy.exc.DatabaseError):
-        # The pg8000 library will raise DatabaseError instead of IntegrityError
+    except (sqlalchemy.exc.IntegrityError):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="User with that email already exists",

@@ -172,7 +172,10 @@ async def read_users_me(current_user: schemas.User = Depends(get_current_user)):
 @app.post("/auth/users/create/", response_model=schemas.User)
 def create_user(user: schemas.UserCreate):
     user.password = get_password_hash(user.password)
-    return crud.create_user(user)
+    user = crud.create_user(user)
+    print(user.high_scores)
+    print(user.profile_picture_index)
+    return user
 
 
 @app.post("/studysets/new/", response_model=schemas.StudySet)
