@@ -7,6 +7,7 @@ export const defaultCtx = {
         name: "",
         email: "",
         role: "",
+        profile_picture_index: 0,
     }
     /* more settings */
 };

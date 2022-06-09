@@ -12,6 +12,8 @@ const Games: NextPage = () => {
 	const { gameSession } = useContext(AuthCtx);
 	const [GameObj, setGameObj] = useState<React.FC>(() => <></>);
 	const Router = useRouter();
+	const avatar = gameSession?.avatar;
+
 	useEffect(() => {
 		if (!gameSession) {
 			Router.push("/dashboard");
@@ -20,27 +22,27 @@ const Games: NextPage = () => {
 		switch (gameSession.game) {
 			case "lavaGame":
 				setGameObj(() => (
-					<LavaGame studySet={gameSession.studySet}></LavaGame>
+					<LavaGame studySet={gameSession.studySet} avatar={avatar}></LavaGame>
 				));
 				break;
 			case "fishingGame":
 				setGameObj(() => (
-					<FishingGame studySet={gameSession.studySet}></FishingGame>
+					<FishingGame studySet={gameSession.studySet} avatar={avatar}></FishingGame>
 				));
 				break;
 			case "bushGame":
 				setGameObj(() => (
-					<BushGame studySet={gameSession.studySet}></BushGame>
+					<BushGame studySet={gameSession.studySet} avatar={avatar} ></BushGame>
 				));
 				break;
 			case "foodFight":
 				setGameObj(() => (
-					<FoodFight studySet={gameSession.studySet}></FoodFight>
+					<FoodFight studySet={gameSession.studySet} avatar={avatar} ></FoodFight>
 				));
 				break;
 			case "dogeball":
 				setGameObj(() => (
-					<Dogeball studySet={gameSession.studySet}></Dogeball>
+					<Dogeball studySet={gameSession.studySet} avatar={avatar} ></Dogeball>
 				));
 				break;
 			default:

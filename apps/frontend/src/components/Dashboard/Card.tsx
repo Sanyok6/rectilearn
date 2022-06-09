@@ -42,6 +42,7 @@ import { FiInfo, FiPlay, FiStar } from "react-icons/fi";
 import AuthCtx from "../../lib/auth";
 import { useRouter } from "next/router";
 import { games } from "./GameCardStack";
+import DashboardCtx from "../../lib/dashboard";
 
 export const InfoButton = (props: IconButtonProps) => (
 	<LightMode>
@@ -109,6 +110,8 @@ const Card = (props: Props) => {
 	const toast = useToast();
     const Router = useRouter();
 
+	const { user } = useContext(DashboardCtx);
+
 	const deleteStudySet = async () => {
 		const response = await fetch(`/api/studysets/${id}/delete_study_set/`, {
 			method: "DELETE",
@@ -136,7 +139,8 @@ const Card = (props: Props) => {
 		}
 		setGameSession({
             game: selected,
-            studySet
+            studySet,
+			avatar: user.profile_picture_index,
         });
         Router.push("/games");
 	}

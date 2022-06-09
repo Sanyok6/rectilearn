@@ -28,7 +28,7 @@ const gameMap = `
 |$$$$$$$$$$$$$$$$$$|`.split("\n");
 gameMap.shift();
 
-const LavaGame = ({ studySet }: { studySet: StudySet }) => {
+const LavaGame = ({ studySet, avatar }: { studySet: StudySet, avatar: number }) => {
 	const cRef = useRef<HTMLCanvasElement>(null);
 	
 	// const [reload, setReload] = useState<boolean>(false);
@@ -65,7 +65,7 @@ const LavaGame = ({ studySet }: { studySet: StudySet }) => {
 					height: cRef.current?.scrollHeight,
 				})
 			);
-            await loadSprite("bean", "/sprites/character.png", {
+            await loadSprite("bean", "/avatars/animations/"+avatar+".png", {
                 sliceX: 8,
                 anims: {
                     "run": {

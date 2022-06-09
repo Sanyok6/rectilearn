@@ -87,8 +87,6 @@ function RewriteModal({ newQ, question, answers, response, open, setOpen, setVal
 
     function checkCorrect(values: {
         i1: string,
-        i2: string,
-        i3: string
     }, e: any) {
         if (Object.entries(values).reduce((prev, cur) => {
             if (!prev) return false;
@@ -100,7 +98,6 @@ function RewriteModal({ newQ, question, answers, response, open, setOpen, setVal
                 return false;
             }
         }, true)) {
-            newQ();
             setValue("");
             setOpen(false);
         }
@@ -130,15 +127,13 @@ function RewriteModal({ newQ, question, answers, response, open, setOpen, setVal
                 <Formik
                     initialValues={{
                         "i1": "",
-                        "i2": "",
-                        "i3": ""
                     }}
                     onSubmit={() => void(0)}
                 >
                     {({ handleChange, values }) => (
                         <>
                             {
-                                [["i1", values.i1], ["i2", values.i2], ["i3", values.i3]].map((i, ind) => (
+                                [["i1", values.i1]].map((i, ind) => (
                                     <InputGroupExt key={ind}>
                                         <Field as={Input} onChange={(e: any) => [handleChange(e), checkCorrect(values, e)]} value={i[1]} name={i[0]} placeholder='rewrite' fontSize="25" textAlign={"center"} autoComplete={"off"} />
                                         <InputRightElement>{<Icon as={isCorrect(i[1]) ? CheckIcon : RiEditLine} color={isCorrect(i[1]) ? "green.500" : "yellow.500" } />}</InputRightElement>
@@ -148,7 +143,7 @@ function RewriteModal({ newQ, question, answers, response, open, setOpen, setVal
                         </>
                     )}
                 </Formik>
-                <Text margin={2}>rewrite three times to continue</Text>
+                <Text margin={2}>rewrite to continue</Text>
             </ModalBody>
           </ModalContent>
         </Modal>
