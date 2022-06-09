@@ -16,7 +16,7 @@ class User(Base):
     created_at = Column(DateTime(), default=datetime.utcnow())
     study_sets = relationship("StudySets")
     high_scores = relationship("HightScores", uselist=False, backref="parent", lazy="subquery")
-    profile_picture_index = Column(Integer, server_default="0")
+    profile_picture_index = Column(Integer, default=0)
 
 
 class HightScores(Base):
