@@ -353,7 +353,9 @@ function AvatarModal({ isAvOpen, onAvClose, avatars, avatarIndex, setAvatarIndex
                   }} 
                   borderRadius="30%" 
                   width="20" 
-                  src={avatar} />
+                  src={avatar}
+                  _hover={{bgColor: "rgba(0, 212, 255, 0.2)"}}
+                  />
               ))}
             </Flex>
           </ModalBody>

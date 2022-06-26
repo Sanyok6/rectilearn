@@ -8,7 +8,7 @@ import { StudySet } from "../Dashboard/Card";
     $ = lava
 */
 const gameMap = `
-|                  |
+$                  $
 |                  |
 |                  |
 |                  |
@@ -239,17 +239,6 @@ const LavaGame = ({ studySet, avatar }: { studySet: StudySet, avatar: number }) 
 						area(),
 						"lava",
 					],
-					// _: () => [
-					// 	sprite("platform", {
-					// 		width: wallXY,
-					// 		height: wallXY,
-					// 	}),
-					// 	area(),
-					// 	solid(),
-					// 	"platform",
-					// 	outview({ hide: true, pause: true }),
-					// 	{ answered: false },
-					// ],
 				});
 
 				onUpdate("platform", (p) => {
