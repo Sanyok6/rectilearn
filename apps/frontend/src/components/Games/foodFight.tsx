@@ -139,6 +139,7 @@ const FoodFight = ({ studySet, avatar }: { studySet: StudySet, avatar: number })
 						}),
 						area(),
 						solid(),
+						"wall"
 					],
 					$: () => [
 						sprite("water", {
@@ -239,7 +240,7 @@ const FoodFight = ({ studySet, avatar }: { studySet: StudySet, avatar: number })
 							)
 						),
 						area(),
-						{ speed: rand(10, 25), destroyed: false },
+						{ speed: rand(10, 25), destroyed: false, direction: {x: rand(-wallXY, wallXY), y: rand(-wallXY, wallXY)} },
 					]);
 					enemies.push(e);
 
@@ -249,7 +250,8 @@ const FoodFight = ({ studySet, avatar }: { studySet: StudySet, avatar: number })
 						let y = -1 + 2 * +(enemy.pos.y > player.pos.y);
 						enemy.flipX(enemy.pos.x > player.pos.x);
 						// enemy.move((x)*10, (y)*(-10))
-						enemy.moveTo(player.pos, enemy.speed);
+						// enemy.moveTo(player.pos, enemy.speed);
+						enemy.moveTo(player.pos.x+e.direction.x, player.pos.y+e.direction.y, enemy.speed);
 
 						if (enemy.isTouching(player)) {
 							enemy.destroy();
@@ -314,9 +316,9 @@ const FoodFight = ({ studySet, avatar }: { studySet: StudySet, avatar: number })
 					const m = toWorld(p);
 					const e: any = add([
 						sprite("apple", {
-							width: wallXY,
+							width: wallXY/2.5,
 						}),
-						pos(player.pos.x, player.pos.y),
+						pos(player.pos.x+wallXY/2.5, player.pos.y+wallXY/2.5),
 						lifespan(2),
 						area(),
 						{
@@ -347,6 +349,9 @@ const FoodFight = ({ studySet, avatar }: { studySet: StudySet, avatar: number })
 								addEnemy();
 							}
 						}
+						e.onCollide(("wall"), () => {
+							e.destroy();
+						})
 					});
 				});
 				
