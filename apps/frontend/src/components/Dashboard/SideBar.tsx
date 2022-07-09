@@ -32,6 +32,7 @@ import {
   ModalFooter,
   Switch,
   Image,
+  Tooltip
 } from "@chakra-ui/react";
 
 import {
@@ -43,7 +44,7 @@ import {
   FiSun,
   FiMoon,
 } from "react-icons/fi";
-import { IoGameController } from "react-icons/io5";
+import { IoGameController, IoSchool } from "react-icons/io5";
 import NextLink from "next/link";
 import { IconType } from "react-icons";
 import { SectionType } from "../../pages/dashboard";
@@ -51,6 +52,7 @@ import DashboardCtx from "../../lib/dashboard";
 import { useRouter } from "next/router";
 
 import "@fontsource/pacifico"
+import { MdOutlineSubdirectoryArrowRight } from "react-icons/md";
 
 interface LinkItemProps {
   name: string;
@@ -117,6 +119,10 @@ interface SidebarProps extends BoxProps {
 const SidebarContent = ({ onClose, alterSection, ...rest }: SidebarProps) => {
   const ctx = useContext(DashboardCtx);
   const LinkItemsArr = ctx.groupGS ? LinkItemsBined : LinkItems;
+  const [isOpen, setOpen] = useState(false);
+
+  const classes = [{name: "Bob's classroom", color: "green"}, {name: "Foo's Class", color: "blue"}, {name: "Very Long Class Name!!!", color: "orange"}];
+
   return (
     <Box
       transition="0.2s ease"
@@ -143,13 +149,42 @@ const SidebarContent = ({ onClose, alterSection, ...rest }: SidebarProps) => {
           {link.name}
         </NavItem>
       ))}
+
+        <NavItem key={3} icon={IoSchool} alterSection={() => {setOpen(!isOpen)}}>Classes</NavItem>
+
+        <Box display={isOpen ? 'block' : 'none'} width="95%">
+            {classes.map((classroom) => (
+              <Box ml="7" mt="-2" onClick={() => {alert(classroom.name)}}>
+                <Box 
+                  borderRadius={"lg"}
+                  mb="1"
+                  p="0.5"
+                  _hover={{
+                      bg: useColorModeValue(classroom.color+".300", classroom.color+".500"),
+                      color: "white",
+                    }}
+                  >
+                  <HStack width="">
+                    <Icon as={MdOutlineSubdirectoryArrowRight} size={16} />
+                    <Icon color={useColorModeValue(classroom.color+".600", classroom.color+".200")} as={IoSchool} size={16} />
+                    
+                    <Tooltip label={classroom.name} openDelay={400} hasArrow>
+                      <Text overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis" width="inherit">{classroom.name}</Text>
+                    </Tooltip>
+                  </HStack>
+                </Box>
+              </Box>
+            ))}
+
+        </Box>
+
     </Box>
   );
 };
 
 interface NavItemProps extends FlexProps {
   icon: IconType;
-  children: ReactText;
+  children: ReactNode;
   alterSection: React.MouseEventHandler<HTMLAnchorElement>;
 }
 
