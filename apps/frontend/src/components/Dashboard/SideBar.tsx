@@ -154,7 +154,7 @@ const SidebarContent = ({ onClose, alterSection, ...rest }: SidebarProps) => {
 
         <Box display={isOpen ? 'block' : 'none'} width="95%">
             {classes.map((classroom) => (
-              <Box ml="7" mt="-2" onClick={() => {alert(classroom.name)}}>
+              <Box ml="7" mt="-2" onClick={() => [alterSection("class page" as SectionType),onClose(),]}>
                 <Box 
                   borderRadius={"lg"}
                   mb="1"
@@ -165,10 +165,10 @@ const SidebarContent = ({ onClose, alterSection, ...rest }: SidebarProps) => {
                     }}
                   >
                   <HStack width="">
-                    <Icon as={MdOutlineSubdirectoryArrowRight} size={16} />
-                    <Icon color={useColorModeValue(classroom.color+".600", classroom.color+".200")} as={IoSchool} size={16} />
-                    
-                    <Tooltip label={classroom.name} openDelay={400} hasArrow>
+                    <Icon as={MdOutlineSubdirectoryArrowRight} />
+                    <Icon color={useColorModeValue(classroom.color+".600", classroom.color+".200")} as={IoSchool} />
+                    <
+                    Tooltip label={classroom.name} openDelay={400} hasArrow>
                       <Text overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis" width="inherit">{classroom.name}</Text>
                     </Tooltip>
                   </HStack>

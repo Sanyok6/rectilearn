@@ -12,10 +12,11 @@ import { useRouter } from "next/router";
 
 import { Text, Link } from "@chakra-ui/react";
 
-export type SectionType = 'sets' | 'games' | 'explore' | 'sets & games ';
+export type SectionType = 'sets' | 'games' | 'explore' | 'sets & games ' | 'class page';
 
 const CardStack = dynamic(() => import("../../components/Dashboard/CardStack"));
 const GameCardStack = dynamic(() => import("../../components/Dashboard/GameCardStack"));
+const ClassPage = dynamic(() => import("../../components/Dashboard/ClassPage"));
 // Dynamically import to reduce bundle size
 
 const fetcher = async (url: string, token: string) => {
@@ -87,6 +88,8 @@ const Dashboard: NextPage = ({ access_token }: InferGetServerSidePropsType<typeo
               <CardStack />
             : curSection === 'games' ?
               <GameCardStack />
+            : curSection === 'class page' ?
+              <><ClassPage /></>              
             : //  explore
               <><Text marginTop={"10"} size="xl">Choose a study set from <Link color="blue.400" href="https://quizlet.com/search">Quizlet</Link> and import it!</Text></>
           :
