@@ -322,7 +322,6 @@ def get_random_question(user: schemas.User = Depends(get_current_user)):
 
     set = random.choice(sets)
     questions = crud.get_questions(set.id)
-    print(questions)
     question = random.choice(questions)
 
     return question
@@ -342,6 +341,12 @@ def set_high_score(game_mode: str, new_high_score: int, user: schemas.User = Dep
 @app.post("/set-profile-picture/{profile_picture_index}/", response_model=schemas.User)
 def set_profile_picture(profile_picture_index: int, user: schemas.User = Depends(get_current_user)):
     return crud.set_profile_picture_index(user.id, profile_picture_index)
+
+
+@app.post("/studysets/update-question-accuracy/{studyset_id}/", response_model=schemas.StudySet)
+def update_question_accuracy(studyset_id: int, question_accuracies: typing.List[schemas.QuestionAccuracy],
+                             user: schemas.User = Depends(get_current_user)):
+    return crud.update_questions_accuracy(studyset_id, user, question_accuracies)
 
 
 if __name__ == "__main__":

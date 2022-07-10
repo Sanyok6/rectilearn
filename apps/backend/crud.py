@@ -1,8 +1,9 @@
-from textwrap import indent
+from typing import List
 
 import sqlalchemy
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
+from sqlalchemy.orm.attributes import flag_modified
 
 import database
 import models
@@ -16,7 +17,6 @@ def get_user(email: str):
 
 
 def create_user(user: schemas.UserCreate):
-
     db_user = models.User(
         name=user.name,
         email=user.email,
@@ -61,8 +61,8 @@ def get_study_sets(creator_id: int):
     with Session(database.engine) as session:
         return (
             session.query(models.StudySets)
-            .filter(models.StudySets.creator == creator_id)
-            .all()
+                .filter(models.StudySets.creator == creator_id)
+                .all()
         )
 
 
@@ -87,8 +87,8 @@ def get_study_set(study_set_id: int):
     with Session(database.engine) as session:
         return (
             session.query(models.StudySets)
-            .filter(models.StudySets.id == study_set_id)
-            .first()
+                .filter(models.StudySets.id == study_set_id)
+                .first()
         )
 
 
@@ -101,8 +101,6 @@ def add_question(study_set_id: int, question: schemas.StudySetQuestionCreate):
     with Session(database.engine) as session:
         session.add(db_question)
         session.commit()
-        session.refresh(db_question)
-        return db_question
 
 
 def delete_question(question_id: int):
@@ -113,16 +111,19 @@ def delete_question(question_id: int):
         session.commit()
         return True
 
+
 def get_questions(study_set_id: int):
     with Session(database.engine) as session:
-        return (session.query(models.StudySetQuestions).filter(models.StudySetQuestions.study_set == study_set_id).all())
+        return (
+            session.query(models.StudySetQuestions).filter(models.StudySetQuestions.study_set == study_set_id).all())
+
 
 def get_question(question_id: int):
     with Session(database.engine) as session:
         return (
             session.query(models.StudySetQuestions)
-            .filter(models.StudySetQuestions.id == question_id)
-            .first()
+                .filter(models.StudySetQuestions.id == question_id)
+                .first()
         )
 
 
@@ -134,12 +135,13 @@ def delete_studyset(study_set_id: int):
         session.commit()
         return True
 
+
 def get_public_study_sets():
     with Session(database.engine) as session:
         return (
             session.query(models.StudySets)
-            .filter(models.StudySets.is_public == True).filter(models.StudySets.questions!=None)
-            .all()
+                .filter(models.StudySets.is_public == True).filter(models.StudySets.questions != None)
+                .all()
         )
 
 
@@ -163,8 +165,9 @@ def update_high_score(user_id: int, game_mode: str, new_high_score: int):
 
 def set_profile_picture_index(user_id: int, new_index: int):
     if new_index not in PROFILE_PICTURE_INDEXES:
-        raise HTTPException(status_code=422, detail=f"profile_picture_index only can be the following: {PROFILE_PICTURE_INDEXES}")
-    
+        raise HTTPException(status_code=422,
+                            detail=f"profile_picture_index only can be the following: {PROFILE_PICTURE_INDEXES}")
+
     with Session(database.engine) as session:
         user = session.query(models.User).filter(models.User.id == user_id).first()
         user.profile_picture_index = new_index
@@ -172,3 +175,26 @@ def set_profile_picture_index(user_id: int, new_index: int):
         session.refresh(user)
 
     return user
+
+
+def update_questions_accuracy(studyset_id: int, user: schemas.User, questions_accs: List[schemas.QuestionAccuracy]):
+    # acc means accuracy
+    with Session(database.engine) as session:
+        studyset = session.query(models.StudySets).where(models.StudySets.id == studyset_id).first()
+
+        if studyset.creator != user.id:
+            raise HTTPException(status_code=403, detail="You don't have the permission to modify this studyset")
+
+        for question_accuracy in questions_accs:
+            question = (session.query(models.StudySetQuestions)
+                        .filter(models.StudySetQuestions.id == question_accuracy.question_id)
+                        .first())
+            if question_accuracy.is_correct:
+                question.correct_count = (question.correct_count or 0) + 1
+            else:
+                question.wrong_count = (question.wrong_count or 0) + 1
+
+        session.commit()
+        session.refresh(studyset)
+
+    return studyset
