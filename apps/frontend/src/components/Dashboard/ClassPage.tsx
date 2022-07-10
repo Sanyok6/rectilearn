@@ -46,12 +46,25 @@ interface classObj {
     assignments: [];
 }
 
-const RightSidebar = () => {
+const RightSidebar = ({curClass}: {curClass: classObj}) => {
     const {isOpen, onOpen, onClose} = useDisclosure();
     const [curAssignment, setCurAssignment] = useState<assignmentObj>({title:"", due:"", gameMode: "", assignmentIndex:0, completedBy:[]});
 
     const assignments = [{title: "Complete 20 questions", due: "1/1/22", gameMode: "", assignmentIndex:0, completedBy:[], completed:true}, {title: "Earn $100 in Food Fight", due: "1/2/22", gameMode: "", assignmentIndex:0, completedBy:[], completed:true}, {title: "Complete 40 questions", due: "10/1/22", gameMode: "", assignmentIndex:0, completedBy:[], completed:false}];
     const leaderboard = [{name: "Sanya", correct: 10, incorrect: 5}, {name: "Rush", correct: 10, incorrect: 6}, {name: "llama", correct: 10, incorrect: 7},{name: "Sanya", correct: 10, incorrect: 5}, {name: "Rush", correct: 10, incorrect: 6}, {name: "llama", correct: 10, incorrect: 7},{name: "Sanya", correct: 10, incorrect: 5}, {name: "Rush", correct: 10, incorrect: 6}, {name: "llama", correct: 10, incorrect: 7},{name: "Sanya", correct: 10, incorrect: 5}, {name: "Rush", correct: 10, incorrect: 6}, {name: "llama", correct: 10, incorrect: 7},];
+
+    const byAccuracy = leaderboard.slice().sort((a, b) => {
+        if (a.correct/(a.correct+a.incorrect) < b.correct/(b.correct+b.incorrect)) return 1;
+        if (a.correct/(a.correct+a.incorrect) > b.correct/(b.correct+b.incorrect)) return -1;
+        else return 0;
+    })
+
+    const byQuantity = leaderboard.slice().sort((a, b) => {
+        if (a.correct+a.incorrect < b.correct+b.incorrect) return 1;
+        if (a.correct+a.incorrect > b.correct+b.incorrect) return -1;
+        else return 0;
+    })
+
     return (
         <>
             <Box borderRadius={"lg"} bg={useColorModeValue('white', '#171923')} >
@@ -101,7 +114,7 @@ const RightSidebar = () => {
                                 <GridItem borderBottom="1px solid">Correct</GridItem>
                                 <GridItem borderBottom="1px solid">Incorrect</GridItem>
                                 <GridItem borderBottom="1px solid">%</GridItem>
-                                {leaderboard.map((user, index) => (
+                                {byAccuracy.map((user, index) => (
                                     <>
                                         <GridItem key={index}>{index+1}</GridItem>
                                         <GridItem colSpan={2}>{user.name}</GridItem>
@@ -117,7 +130,7 @@ const RightSidebar = () => {
                                 <GridItem colSpan={2} borderBottom="1px solid">Name</GridItem>
                                 <GridItem borderBottom="1px solid">Attempted</GridItem>
                                 <GridItem borderBottom="1px solid">%</GridItem>
-                                {leaderboard.map((user, index) => (
+                                {byQuantity.map((user, index) => (
                                     <>
                                         <GridItem key={index}>{index+1}</GridItem>
                                         <GridItem colSpan={2}>{user.name}</GridItem>
@@ -171,12 +184,12 @@ const AssignmentModal = ({assignment, isOpen, onClose}: {assignment: assignmentO
     )
 }
 
-const ClassSets = () => {
+const ClassSets = ({curClass}: {curClass: classObj}) => {
     return (
         <>
             <Box color="blue.400" fontWeight={"extrabold"} fontSize={"2xl"} my="5" margin={"auto"} >
                 <Icon as={IoSchool} mr="6" mb="-1" w="8" h="8"></Icon>
-                Bob's Class
+                {curClass.name}
             </Box>
             <Box width={{base: "95%", lg: "80%"}}></Box>
         </>
@@ -187,8 +200,8 @@ export default function ClassPage({curClass}: {curClass: classObj}) {
     return (
         <> 
             <SimpleGrid minChildWidth='250px' spacing={6}>
-                <GridItem colSpan={{base: 1, lg: 2}}><ClassSets /></GridItem>
-                <GridItem><RightSidebar /></GridItem>
+                <GridItem colSpan={{base: 1, lg: 2}}><ClassSets curClass={curClass} /></GridItem>
+                <GridItem><RightSidebar curClass={curClass} /></GridItem>
             </SimpleGrid>
         
         </>

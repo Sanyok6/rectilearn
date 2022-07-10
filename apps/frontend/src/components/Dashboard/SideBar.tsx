@@ -212,7 +212,8 @@ const NavItem = ({ icon, children, alterSection, ...rest }: NavItemProps) => {
 const NavClasses = ({alterClassroom, alterSection}: {alterClassroom: Dispatch<SetStateAction<classObj>>; alterSection: Dispatch<SetStateAction<SectionType>>}) => {
   const [isOpen, setOpen] = useState(false);
 
-  const classes = [{id: 0, name: 'Bobs classroom', color: 'green', students: [], teacher: 0, study_sets: [], assignments: []}, {id: 0, name: 'Random Class', color: 'red', students: [], teacher: 0, study_sets: [], assignments: []}];
+  const classes = [{id: 0, name: 'Bobs classroom', color: 'green', students: [1, 2, 3], teacher: 0, study_sets: [1, 2, 3], assignments: [{}, {}]}, {id: 0, name: 'Random Class', color: 'red', students: [1, 2], teacher: 0, study_sets: [1, 2], assignments: [{}]}];
+
 
   return (
     <>
