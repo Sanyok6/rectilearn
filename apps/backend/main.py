@@ -1,29 +1,34 @@
+import random
+import typing
 from datetime import datetime, timedelta
 from http import HTTPStatus
-import typing
-import random
-import os
 from typing import Optional
+
 import uvicorn
 from fastapi import Depends, FastAPI, HTTPException, status, Response
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import  OAuth2PasswordRequestForm, OAuth2
 from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2
+from fastapi.security.utils import get_authorization_scheme_param
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-from fastapi.security.utils import get_authorization_scheme_param
-import crud, models, schemas
+from starlette.requests import Request
+
+import crud
+import models
+import schemas
 from settings import *
 
-from starlette.requests import Request
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
 class OAuth2PasswordBearerCookie(OAuth2):
     def __init__(
-        self,
-        tokenUrl: str,
-        scheme_name: str = None,
-        scopes: dict = None,
-        auto_error: bool = True,
+            self,
+            tokenUrl: str,
+            scheme_name: str = None,
+            scopes: dict = None,
+            auto_error: bool = True,
     ):
         if not scopes:
             scopes = {}
@@ -61,6 +66,7 @@ class OAuth2PasswordBearerCookie(OAuth2):
             else:
                 return None
         return param
+
 
 oauth2_scheme = OAuth2PasswordBearerCookie(tokenUrl="auth/token/")
 
@@ -130,7 +136,6 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 
 @app.get("/")
 async def index():
-
     return "Hello"
 
 
@@ -180,7 +185,7 @@ def create_user(user: schemas.UserCreate):
 
 @app.post("/studysets/new/", response_model=schemas.StudySet)
 def create_study_set(
-    study_set: schemas.StudySetCreate, user: schemas.User = Depends(get_current_user)
+        study_set: schemas.StudySetCreate, user: schemas.User = Depends(get_current_user)
 ):
     v = crud.create_study_set(study_set, user.id)
     return v
@@ -195,9 +200,9 @@ def get_study_set(user: schemas.User = Depends(get_current_user)):
     "/studysets/{study_set_id}/add_question/", response_model=schemas.StudySetQuestions
 )
 def new_question(
-    study_set_id: int,
-    question: schemas.StudySetQuestionCreate,
-    user: schemas.User = Depends(get_current_user),
+        study_set_id: int,
+        question: schemas.StudySetQuestionCreate,
+        user: schemas.User = Depends(get_current_user),
 ):
     study_set = crud.get_study_set(study_set_id)
     if study_set.creator != user.id:
@@ -209,14 +214,13 @@ def new_question(
     return crud.add_question(study_set_id, question)
 
 
-
 @app.put(
     "/studysets/{study_set_id}/update/", response_model=schemas.StudySet
 )
 def update_studyset(
-    study_set_id: int,
-    new_study_set: schemas.StudySetCreate,
-    user: schemas.User = Depends(get_current_user),
+        study_set_id: int,
+        new_study_set: schemas.StudySetCreate,
+        user: schemas.User = Depends(get_current_user),
 ):
     study_set = crud.get_study_set(study_set_id)
     if study_set.creator != user.id:
@@ -230,12 +234,11 @@ def update_studyset(
     # return stu
 
 
-
 @app.delete("/studysets/{study_set_id}/delete_question/")
 def delete_question(
-    study_set_id: int,
-    question_id: int,
-    user: schemas.User = Depends(get_current_user),
+        study_set_id: int,
+        question_id: int,
+        user: schemas.User = Depends(get_current_user),
 ):
     study_set = crud.get_study_set(study_set_id)
     if study_set.creator != user.id:
@@ -262,8 +265,8 @@ def delete_question(
 
 @app.delete("/studysets/{study_set_id}/delete_study_set/")
 def delete_study_set(
-    study_set_id: int,
-    user: schemas.User = Depends(get_current_user),
+        study_set_id: int,
+        user: schemas.User = Depends(get_current_user),
 ):
     study_set = crud.get_study_set(study_set_id)
     if study_set.creator != user.id:
@@ -275,9 +278,10 @@ def delete_study_set(
     if crud.delete_studyset(study_set_id):
         return HTTPStatus(status.HTTP_200_OK)
 
+
 @app.get("/studysets/public/", response_model=typing.List[schemas.StudySet])
 def get_public_study_sets():
-    sets=  crud.get_public_study_sets()
+    sets = crud.get_public_study_sets()
     if len(sets) == 0:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -286,9 +290,10 @@ def get_public_study_sets():
         )
     return sets
 
-@app.get("/studysets/{study_set_id}/", response_model=schemas.StudySet)  
+
+@app.get("/studysets/{study_set_id}/", response_model=schemas.StudySet)
 def get_study_set_by_id(study_set_id: int, user: schemas.User = Depends(get_current_user)):
-    set =  crud.get_study_set(study_set_id)
+    set = crud.get_study_set(study_set_id)
     if set == None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -303,6 +308,7 @@ def get_study_set_by_id(study_set_id: int, user: schemas.User = Depends(get_curr
                 headers={"WWW-Authenticate": "Bearer"},
             )
     return set
+
 
 @app.get("/studysets/questions/random/", response_model=schemas.StudySetQuestions)
 def get_random_question(user: schemas.User = Depends(get_current_user)):
