@@ -40,9 +40,7 @@ class OAuth2PasswordBearerCookie(OAuth2):
         cookie_scheme, cookie_param = get_authorization_scheme_param(
             cookie_authorization
         )
-        print(header_authorization, header_scheme, header_param)
         if header_scheme.lower() == "bearer":
-            print("here")
             authorization = True
             scheme = header_scheme
             param = header_param
@@ -63,6 +61,7 @@ class OAuth2PasswordBearerCookie(OAuth2):
             else:
                 return None
         return param
+
 oauth2_scheme = OAuth2PasswordBearerCookie(tokenUrl="auth/token/")
 
 app = FastAPI()
