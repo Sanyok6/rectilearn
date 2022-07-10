@@ -94,14 +94,14 @@ const GameCardStack = () => {
                     display={shouldOpen ? undefined : "none"}
                 >
                     <CardGrid autoRows="1fr">
-                        <GameCard
+                        {/* <GameCard
                             games={games[Math.floor(Math.random() * games.length)]}
                             rootProps={{
                                 gridRow: "1 / 3",
                                 gridColumn: useBreakpointValue({ base: "1 / 2", md: "1 / 3" }),
                             }}
                             studySets={data}
-                        />
+                        /> */}
                         {games.map((game, index) => (
                             <GameCard games={game} key={index} studySets={data} />
                         ))}

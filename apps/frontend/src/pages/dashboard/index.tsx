@@ -19,6 +19,16 @@ const GameCardStack = dynamic(() => import("../../components/Dashboard/GameCardS
 const ClassPage = dynamic(() => import("../../components/Dashboard/ClassPage"));
 // Dynamically import to reduce bundle size
 
+interface classObj {
+  id: number;
+  name: string;
+  color: string;
+  students: Array<number>;
+  teacher: number;
+  study_sets: Array<number>;
+  assignments: [];
+}
+
 const fetcher = async (url: string, token: string) => {
   const res = await fetch(url, {
     headers: {
@@ -37,7 +47,7 @@ const fetcher = async (url: string, token: string) => {
 
 const Dashboard: NextPage = ({ access_token }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [curSection, setCurSection] = useState<SectionType>('sets');
-  const [curClassroom, setCurClassroom] = useState<number>(0);
+  const [curClassroom, setCurClassroom] = useState<classObj>({id: 0, name: '', color: '', students: [], teacher: 0, study_sets: [], assignments: []});
   const [groupGS, setGroupGS] = useLocalStorage<boolean>("prefGS", false);
   const [user, setUser] = useState<{
     name: string,
@@ -90,7 +100,7 @@ const Dashboard: NextPage = ({ access_token }: InferGetServerSidePropsType<typeo
             : curSection === 'games' ?
               <GameCardStack />
             : curSection === 'class page' ?
-              <><ClassPage /></>              
+              <><ClassPage curClass={curClassroom} /></>              
             : //  explore
               <><Text marginTop={"10"} size="xl">Choose a study set from <Link color="blue.400" href="https://quizlet.com/search">Quizlet</Link> and import it!</Text></>
           :

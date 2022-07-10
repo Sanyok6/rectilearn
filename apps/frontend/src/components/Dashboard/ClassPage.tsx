@@ -146,7 +146,7 @@ interface assignmentObj {
     completedBy: Array<number>;
 }
 
-const AssignmentModal = ({assignment, isOpen, onClose}: {assignment: assignmentObj; isOpen: any; onClose:any;}) =>  {
+const AssignmentModal = ({assignment, isOpen, onClose}: {assignment: assignmentObj; isOpen: boolean; onClose: () => void;}) =>  {
     return (
         <>
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -183,10 +183,9 @@ const ClassSets = () => {
     )
 }
 
-export default function ClassPage() {
+export default function ClassPage({curClass}: {curClass: classObj}) {
     return (
         <> 
-
             <SimpleGrid minChildWidth='250px' spacing={6}>
                 <GridItem colSpan={{base: 1, lg: 2}}><ClassSets /></GridItem>
                 <GridItem><RightSidebar /></GridItem>

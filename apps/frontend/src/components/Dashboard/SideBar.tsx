@@ -70,6 +70,16 @@ const LinkItemsBined: Array<LinkItemProps> = [
   { name: "Explore", icon: FiCompass },
 ]
 
+interface classObj {
+  id: number;
+  name: string;
+  color: string;
+  students: Array<number>;
+  teacher: number;
+  study_sets: Array<number>;
+  assignments: [];
+}
+
 export default function Sidebar({
   children,
   alterSection,
@@ -77,7 +87,7 @@ export default function Sidebar({
 }: {
   children?: ReactNode;
   alterSection: Dispatch<SetStateAction<SectionType>>;
-  alterClassroom: Dispatch<SetStateAction<number>>;
+  alterClassroom: Dispatch<SetStateAction<classObj>>;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
@@ -117,7 +127,7 @@ export default function Sidebar({
 interface SidebarProps extends BoxProps {
   onClose: () => void;
   alterSection: Dispatch<SetStateAction<SectionType>>;
-  alterClassroom: Dispatch<SetStateAction<number>>;
+  alterClassroom: Dispatch<SetStateAction<classObj>>;
 }
 
 const SidebarContent = ({ onClose, alterSection, alterClassroom, ...rest }: SidebarProps) => {
@@ -198,10 +208,11 @@ const NavItem = ({ icon, children, alterSection, ...rest }: NavItemProps) => {
   );
 };
 
-const NavClasses = ({alterClassroom, alterSection}: {alterClassroom: Dispatch<SetStateAction<number>>; alterSection: Dispatch<SetStateAction<SectionType>>}) => {
+
+const NavClasses = ({alterClassroom, alterSection}: {alterClassroom: Dispatch<SetStateAction<classObj>>; alterSection: Dispatch<SetStateAction<SectionType>>}) => {
   const [isOpen, setOpen] = useState(false);
 
-  const classes = [{name: "Bob's classroom", color: "green"}, {name: "Foo's Class", color: "blue"}, {name: "Very Long Class Name!!!", color: "orange"}];
+  const classes = [{id: 0, name: 'Bobs classroom', color: 'green', students: [], teacher: 0, study_sets: [], assignments: []}, {id: 0, name: 'Random Class', color: 'red', students: [], teacher: 0, study_sets: [], assignments: []}];
 
   return (
     <>
@@ -209,7 +220,7 @@ const NavClasses = ({alterClassroom, alterSection}: {alterClassroom: Dispatch<Se
 
         <Box display={isOpen ? 'block' : 'none'} width="95%">
             {classes.map((classroom) => (
-              <Box ml="7" mt="-2" onClick={() => [alterClassroom(0), alterSection("class page" as SectionType)]}>
+              <Box ml="7" mt="-2" onClick={() => [alterClassroom(classroom), alterSection("class page" as SectionType)]}>
                 <Box 
                   borderRadius={"lg"}
                   mb="1"
@@ -393,7 +404,7 @@ function AvatarModal({ isAvOpen, onAvClose, avatars, avatarIndex, setAvatarIndex
               {avatars.map((avatar, index) => (
                 <Image 
                   p={1} 
-                  bgColor={index == avatarIndex && "rgba(0, 212, 255, 0.4)"} 
+                  // bgColor={index == avatarIndex && "rgba(0, 212, 255, 0.4)"} 
                   onClick={() => {
                     setAvatarIndex(index)                  
                     fetch("/api/set-profile-picture/"+index, {method: 'POST'})
