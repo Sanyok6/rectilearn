@@ -37,6 +37,7 @@ const fetcher = async (url: string, token: string) => {
 
 const Dashboard: NextPage = ({ access_token }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [curSection, setCurSection] = useState<SectionType>('sets');
+  const [curClassroom, setCurClassroom] = useState<number>(0);
   const [groupGS, setGroupGS] = useLocalStorage<boolean>("prefGS", false);
   const [user, setUser] = useState<{
     name: string,
@@ -78,7 +79,7 @@ const Dashboard: NextPage = ({ access_token }: InferGetServerSidePropsType<typeo
       <Head>
         <title>Dashboard</title>
       </Head>
-      <Sidebar alterSection={setCurSection}>
+      <Sidebar alterSection={setCurSection} alterClassroom={setCurClassroom}>
         <Heading as="h1" textAlign={"center"}>
           Welcome to the dashboard!
         </Heading>

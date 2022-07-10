@@ -9,6 +9,14 @@ import {
     GridItem,
     HStack,
     Icon,
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    propNames,
     SimpleGrid,
     Tab,
     TabList,
@@ -21,8 +29,12 @@ import {
     TagRightIcon,
     Text,
     useColorModeValue,
+    useDisclosure,
 
 } from '@chakra-ui/react';
+import { emit } from 'process';
+import { useState } from 'react';
+import { IoSchool } from 'react-icons/io5';
 
 interface classObj {
     id: number;
@@ -35,16 +47,18 @@ interface classObj {
 }
 
 const RightSidebar = () => {
-    const assignments = [{title: "Complete 20 questions", due: "1/1/22", completed:true}, {title: "Earn $100 in Food Fight", due: "1/2/22", completed:true}, {title: "Complete 40 questions", due: "10/1/22", completed:false}];
+    const {isOpen, onOpen, onClose} = useDisclosure();
+    const [curAssignment, setCurAssignment] = useState<assignmentObj>({title:"", due:"", gameMode: "", assignmentIndex:0, completedBy:[]});
+
+    const assignments = [{title: "Complete 20 questions", due: "1/1/22", gameMode: "", assignmentIndex:0, completedBy:[], completed:true}, {title: "Earn $100 in Food Fight", due: "1/2/22", gameMode: "", assignmentIndex:0, completedBy:[], completed:true}, {title: "Complete 40 questions", due: "10/1/22", gameMode: "", assignmentIndex:0, completedBy:[], completed:false}];
     const leaderboard = [{name: "Sanya", correct: 10, incorrect: 5}, {name: "Rush", correct: 10, incorrect: 6}, {name: "llama", correct: 10, incorrect: 7},{name: "Sanya", correct: 10, incorrect: 5}, {name: "Rush", correct: 10, incorrect: 6}, {name: "llama", correct: 10, incorrect: 7},{name: "Sanya", correct: 10, incorrect: 5}, {name: "Rush", correct: 10, incorrect: 6}, {name: "llama", correct: 10, incorrect: 7},{name: "Sanya", correct: 10, incorrect: 5}, {name: "Rush", correct: 10, incorrect: 6}, {name: "llama", correct: 10, incorrect: 7},];
     return (
         <>
-
             <Box borderRadius={"lg"} bg={useColorModeValue('white', '#171923')} >
-
+                <AssignmentModal isOpen={isOpen} onClose={onClose} assignment={curAssignment} />
                 <Tabs isFitted variant='enclosed'>
                     <TabList mb='1em'>
-                        <Tab>Stats</Tab>
+                        <Tab>Home</Tab>
                         <Tab>Leaderboard</Tab>
                         <Tab>Settings</Tab>
                     </TabList>
@@ -67,8 +81,9 @@ const RightSidebar = () => {
                             <Text fontSize={"xl"} m="4" mt="25px">Asignments</Text>
                             <Box maxH="50vh" overflow={"scroll"}>
                                 {assignments.map((assignment, index) => (
-                                    <Box key={index} my="1">
-                                        <Flex border="solid rgba(39, 211, 245, 0.8) 1px" borderRadius={"2xl"} justifyContent="space-between" p="3">
+                                    <Box key={index} my="2" onClick={() => {setCurAssignment(assignment); onOpen()}}>
+                                         {/* border="solid rgba(39, 211, 245, 0.8) 1px"  */}
+                                        <Flex bg={useColorModeValue("#edf2f7", "#20242e")} rounded={"2xl"} boxShadow="md" justifyContent="space-between" p="3" _hover={{filter: useColorModeValue("brightness(95%)", "brightness(120%)")}}>
                                             <Text fontSize={"xl"} fontWeight="bold">{assignment.title}</Text>
                                             <Text fontSize="lg">Due: {assignment.due}</Text>
                                             <Icon color={assignment.completed ? 'green.400' : useColorModeValue('gray.500', 'gray.300')} as={assignment.completed ? CheckIcon : MinusIcon} w="6" h="6" />
@@ -123,12 +138,57 @@ const RightSidebar = () => {
     );
 }
 
-export default function ClassPage() {
+interface assignmentObj {
+    title: string;
+    due: string;
+    gameMode: string;
+    assignmentIndex: number;
+    completedBy: Array<number>;
+}
+
+const AssignmentModal = ({assignment, isOpen, onClose}: {assignment: assignmentObj; isOpen: any; onClose:any;}) =>  {
     return (
         <>
+        <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+            <ModalHeader>{assignment.title}</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+                    <Text my={2}>Task: {assignment.title}</Text>
+                    <Text my={2}>Game Mode: {assignment.gameMode}</Text>
+                    <Text my={2}>Due: {assignment.due}</Text>
+            </ModalBody>
+    
+            <ModalFooter>
+                <Button colorScheme='blue' width={"90%"} mr={3} onClick={onClose}>
+                Start Assignment 
+                </Button>
+            </ModalFooter>
+            </ModalContent>
+        </Modal>
+        </>
+    )
+}
+
+const ClassSets = () => {
+    return (
+        <>
+            <Box color="blue.400" fontWeight={"extrabold"} fontSize={"2xl"} my="5" margin={"auto"} >
+                <Icon as={IoSchool} mr="6" mb="-1" w="8" h="8"></Icon>
+                Bob's Class
+            </Box>
+            <Box width={{base: "95%", lg: "80%"}}></Box>
+        </>
+    )
+}
+
+export default function ClassPage() {
+    return (
+        <> 
 
             <SimpleGrid minChildWidth='250px' spacing={6}>
-                <GridItem bg='blue.500' colSpan={{base: 1, lg: 2}}></GridItem>
+                <GridItem colSpan={{base: 1, lg: 2}}><ClassSets /></GridItem>
                 <GridItem><RightSidebar /></GridItem>
             </SimpleGrid>
         

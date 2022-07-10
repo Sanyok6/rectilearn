@@ -73,9 +73,11 @@ const LinkItemsBined: Array<LinkItemProps> = [
 export default function Sidebar({
   children,
   alterSection,
+  alterClassroom,
 }: {
   children?: ReactNode;
   alterSection: Dispatch<SetStateAction<SectionType>>;
+  alterClassroom: Dispatch<SetStateAction<number>>;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
@@ -84,6 +86,7 @@ export default function Sidebar({
         onClose={onClose}
         display={{ base: "none", md: "block" }}
         alterSection={alterSection}
+        alterClassroom={alterClassroom}
       />
       <Drawer
         autoFocus={false}
@@ -95,7 +98,7 @@ export default function Sidebar({
         size="full"
       >
         <DrawerContent>
-          <SidebarContent onClose={onClose} alterSection={alterSection} />
+          <SidebarContent onClose={onClose} alterSection={alterSection} alterClassroom={alterClassroom} />
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
@@ -114,15 +117,12 @@ export default function Sidebar({
 interface SidebarProps extends BoxProps {
   onClose: () => void;
   alterSection: Dispatch<SetStateAction<SectionType>>;
+  alterClassroom: Dispatch<SetStateAction<number>>;
 }
 
-const SidebarContent = ({ onClose, alterSection, ...rest }: SidebarProps) => {
+const SidebarContent = ({ onClose, alterSection, alterClassroom, ...rest }: SidebarProps) => {
   const ctx = useContext(DashboardCtx);
   const LinkItemsArr = ctx.groupGS ? LinkItemsBined : LinkItems;
-  const [isOpen, setOpen] = useState(false);
-
-  const classes = [{name: "Bob's classroom", color: "green"}, {name: "Foo's Class", color: "blue"}, {name: "Very Long Class Name!!!", color: "orange"}];
-
   return (
     <Box
       transition="0.2s ease"
@@ -150,33 +150,7 @@ const SidebarContent = ({ onClose, alterSection, ...rest }: SidebarProps) => {
         </NavItem>
       ))}
 
-        <NavItem key={3} icon={IoSchool} alterSection={() => {setOpen(!isOpen)}}>Classes</NavItem>
-
-        <Box display={isOpen ? 'block' : 'none'} width="95%">
-            {classes.map((classroom) => (
-              <Box ml="7" mt="-2" onClick={() => [alterSection("class page" as SectionType),onClose(),]}>
-                <Box 
-                  borderRadius={"lg"}
-                  mb="1"
-                  p="0.5"
-                  _hover={{
-                      bg: useColorModeValue(classroom.color+".300", classroom.color+".500"),
-                      color: "white",
-                    }}
-                  >
-                  <HStack width="">
-                    <Icon as={MdOutlineSubdirectoryArrowRight} />
-                    <Icon color={useColorModeValue(classroom.color+".600", classroom.color+".200")} as={IoSchool} />
-                    <
-                    Tooltip label={classroom.name} openDelay={400} hasArrow>
-                      <Text overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis" width="inherit">{classroom.name}</Text>
-                    </Tooltip>
-                  </HStack>
-                </Box>
-              </Box>
-            ))}
-
-        </Box>
+        <NavClasses alterClassroom={alterClassroom} alterSection={alterSection}></NavClasses>
 
     </Box>
   );
@@ -223,6 +197,44 @@ const NavItem = ({ icon, children, alterSection, ...rest }: NavItemProps) => {
     </Link>
   );
 };
+
+const NavClasses = ({alterClassroom, alterSection}: {alterClassroom: Dispatch<SetStateAction<number>>; alterSection: Dispatch<SetStateAction<SectionType>>}) => {
+  const [isOpen, setOpen] = useState(false);
+
+  const classes = [{name: "Bob's classroom", color: "green"}, {name: "Foo's Class", color: "blue"}, {name: "Very Long Class Name!!!", color: "orange"}];
+
+  return (
+    <>
+      <NavItem key={3} icon={IoSchool} alterSection={() => {setOpen(!isOpen)}}>Classes</NavItem>
+
+        <Box display={isOpen ? 'block' : 'none'} width="95%">
+            {classes.map((classroom) => (
+              <Box ml="7" mt="-2" onClick={() => [alterClassroom(0), alterSection("class page" as SectionType)]}>
+                <Box 
+                  borderRadius={"lg"}
+                  mb="1"
+                  p="0.5"
+                  _hover={{
+                      bg: useColorModeValue(classroom.color+".300", classroom.color+".500"),
+                      color: "white",
+                    }}
+                  >
+                  <HStack width="">
+                    <Icon as={MdOutlineSubdirectoryArrowRight} />
+                    <Icon color={useColorModeValue(classroom.color+".600", classroom.color+".200")} as={IoSchool} />
+                    <
+                    Tooltip label={classroom.name} openDelay={400} hasArrow>
+                      <Text overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis" width="inherit">{classroom.name}</Text>
+                    </Tooltip>
+                  </HStack>
+                </Box>
+              </Box>
+            ))}
+
+        </Box>
+    </>
+  )
+}
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
