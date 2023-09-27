@@ -10,7 +10,7 @@ const CardGrid = (props: SimpleGridProps) => {
       lg: Math.min(3, count),
       xl: Math.min(4, count),
     }
-  }, [props.children])
+  }, [props.children]);
 
   return (
     <SimpleGrid
