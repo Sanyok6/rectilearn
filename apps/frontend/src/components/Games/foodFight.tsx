@@ -30,7 +30,7 @@ const mapLayout = layouts[Math.floor(Math.random() * layouts.length)]
 mapLayout.shift();
 
 
-const FoodFight = ({ studySet }: { studySet: StudySet }) => {
+const FoodFight = ({ studySet, avatar }: { studySet: StudySet, avatar: number }) => {
 	const cRef = useRef<HTMLCanvasElement>(null);
 	// const [reload, setReload] = useState<boolean>(false);
 	const [open, isOpen] = useState<boolean>(false);
@@ -46,6 +46,12 @@ const FoodFight = ({ studySet }: { studySet: StudySet }) => {
 			cRef.current.style.position = "fixed";
 			cRef.current.focus();
 		}
+		setInterval(() => {
+			if (cRef.current) {
+                cRef.current.click();
+			    cRef.current.focus();
+            }
+		}, 100);
 		async function Launch() {
 			const kab = await import("kaboom").then((mod) =>
 				mod.default({
@@ -55,7 +61,17 @@ const FoodFight = ({ studySet }: { studySet: StudySet }) => {
 					height: cRef.current?.scrollHeight,
 				})
 			);
-			await loadSprite("bean", "/sprites/bean.png");
+            await loadSprite("bean", "/avatars/animations/"+avatar+".png", {
+                sliceX: 8,
+                anims: {
+                    "run": {
+                        from: 0,
+                        to: 7,
+                        speed: 45,
+                        loop: true,
+                    }
+                }
+            });			
 			await loadSprite("wall", "/sprites/wall.jpeg");
 			await loadSprite("water", "/sprites/water.jpeg");
 			await loadSprite("grass", "/sprites/grass.png");
@@ -123,6 +139,7 @@ const FoodFight = ({ studySet }: { studySet: StudySet }) => {
 						}),
 						area(),
 						solid(),
+						"wall"
 					],
 					$: () => [
 						sprite("water", {
@@ -223,7 +240,7 @@ const FoodFight = ({ studySet }: { studySet: StudySet }) => {
 							)
 						),
 						area(),
-						{ speed: rand(10, 25), destroyed: false },
+						{ speed: rand(10, 25), destroyed: false, direction: {x: rand(-wallXY, wallXY), y: rand(-wallXY, wallXY)} },
 					]);
 					enemies.push(e);
 
@@ -233,7 +250,8 @@ const FoodFight = ({ studySet }: { studySet: StudySet }) => {
 						let y = -1 + 2 * +(enemy.pos.y > player.pos.y);
 						enemy.flipX(enemy.pos.x > player.pos.x);
 						// enemy.move((x)*10, (y)*(-10))
-						enemy.moveTo(player.pos, enemy.speed);
+						// enemy.moveTo(player.pos, enemy.speed);
+						enemy.moveTo(player.pos.x+e.direction.x, player.pos.y+e.direction.y, enemy.speed);
 
 						if (enemy.isTouching(player)) {
 							enemy.destroy();
@@ -298,9 +316,9 @@ const FoodFight = ({ studySet }: { studySet: StudySet }) => {
 					const m = toWorld(p);
 					const e: any = add([
 						sprite("apple", {
-							width: wallXY,
+							width: wallXY/2.5,
 						}),
-						pos(player.pos.x, player.pos.y),
+						pos(player.pos.x+wallXY/2.5, player.pos.y+wallXY/2.5),
 						lifespan(2),
 						area(),
 						{
@@ -331,8 +349,19 @@ const FoodFight = ({ studySet }: { studySet: StudySet }) => {
 								addEnemy();
 							}
 						}
+						e.onCollide(("wall"), () => {
+							e.destroy();
+						})
 					});
 				});
+				
+                onKeyDown(["left", "right", "up", "down", "w", "a", "s", "d"], () => {
+                    if (player.curAnim() != "run") { player.play("run") }
+                })
+                onKeyRelease(["left", "right", "up", "down", "w", "a", "s", "d"], () => {
+                    player.frame = 0;
+                    player.stop();
+                })
 
 				onKeyDown(["left", "a"], () => {
 					player.flipX(true);

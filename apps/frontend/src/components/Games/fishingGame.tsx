@@ -21,7 +21,7 @@ const mapLayout =
 |||||||||||||||||`.split("\n");
 mapLayout.shift();
 
-const FishingGame = ({ studySet }: { studySet: StudySet }) => {
+const FishingGame = ({ studySet, avatar }: { studySet: StudySet, avatar: number }) => {
     const [open, setOpen] = useState<boolean>(false)
 
     const cRef = useRef<HTMLCanvasElement>(null);
@@ -39,9 +39,26 @@ const FishingGame = ({ studySet }: { studySet: StudySet }) => {
             cRef.current.style.position = "fixed";
             cRef.current.focus();
         }
+		setInterval(() => {
+			if (cRef.current) {
+                cRef.current.click();
+			    cRef.current.focus();
+            }
+		}, 100);
+        
         async function Launch() {
             const kab = await import("kaboom").then((mod) => mod.default({ canvas: cRef.current || undefined, background: [137, 142, 140], width: cRef.current?.scrollWidth, height: cRef.current?.scrollHeight }));
-            await loadSprite("bean", "/sprites/bean.png");
+            await loadSprite("bean", "/avatars/animations/"+avatar+".png", {
+                sliceX: 8,
+                anims: {
+                    "run": {
+                        from: 0,
+                        to: 7,
+                        speed: 45,
+                        loop: true,
+                    }
+                }
+            });            
             await loadSprite("wall", "/sprites/wall.jpeg");
             await loadSprite("water", "/sprites/water.jpeg");
             await loadSprite("grass", "/sprites/grass.png");
@@ -201,22 +218,31 @@ const FishingGame = ({ studySet }: { studySet: StudySet }) => {
                 player.onUpdate(() => {
                     camPos(player.pos);
                 });
-                onKeyDown("left", () => {
+
+                onKeyDown(["left", "right", "up", "down", "w", "a", "s", "d"], () => {
+                    if (player.curAnim() != "run") { player.play("run") }
+                })
+                onKeyRelease(["left", "right", "up", "down", "w", "a", "s", "d"], () => {
+                    player.frame = 0;
+                    player.stop();
+                })
+
+                onKeyDown(["left", "a"], () => {
                     player.flipX(true);
                     rod.flipX(true);
                     rod.follow.offset = vec2(-wallXY * 0.7, -wallXY * 0.3);
                     player.move(-SPEED, 0);
                 });
-                onKeyDown("right", () => {
+                onKeyDown(["right", "d"], () => {
                     player.flipX(false);
                     rod.flipX(false);
                     rod.follow.offset = vec2(wallXY * 0.7, -wallXY * 0.3)
                     player.move(SPEED, 0);
                 });
-                onKeyDown("up", () => {
+                onKeyDown(["up", "w"], () => {
                     player.move(0, -SPEED);
                 });
-                onKeyDown("down", () => {
+                onKeyDown(["down", "s"], () => {
                     player.move(0, SPEED);
                 });
                 onKeyPress("space", () => {
@@ -335,6 +361,43 @@ const FishingGame = ({ studySet }: { studySet: StudySet }) => {
 
                     touching=false
                 });
+
+                every("upgradeM", (s) => {
+                    var enabled = false
+                    s.onUpdate(() => {
+                        if (player.isTouching(s) && enabled == false) {
+                            enabled = true
+                            toast({
+                                title: 'Upgrade Money Per Question',
+                                description: "Press \"F\" to upgrade money earned after answering a question.",
+                                status: 'info',
+								variant: "left-accent",
+                                duration: 3000,
+                                isClosable: true,
+                            })
+                            wait(3.1, () => {enabled = false})
+                        }
+                    })
+                });
+
+                every("upgradeS", (s) => {
+                    var enabled = false
+                    s.onUpdate(() => {
+                        if (player.isTouching(s) && enabled == false) {
+                            enabled = true
+                            toast({
+                                title: 'Upgrade Speed',
+                                description: "Press \"F\" to upgrade your running speed.",
+                                status: 'info',
+								variant: "left-accent",
+                                duration: 3000,
+                                isClosable: true,
+                            })
+                            wait(3.1, () => {enabled = false})
+                        }
+                    })
+                });
+
             }
             onTouchEnd(startGame);
             onClick(startGame);

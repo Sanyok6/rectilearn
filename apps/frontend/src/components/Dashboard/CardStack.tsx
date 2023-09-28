@@ -100,7 +100,7 @@ const CardStack = () => {
     useEffect(() => {
         if (accessToken && accessToken === "guest") {
             setData([]);
-            alert("Note: Guests cannot create any studysets or play any games. Please make an account to get access to all features");
+            // alert("Note: Guests cannot create any studysets or play any games. Please make an account to get access to all features");
         } else if (accessToken && d) {
             setData(d);
         }
@@ -162,7 +162,7 @@ const CreateCard = (props: ICreateCardProps) => {
 			{...rootProps}
 		>
 			<Box
-				maxW={"420px"}
+				maxW={"320px"}
 				w={"full"}
 				bg={useColorModeValue("white", "gray.700")}
 				boxShadow={"2xl"}

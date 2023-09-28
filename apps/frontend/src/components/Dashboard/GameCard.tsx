@@ -19,11 +19,12 @@ import {
     Select,
     useToast
 } from '@chakra-ui/react';
-import React, { useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { Image } from '../../utils/next-chakra-image';
 import { StudySet } from './Card';
 import AuthCtx from "../../lib/auth";
 import { useRouter } from "next/router";
+import DashboardCtx from '../../lib/dashboard';
 
 interface game {
     id: number;
@@ -45,6 +46,7 @@ const GameCard = (props: Props) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [selected, setSelected] = useState<string>("");
     const { setGameSession } = useContext(AuthCtx);
+    const { user } = useContext(DashboardCtx);
     const toast = useToast();
     const Router = useRouter();
     function onComplete() {
@@ -57,7 +59,8 @@ const GameCard = (props: Props) => {
 		}
 		setGameSession({
             game: gameName,
-            studySet: studySets.find((i) => i.id === Number(selected)) || studySets[0]
+            studySet: studySets.find((i) => i.id === Number(selected)) || studySets[0],
+            avatar: user.profile_picture_index,
         });
         Router.push("/games");
 	}

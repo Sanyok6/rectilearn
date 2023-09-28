@@ -1,29 +1,35 @@
+import psycopg2
+import random
+import typing
 from datetime import datetime, timedelta
 from http import HTTPStatus
-import typing
-import random
-import os
 from typing import Optional
+
 import uvicorn
 from fastapi import Depends, FastAPI, HTTPException, status, Response
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import  OAuth2PasswordRequestForm, OAuth2
 from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2
+from fastapi.security.utils import get_authorization_scheme_param
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-from fastapi.security.utils import get_authorization_scheme_param
-import crud, models, schemas
+from starlette.requests import Request
+
+import crud
+import models
+import schemas
 from settings import *
 
-from starlette.requests import Request
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
 class OAuth2PasswordBearerCookie(OAuth2):
     def __init__(
-        self,
-        tokenUrl: str,
-        scheme_name: str = None,
-        scopes: dict = None,
-        auto_error: bool = True,
+            self,
+            tokenUrl: str,
+            scheme_name: str = None,
+            scopes: dict = None,
+            auto_error: bool = True,
     ):
         if not scopes:
             scopes = {}
@@ -31,22 +37,21 @@ class OAuth2PasswordBearerCookie(OAuth2):
         super().__init__(flows=flows, scheme_name=scheme_name, auto_error=auto_error)
 
     async def __call__(self, request: Request) -> Optional[str]:
-        # header_authorization: str = request.headers.get("Authorization")
+        header_authorization: str = request.headers.get("Authorization")
         cookie_authorization: str = request.cookies.get("Authorization")
 
-        # header_scheme, header_param = get_authorization_scheme_param(
-        #     header_authorization
-        # )
+        header_scheme, header_param = get_authorization_scheme_param(
+            header_authorization
+        )
         cookie_scheme, cookie_param = get_authorization_scheme_param(
             cookie_authorization
         )
+        if header_scheme.lower() == "bearer":
+            authorization = True
+            scheme = header_scheme
+            param = header_param
 
-        # if header_scheme.lower() == "bearer":
-        #     authorization = True
-        #     scheme = header_scheme
-        #     param = header_param
-
-        if cookie_scheme.lower() == "bearer":
+        elif cookie_scheme.lower() == "bearer":
             authorization = True
             scheme = cookie_scheme
             param = cookie_param
@@ -62,6 +67,8 @@ class OAuth2PasswordBearerCookie(OAuth2):
             else:
                 return None
         return param
+
+
 oauth2_scheme = OAuth2PasswordBearerCookie(tokenUrl="auth/token/")
 
 app = FastAPI()
@@ -130,7 +137,6 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 
 @app.get("/")
 async def index():
-
     return "Hello"
 
 
@@ -172,12 +178,15 @@ async def read_users_me(current_user: schemas.User = Depends(get_current_user)):
 @app.post("/auth/users/create/", response_model=schemas.User)
 def create_user(user: schemas.UserCreate):
     user.password = get_password_hash(user.password)
-    return crud.create_user(user)
+    user = crud.create_user(user)
+    print(user.high_scores)
+    print(user.profile_picture_index)
+    return user
 
 
 @app.post("/studysets/new/", response_model=schemas.StudySet)
 def create_study_set(
-    study_set: schemas.StudySetCreate, user: schemas.User = Depends(get_current_user)
+        study_set: schemas.StudySetCreate, user: schemas.User = Depends(get_current_user)
 ):
     v = crud.create_study_set(study_set, user.id)
     return v
@@ -192,9 +201,9 @@ def get_study_set(user: schemas.User = Depends(get_current_user)):
     "/studysets/{study_set_id}/add_question/", response_model=schemas.StudySetQuestions
 )
 def new_question(
-    study_set_id: int,
-    question: schemas.StudySetQuestionCreate,
-    user: schemas.User = Depends(get_current_user),
+        study_set_id: int,
+        question: schemas.StudySetQuestionCreate,
+        user: schemas.User = Depends(get_current_user),
 ):
     study_set = crud.get_study_set(study_set_id)
     if study_set.creator != user.id:
@@ -206,14 +215,13 @@ def new_question(
     return crud.add_question(study_set_id, question)
 
 
-
 @app.put(
     "/studysets/{study_set_id}/update/", response_model=schemas.StudySet
 )
 def update_studyset(
-    study_set_id: int,
-    new_study_set: schemas.StudySetCreate,
-    user: schemas.User = Depends(get_current_user),
+        study_set_id: int,
+        new_study_set: schemas.StudySetCreate,
+        user: schemas.User = Depends(get_current_user),
 ):
     study_set = crud.get_study_set(study_set_id)
     if study_set.creator != user.id:
@@ -227,12 +235,11 @@ def update_studyset(
     # return stu
 
 
-
 @app.delete("/studysets/{study_set_id}/delete_question/")
 def delete_question(
-    study_set_id: int,
-    question_id: int,
-    user: schemas.User = Depends(get_current_user),
+        study_set_id: int,
+        question_id: int,
+        user: schemas.User = Depends(get_current_user),
 ):
     study_set = crud.get_study_set(study_set_id)
     if study_set.creator != user.id:
@@ -259,8 +266,8 @@ def delete_question(
 
 @app.delete("/studysets/{study_set_id}/delete_study_set/")
 def delete_study_set(
-    study_set_id: int,
-    user: schemas.User = Depends(get_current_user),
+        study_set_id: int,
+        user: schemas.User = Depends(get_current_user),
 ):
     study_set = crud.get_study_set(study_set_id)
     if study_set.creator != user.id:
@@ -272,9 +279,10 @@ def delete_study_set(
     if crud.delete_studyset(study_set_id):
         return HTTPStatus(status.HTTP_200_OK)
 
+
 @app.get("/studysets/public/", response_model=typing.List[schemas.StudySet])
 def get_public_study_sets():
-    sets=  crud.get_public_study_sets()
+    sets = crud.get_public_study_sets()
     if len(sets) == 0:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -283,9 +291,10 @@ def get_public_study_sets():
         )
     return sets
 
-@app.get("/studysets/{study_set_id}/", response_model=schemas.StudySet)  
+
+@app.get("/studysets/{study_set_id}/", response_model=schemas.StudySet)
 def get_study_set_by_id(study_set_id: int, user: schemas.User = Depends(get_current_user)):
-    set =  crud.get_study_set(study_set_id)
+    set = crud.get_study_set(study_set_id)
     if set == None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -301,6 +310,7 @@ def get_study_set_by_id(study_set_id: int, user: schemas.User = Depends(get_curr
             )
     return set
 
+
 @app.get("/studysets/questions/random/", response_model=schemas.StudySetQuestions)
 def get_random_question(user: schemas.User = Depends(get_current_user)):
     sets = crud.get_public_study_sets()
@@ -313,7 +323,6 @@ def get_random_question(user: schemas.User = Depends(get_current_user)):
 
     set = random.choice(sets)
     questions = crud.get_questions(set.id)
-    print(questions)
     question = random.choice(questions)
 
     return question
@@ -325,10 +334,21 @@ def logout(response: Response):
     return {"message": "Successfully logged out"}
 
 
-@app.post("/set-high-score/{game_mode}/", response_model=schemas.User)
+@app.post("/set-high-score/{game_mode}/{new_high_score}/", response_model=schemas.User)
 def set_high_score(game_mode: str, new_high_score: int, user: schemas.User = Depends(get_current_user)):
-    crud.update_high_score(user, game_mode, new_high_score)
-    return user
+    return crud.update_high_score(user.id, game_mode, new_high_score)
+
+
+@app.post("/set-profile-picture/{profile_picture_index}/", response_model=schemas.User)
+def set_profile_picture(profile_picture_index: int, user: schemas.User = Depends(get_current_user)):
+    return crud.set_profile_picture_index(user.id, profile_picture_index)
+
+
+@app.post("/studysets/update-question-accuracy/{studyset_id}/", response_model=schemas.StudySet)
+def update_question_accuracy(studyset_id: int, question_accuracies: typing.List[schemas.QuestionAccuracy],
+                             user: schemas.User = Depends(get_current_user)):
+    return crud.update_questions_accuracy(studyset_id, user, question_accuracies)
+
 
 if __name__ == "__main__":
     uvicorn.run(

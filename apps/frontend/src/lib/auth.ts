@@ -3,7 +3,8 @@ import { StudySet } from '../components/Dashboard/Card';
 
 export interface IgameSession {
     game: string;
-    studySet: StudySet
+    studySet: StudySet;
+    avatar: number;
 }
 
 export const defaultSettings = {

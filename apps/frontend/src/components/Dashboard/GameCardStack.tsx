@@ -40,6 +40,12 @@ export const games = [
         imageUrl: "/screenshots/bushGame.png",
         gameName: "bushGame"
     },
+    {
+        id: 6,
+        name: "Three.js test",
+        imageUrl: "/screenshots/bushGame.png",
+        gameName: "threeGame"
+    },
 ];
 
 const fetcher = (url: string) =>
@@ -58,7 +64,7 @@ const GameCardStack = () => {
     useEffect(() => {
         if (accessToken && accessToken === "guest") {
             setData([]);
-            alert("Note: Guests cannot create any studysets or play any games. Please make an account to get access to all features");
+            // alert("Note: Guests cannot create any studysets or play any games. Please make an account to get access to all features");
         } else if (accessToken && d) {
             setData(d);
         }

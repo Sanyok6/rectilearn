@@ -4,7 +4,7 @@ import Unity, { UnityContent } from "react-unity-webgl";
 import { StudySet } from "../Dashboard/Card";
 import Questions from "../questions";
 
-function BushGame({ studySet }: { studySet: StudySet }) {
+function BushGame({ studySet, avatar }: { studySet: StudySet, avatar: number }) {
     const [unityContent, setUnityContent] = useState<UnityContent>();
     const [open, setOpen] = useState<boolean>(false);
     const toast = useToast();

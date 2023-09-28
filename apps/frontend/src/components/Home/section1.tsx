@@ -18,17 +18,25 @@ import {
 import "@fontsource/pacifico"
 import NextLink from 'next/link';
 
-import { Image } from '../../utils/next-chakra-image';
+// import { Image } from '../../utils/next-chakra-image';
 
 import Typewriter from 'typewriter-effect';
 
 import AuthCtx from '../../lib/auth';
-import { useContext } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 
 export default function CallToActionWithVideo() {
+    const [playing, setPlaying] = useState<boolean>(false);
     const ctx = useContext(AuthCtx);
+    const videoRef = useRef<HTMLVideoElement>(null);
+    useEffect(() => {
+      if (videoRef.current) {
+        if (playing) videoRef.current.play();
+        if (!playing) videoRef.current.pause();
+      }
+    }, [playing]);
     return (
-      <Container maxW={'7xl'} minHeight={{ base: "120vh", sm: "100vh" }} /* height={{ base: "120vh", sm: "100vh" }} */>
+      <Container maxW={'7xl'} minHeight={{ base: "100vh", sm: "80vh" }} /* height={{ base: "120vh", sm: "100vh" }} */>
         <Stack
           align={'center'}
           spacing={{ base: 8, md: 10 }}
@@ -57,7 +65,7 @@ export default function CallToActionWithVideo() {
                 </Text>
               </HStack>
               <br />
-              <HStack spacing={5}>
+              <HStack>
                 <Text as={'span'} color={useColorModeValue('black', 'white')}>studying is</Text>
                 <Box color={'blue.400'} >
                   <Typewriter
@@ -112,7 +120,9 @@ export default function CallToActionWithVideo() {
             />
             <Box
               position={'relative'}
-              height={'300px'}
+              display={'flex'}
+              flexDir={'column'}
+              height={'100%'}
               rounded={'2xl'}
               boxShadow={'2xl'}
               width={'full'}
@@ -129,19 +139,12 @@ export default function CallToActionWithVideo() {
                 top={'50%'}
                 transform={'translateX(-50%) translateY(-50%)'}
                 zIndex={1}
-                onClick={() => {window.location.href = "https://github.com/Sanyok6/rectilearn"}}
+                hidden={playing}
+                onClick={() => setPlaying(playing => !playing)}
               />
-              <Image
-                alt={'Hero Image'}
-                objectFit={'cover'}
-                layout={'fill'}
-                alignItems={'center'}
-                w={'100%'}
-                h={'100%'}
-                src={
-                  'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=800&q=80'
-                }
-              />
+              <video style={{
+                flex: 1
+              }} ref={videoRef} src="/site/rectilearn.mp4" onClick={() => setPlaying(playing => !playing)} />
             </Box>
           </Flex>
         </Stack>

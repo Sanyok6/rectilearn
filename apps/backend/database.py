@@ -1,7 +1,5 @@
 import sqlalchemy
-import pg8000
 import settings
-from google.cloud.sql.connector import Connector
 
 from sqlalchemy.ext.declarative import declarative_base
 

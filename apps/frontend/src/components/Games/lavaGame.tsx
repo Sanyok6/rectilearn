@@ -8,7 +8,7 @@ import { StudySet } from "../Dashboard/Card";
     $ = lava
 */
 const gameMap = `
-|                  |
+$                  $
 |                  |
 |                  |
 |                  |
@@ -28,7 +28,7 @@ const gameMap = `
 |$$$$$$$$$$$$$$$$$$|`.split("\n");
 gameMap.shift();
 
-const LavaGame = ({ studySet }: { studySet: StudySet }) => {
+const LavaGame = ({ studySet, avatar }: { studySet: StudySet, avatar: number }) => {
 	const cRef = useRef<HTMLCanvasElement>(null);
 	
 	// const [reload, setReload] = useState<boolean>(false);
@@ -65,7 +65,17 @@ const LavaGame = ({ studySet }: { studySet: StudySet }) => {
 					height: cRef.current?.scrollHeight,
 				})
 			);
-			await loadBean();
+            await loadSprite("bean", "/avatars/animations/"+avatar+".png", {
+                sliceX: 8,
+                anims: {
+                    "run": {
+                        from: 0,
+                        to: 7,
+                        speed: 45,
+                        loop: true,
+                    }
+                }
+            });			
 			await loadSprite("grayBg", "/sprites/grayBg.webp");
 			await loadSprite("lava", "/sprites/lava.jpeg");
 			await loadSprite("wall", "/sprites/wall.jpeg");
@@ -117,7 +127,7 @@ const LavaGame = ({ studySet }: { studySet: StudySet }) => {
 				const JUMP_FORCE = wallXY * 16;
 				const NUM_PLATFORMS = 5;
 
-				let lavaRaiseSpeed = 20;
+				let lavaRaiseSpeed = height()/100;
 
 				scene("gameover", () => {
 					add([
@@ -209,7 +219,7 @@ const LavaGame = ({ studySet }: { studySet: StudySet }) => {
 
 				player.pos = get("platform")[0].pos.sub(0, 64);
 
-				addLevel(gameMap, {
+				const mapObj = addLevel(gameMap, {
 					width: wallXY,
 					height: wallXY,
 					"|": () => [
@@ -229,17 +239,6 @@ const LavaGame = ({ studySet }: { studySet: StudySet }) => {
 						area(),
 						"lava",
 					],
-					// _: () => [
-					// 	sprite("platform", {
-					// 		width: wallXY,
-					// 		height: wallXY,
-					// 	}),
-					// 	area(),
-					// 	solid(),
-					// 	"platform",
-					// 	outview({ hide: true, pause: true }),
-					// 	{ answered: false },
-					// ],
 				});
 
 				onUpdate("platform", (p) => {
@@ -262,23 +261,35 @@ const LavaGame = ({ studySet }: { studySet: StudySet }) => {
 					}
 				});
 				player.onCollide("lava", (_) => go("gameover"));
+
 				player.onCollide("wall", (o) => {
 					if (player.isTouching(o)) {
 						player.moveTo(
 							o.pos.x < player.pos.x
-								? player.pos.x + 1
-								: player.pos.x - 1,
+								? player.pos.x += 10
+								: player.pos.x -= 10,
 							player.pos.y
 						);
 					}
 				});
+				
 				player.onUpdate(() => {
 					// if (player.pos.y > 1000) go("gameover");
 					camPos(player.pos);
+					if (player.pos.y > mapObj.height()) {go("gameover")}
 				});
 				player.onDoubleJump(() => {
 					player.spin();
 				});
+
+                onKeyDown(["left", "right", "up", "down", "w", "a", "s", "d"], () => {
+                    if (player.curAnim() != "run") { player.play("run") }
+                })
+                onKeyRelease(["left", "right", "up", "down", "w", "a", "s", "d"], () => {
+                    player.frame = 0;
+                    player.stop();
+                })
+
 				onKeyPress(["space", "w", "up"], () => {
 					if (energyText.value > 0) {
 						energyText.value --;
@@ -314,7 +325,7 @@ const LavaGame = ({ studySet }: { studySet: StudySet }) => {
 					time.value = seconds;
 					time.text = "Score: "+time.value;
 
-					lavaRaiseSpeed = 20+Math.floor(time.value/2);
+					lavaRaiseSpeed += Math.floor(time.value/2)-lavaRaiseSpeed;
 				});
 			}
 			onTouchEnd(startGame);

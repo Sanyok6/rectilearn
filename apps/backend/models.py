@@ -15,7 +15,8 @@ class User(Base):
     role = Column(String, default="user")  # admin/user
     created_at = Column(DateTime(), default=datetime.utcnow())
     study_sets = relationship("StudySets")
-    high_scores = relationship("HightScores", lazy="subquery")
+    high_scores = relationship("HightScores", uselist=False, backref="parent", lazy="subquery")
+    profile_picture_index = Column(Integer, default=0)
 
 
 class HightScores(Base):
@@ -27,6 +28,7 @@ class HightScores(Base):
     dogeball_highscore = Column(BigInteger, default=0)
     thefloorislava_highscore = Column(BigInteger, default=0)
 
+
 class StudySets(Base):
     __tablename__ = "study_sets"
     id = Column(Integer, autoincrement=True, primary_key=True, unique=True)
@@ -36,9 +38,12 @@ class StudySets(Base):
     created_at = Column(DateTime(), default=datetime.utcnow())
     is_public = Column(Boolean, default=False)
 
+
 class StudySetQuestions(Base):
     __tablename__ = "studyset_questions"
     id = Column(Integer, autoincrement=True, primary_key=True, unique=True)
     study_set = Column(Integer, ForeignKey("study_sets.id", ondelete="CASCADE"))
     question = Column(String(4096))
     answers = Column(ARRAY(String(1000)))
+    correct_count = Column(Integer(), default=0)
+    wrong_count = Column(Integer(), default=0)
