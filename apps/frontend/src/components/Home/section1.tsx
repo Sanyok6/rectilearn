@@ -144,7 +144,7 @@ export default function CallToActionWithVideo() {
               />
               <video style={{
                 flex: 1
-              }} ref={videoRef} src="/site/rectilearn.mp4" onClick={() => setPlaying(playing => !playing)} />
+              }} ref={videoRef} src="https://cdn.discordapp.com/attachments/563779252735180831/1156800111645556838/rectilearn.mp4" onClick={() => setPlaying(playing => !playing)} />
             </Box>
           </Flex>
         </Stack>
