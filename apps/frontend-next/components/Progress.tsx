@@ -67,6 +67,7 @@ const NextNProgress = ({
 	options,
 	nonce,
 	transformCSS = (css) => (
+		// @ts-ignore
 		<style nonce={nonce} jsx="true" global="true">
 			{css}
 		</style>
