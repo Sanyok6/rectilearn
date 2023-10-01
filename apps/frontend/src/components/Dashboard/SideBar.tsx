@@ -38,7 +38,7 @@ import {
   FiCompass,
   FiStar,
   FiMenu,
-  FiBell,
+  // FiBell,
   FiChevronDown,
   FiSun,
   FiMoon,
@@ -346,7 +346,8 @@ function AvatarModal({ isAvOpen, onAvClose, avatars, avatarIndex, setAvatarIndex
               {avatars.map((avatar, index) => (
                 <Image 
                   p={1} 
-                  bgColor={index == avatarIndex && "rgba(0, 212, 255, 0.4)"} 
+                  alt="avatar"
+                  bgColor={index == avatarIndex ? "rgba(0, 212, 255, 0.4)" : undefined} 
                   onClick={() => {
                     setAvatarIndex(index)                  
                     fetch("/api/set-profile-picture/"+index, {method: 'POST'})

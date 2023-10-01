@@ -34,6 +34,7 @@ bcrypt = "*"
 alembic = "*"
 psycopg2-binary = "*"
 python-dotenv = "*"
+sqlalchemy-cockroachdb = "*"
 
 [dev-packages]
 

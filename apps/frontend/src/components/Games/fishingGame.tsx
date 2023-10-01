@@ -22,6 +22,7 @@ const mapLayout =
 mapLayout.shift();
 
 const FishingGame = ({ studySet, avatar }: { studySet: StudySet, avatar: number }) => {
+    console.log(studySet)
     const [open, setOpen] = useState<boolean>(false)
 
     const cRef = useRef<HTMLCanvasElement>(null);

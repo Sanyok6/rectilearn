@@ -6,7 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 if settings.PRODUCTION:
     engine = sqlalchemy.create_engine(
-        "postgresql+psycopg2"+settings.POSTGRESQL_URI
+        "cockroachdb+psycopg2"+settings.POSTGRESQL_URI
     )
 
     Base = declarative_base()
