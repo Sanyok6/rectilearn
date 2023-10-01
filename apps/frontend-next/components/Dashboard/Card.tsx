@@ -42,6 +42,7 @@ import AuthCtx from "@/lib/auth";
 import { useRouter } from "next/navigation";
 import { games } from "./GameCardStack";
 import DashboardCtx from "@/lib/dashboard";
+import { PathCtx } from "@/utils/useNavigationEvent";
 
 export const InfoButton = (props: IconButtonProps) => (
 	<LightMode>
@@ -96,6 +97,7 @@ interface Props {
 }
 
 const Card = (props: Props) => {
+	const path = useContext(PathCtx);
 	const imageUrl =
 		"https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc=";
 	const { studySet, updateStudySet, rootProps } = props;
@@ -141,6 +143,7 @@ const Card = (props: Props) => {
             studySet,
 			avatar: user.profile_picture_index,
         });
+		path.setPath(true);
         Router.push("/games");
 	}
 	return (

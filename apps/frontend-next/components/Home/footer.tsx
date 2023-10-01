@@ -15,6 +15,7 @@ import { ReactNode, useContext } from "react";
 import "@fontsource/pacifico";
 import { Link } from '@chakra-ui/next-js'
 import AuthCtx from "@/lib/auth";
+import { PathCtx } from "@/utils/useNavigationEvent";
 
 const SocialButton = ({
 	children,
@@ -50,6 +51,7 @@ const SocialButton = ({
 
 export default function Footer() {
 	const ctx = useContext(AuthCtx);
+	const path = useContext(PathCtx);
 
 	return (
 		<Box
@@ -73,11 +75,11 @@ export default function Footer() {
 				<Stack direction={"row"} spacing={6}>
 					{!ctx.loggedIn ? (
 						<>
-							<Link href={"/login"}>Login</Link>
-							<Link href={"/signup"}>Signup</Link>
+							<Link href={"/login"} onClick={() => path.setPath(true)}>Login</Link>
+							<Link href={"/signup"} onClick={() => path.setPath(true)}>Signup</Link>
 						</>
 					) : (
-						<Link href={"/dashboard"}>Dashboard</Link>
+						<Link href={"/dashboard"} onClick={() => path.setPath(true)}>Dashboard</Link>
 					)}
 				</Stack>
 			</Container>
@@ -101,6 +103,7 @@ export default function Footer() {
 						<Link
 							href="https://github.com/Sanyok6/TWTcodejam-team-Rectifiers"
 							textDecoration={"underline"}
+							onClick={() => path.setPath(true)}
 							_hover={{ color: "blue.500" }}
 						>
 							github

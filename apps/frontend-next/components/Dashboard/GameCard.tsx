@@ -27,6 +27,7 @@ import { StudySet } from './Card';
 import AuthCtx from "@/lib/auth";
 import { useRouter } from "next/navigation";
 import DashboardCtx from '@/lib/dashboard';
+import { PathCtx } from '@/utils/useNavigationEvent';
 
 interface game {
     id: number;
@@ -43,6 +44,7 @@ interface Props {
 
 const GameCard = (props: Props) => {
     const { games, rootProps, studySets } = props;
+    const path = useContext(PathCtx);
     const { name, imageUrl, gameName } = games;
     const [isLoading, setLoading] = useState<boolean>(true);
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -64,6 +66,7 @@ const GameCard = (props: Props) => {
             studySet: studySets.find((i) => i.id === Number(selected)) || studySets[0],
             avatar: user.profile_picture_index,
         });
+        path.setPath(true);
         Router.push("/games");
 	}
     return (

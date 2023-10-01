@@ -17,9 +17,11 @@ import "@fontsource/pacifico"
 import FadeIn from './fadeIn'
 import { useContext } from 'react';
 import AuthCtx from '@/lib/auth';
+import { PathCtx } from '@/utils/useNavigationEvent';
 
 export default function Section3() {
     const ctx = useContext(AuthCtx);
+    const path = useContext(PathCtx);
 
     return (
         <FadeIn>
@@ -41,6 +43,7 @@ export default function Section3() {
                         color={useColorModeValue("blue.600", "blue.400")} 
                         animation={""} 
                         shadow="0px 0px 28px 14px #0ff;"
+                        onClick={() => path.setPath(true)}
                     >
                         Start learning
                     </Link>

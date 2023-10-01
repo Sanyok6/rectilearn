@@ -12,7 +12,7 @@ from models import Base
 # access to the values within the .ini file in use.
 config = context.config
 if settings.PRODUCTION:
-    config.set_main_option("sqlalchemy.url", "cockroachdb+psycopg2"+settings.POSTGRESQL_URI)
+    config.set_main_option("sqlalchemy.url", "postgresql+psycopg2"+settings.POSTGRESQL_URI)
 
 else:
     # Testing environment

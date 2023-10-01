@@ -6,11 +6,12 @@
  *
  */
 
-import { useCompleteEvent, useNavigationEvent } from "@/utils/useNavigationEvent";
+import { PathCtx, useCompleteEvent, useNavigationEvent } from "@/utils/useNavigationEvent";
 // import Router from "next/navigation";
 import NProgress from "nprogress";
 // import * as PropTypes from "prop-types";
 import * as React from "react";
+import { useContext, useEffect } from "react";
 
 export interface NextNProgressProps {
 	/**
@@ -66,7 +67,7 @@ const NextNProgress = ({
 	options,
 	nonce,
 	transformCSS = (css) => (
-		<style nonce={nonce} jsx={true} global>
+		<style nonce={nonce} jsx="true" global="true">
 			{css}
 		</style>
 	),

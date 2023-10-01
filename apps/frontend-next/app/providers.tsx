@@ -5,11 +5,13 @@ import { ChakraProvider, cookieStorageManagerSSR } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import theme from "@/lib/theme";
 import AuthCtx, { type IgameSession } from "@/lib/auth";
+import { PathCtx } from "@/utils/useNavigationEvent";
 
 export function Providers({ children, cookies }: { children: React.ReactNode, cookies: string }) {
     const [accessToken, setAccessToken] = useState<string>("");
     const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
     const [gameSession, setGameSession] = useState<IgameSession>();
+    const [path, setPath] = useState<boolean>(false);
     useEffect(() => {
         if (loggedIn === null) {
         fetch("/api/state/", {
@@ -32,7 +34,12 @@ export function Providers({ children, cookies }: { children: React.ReactNode, co
                     gameSession,
                     setGameSession
                 }}>
-                    {children}
+                    <PathCtx.Provider value={{
+                        path,
+                        setPath
+                    }}>
+                        {children}
+                    </PathCtx.Provider>
                 </AuthCtx.Provider>
             </ChakraProvider>
 		</CacheProvider>

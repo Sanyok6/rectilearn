@@ -21,9 +21,11 @@ import { FiUser } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import AuthCtx from "@/lib/auth";
+import { PathCtx } from "@/utils/useNavigationEvent";
 
 const LoginForm = () => {
     const ctx = useContext(AuthCtx);
+    const path = useContext(PathCtx);
     const toast = useToast();
     const bgEmail = useColorModeValue(undefined, 'RGBA(0, 0, 0, 0.16)');
     const guestColor = useColorModeValue("blue", "blue.200");
@@ -56,6 +58,7 @@ const LoginForm = () => {
                         const pl = await res.json();
                         if (pl.access_token) {
                             ctx.setAccessToken(pl.access_token);
+                            path.setPath(true);
                             Router.push("/dashboard");
                         } else {
                             toast({
@@ -113,10 +116,10 @@ const LoginForm = () => {
                                 </Text>
                                 <Divider />
                                 </HStack>
-                                <Link href="#" maxW="40%" alignSelf="center" _hover={{
+                                <Link onClick={() => path.setPath(true)} href="#" maxW="40%" alignSelf="center" _hover={{
                                     textDecor: "none",
                                 }}>
-                                    <HStack onClick={() => Router.push("/api/guest")}>
+                                    <HStack onClick={() => [path.setPath(true), Router.push("/api/guest")]}>
                                         <FiUser />
                                         <Text>Login as<chakra.span
                                             color={guestColor}

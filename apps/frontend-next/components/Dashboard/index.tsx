@@ -12,6 +12,7 @@ import { Heading, Text } from "@chakra-ui/react";
 import CardStack from "./CardStack";
 import GameCardStack from "./GameCardStack";
 import { Link } from "@chakra-ui/next-js";
+import { PathCtx } from "@/utils/useNavigationEvent";
 
 const fetcher = async (url: string, token: string) => {
 	const res = await fetch(url, {
@@ -45,6 +46,7 @@ const Dashboard = ({ children, access_token }: { children: React.ReactNode, acce
 	});
 	const Router = useRouter();
 	const { accessToken, setAccessToken } = useContext(AuthCtx);
+	const path = useContext(PathCtx);
 	const guest: boolean = access_token === "guest";
 	const { data, error }: any = useSWR("/api/auth/users/me/", (url) =>
 		guest ? { name: "guest", email: "guest@guest", role: "guest" } : fetcher(url, access_token)
@@ -55,6 +57,7 @@ const Dashboard = ({ children, access_token }: { children: React.ReactNode, acce
 		}
 		if (error && error.info && error.info.detail === "Could not validate credentials") {
 			setAccessToken("");
+			path.setPath(true);
 			Router.push("/api/logout");
 		} else if (error) {
 			console.error(error.info);

@@ -8,6 +8,9 @@
       "outputs": []
     },
     "dev": {
+      "cache": true
+    },
+    "start": {
       "cache": false
     }
   }

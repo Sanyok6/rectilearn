@@ -54,6 +54,7 @@ import { useRouter } from "next/navigation";
 import { Image } from "@chakra-ui/next-js";
 
 import "@fontsource/pacifico"
+import { PathCtx } from "@/utils/useNavigationEvent";
 
 interface LinkItemProps {
   name: string;
@@ -157,9 +158,10 @@ interface NavItemProps extends FlexProps {
 }
 
 const NavItem = ({ icon, children, alterSection, ...rest }: NavItemProps) => {
+  const path = useContext(PathCtx);
   return (
     <Link
-      onClick={alterSection}
+      onClick={e => [path.setPath(true), alterSection(e)]}
       style={{ textDecoration: "none" }}
       _focus={{ boxShadow: "none" }}
     >
@@ -209,6 +211,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
     onClose: onStClose,
   } = useDisclosure();
   const { user } = useContext(DashboardCtx);
+  const path = useContext(PathCtx);
   const Router = useRouter();
 
   const [avatarIndex, setAvatarIndex] = useState(user.profile_picture_index);
@@ -303,7 +306,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               <MenuItem onClick={onStOpen}>Settings</MenuItem>
               <SettingsModal isStOpen={isStOpen} onStClose={onStClose} />
               <MenuDivider />
-              <MenuItem onClick={() => Router.push("/api/logout")}>Sign out</MenuItem>
+              <MenuItem onClick={() => [path.setPath(true), Router.push("/api/logout")]}>Sign out</MenuItem>
             </MenuList>
           </Menu>
         </Flex>

@@ -13,8 +13,11 @@ import {
 } from "@chakra-ui/react";
 import { PasswordField } from "../PasswordField";
 import { useRouter } from "next/navigation";
+import { useContext } from "react";
+import { PathCtx } from "@/utils/useNavigationEvent";
 
 const SignUpForm = () => {
+    const path = useContext(PathCtx);
     const bgFields = useColorModeValue(undefined, 'RGBA(0, 0, 0, 0.16)');
     const Router = useRouter();
     const toast = useToast();
@@ -41,7 +44,8 @@ const SignUpForm = () => {
                         body: JSON.stringify(values)
                     }).catch(console.error);
                     if (res && res.status === 200) {
-                        Router.replace("/login")
+                        path.setPath(true);
+                        Router.replace("/login");
                     } else {
                         toast({
                             title: "Something went wrong",

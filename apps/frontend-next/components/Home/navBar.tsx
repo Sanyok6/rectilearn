@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useContext } from 'react';
+import { ReactNode, useContext, useEffect } from 'react';
 import {
   Box,
   Flex,
@@ -20,6 +20,7 @@ import {
 } from "react-icons/fi";
 import { usePathname } from 'next/navigation';
 import AuthCtx from '@/lib/auth';
+import { PathCtx } from '@/utils/useNavigationEvent';
 
 const links = [
   {
@@ -44,28 +45,33 @@ const links = [
   }
 ];
 
-const NavLink = ({ children, href }: { children: ReactNode, href: string }) => (
-  <Link
-    href={href}
-    px={3}
-    py={2}
-    rounded={'md'}
-    fontWeight={"bold"}
-    color={useColorModeValue('gray.600', undefined)}
-    _hover={{
-      textDecoration: 'none',
-      bg: useColorModeValue('blue.100', 'gray.700'),
-    }}
-  >
-    {children}
-  </Link>
-);
+const NavLink = ({ children, href }: { children: ReactNode, href: string }) => {
+  const { setPath }= useContext(PathCtx);
+  return (
+    <Link
+      href={href}
+      px={3}
+      py={2}
+      rounded={'md'}
+      fontWeight={"bold"}
+      color={useColorModeValue('gray.600', undefined)}
+      _hover={{
+        textDecoration: 'none',
+        bg: useColorModeValue('blue.100', 'gray.700'),
+      }}
+      onClick={() => setPath(true)}
+    >
+      {children}
+    </Link>
+  );
+}
 
 export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { toggleColorMode } = useColorMode();
   const pathname = usePathname();
   const ctx = useContext(AuthCtx);
+  const { setPath } = useContext(PathCtx);
   const Links = links.filter((i) => {
     if (["/login", "/signup"].includes(i.url) && ctx.loggedIn) {
       return false;
@@ -79,7 +85,7 @@ export default function NavBar() {
       <Box bg={useColorModeValue('rgba(0, 0, 0, 0.05)', 'rgba(0, 0, 0, 0.5)')} px={4}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
             <Box fontFamily={"pacifico"}>
-              <Link href={"/"}>Rectilearn</Link>
+              <Link href={"/"} onClick={() => setPath(true)}>Rectilearn</Link>
             </Box>
             <HStack
               as={'nav'}
