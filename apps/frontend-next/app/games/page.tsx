@@ -10,7 +10,7 @@ import Dogeball from "@/components/Games/dogeball";
 import FishingGame from "@/components/Games/fishingGame";
 import FoodFight from "@/components/Games/foodFight";
 import LavaGame from "@/components/Games/lavaGame";
-import ThreeGame from "@/components/Games/threeGame"
+import ThreeGame from "@/components/Games/three_game_template/threeGame"
 import AuthCtx from "@/lib/auth";
 
 const Games: NextPage = () => {

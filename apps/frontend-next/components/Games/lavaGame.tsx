@@ -334,7 +334,7 @@ const LavaGame = ({ studySet, avatar }: { studySet: StudySet, avatar: number }) 
             onClick(startGame);
 		}
 		Launch();
-		return () => every(destroy);
+		// return () => every(destroy);
 	}, []);
 	return (
 		<>

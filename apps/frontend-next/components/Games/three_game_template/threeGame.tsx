@@ -6,9 +6,9 @@ import { MeshStandardMaterial, Euler, PlaneGeometry, CanvasTexture, TextureLoade
 import type * as THREE from "three";
 import { Physics, RigidBody } from "@react-three/rapier";
 import { Suspense, useEffect, useState } from "react";
-import { StudySet } from "../Dashboard/Card";
+import { StudySet } from "../../Dashboard/Card";
 import { useToast } from "@chakra-ui/react";
-import Questions from "../questions";
+import Questions from "../../questions";
 import alea from "alea";
 import { createNoise2D } from "simplex-noise";
 
