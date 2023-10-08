@@ -38,7 +38,13 @@ const LavaGame = ({ studySet, avatar }: { studySet: StudySet, avatar: number }) 
 
 	const toast = useToast()
 
+	const gameStarted = useRef(false);
+
 	useEffect(() => {
+
+        if (!gameStarted.current) {gameStarted.current=true} else {return}
+
+
 		// window.onresize = () => {
 		// 	setReload((reload) => !reload);
 		// };

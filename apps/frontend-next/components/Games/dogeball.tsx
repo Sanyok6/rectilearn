@@ -26,12 +26,17 @@ const Dogeball = ({ studySet, avatar }: { studySet: StudySet, avatar: number }) 
     const cRef = useRef<HTMLCanvasElement>(null);
     // const [reload, setReload] = useState<boolean>(false);
 
-    const toast = useToast()
+    const toast = useToast();
+
+    const gameStarted = useRef(false);
 
     useEffect(() => {
         // window.onresize = () => {
         //     setReload(reload => !reload)
         // }
+
+        if (!gameStarted.current) {gameStarted.current=true} else {return}
+
         if (cRef.current) {
             cRef.current.style.width = "100vw";
             cRef.current.style.height= "100vh";
