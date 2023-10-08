@@ -8,8 +8,9 @@ import { StudySet } from "../../Dashboard/Card";
 // import { useToast } from "@chakra-ui/react";
 import Questions from "../../questions";
 import Ground from "./rapier/world/ground";
+import Player from "./player";
 
-function ThreeGame({ studySet, avatar }: { studySet: StudySet, avatar: number }) {
+function FishingGame({ studySet, avatar }: { studySet: StudySet, avatar: number }) {
 
     const [open, setOpen] = useState<boolean>(false);
 	
@@ -23,9 +24,10 @@ function ThreeGame({ studySet, avatar }: { studySet: StudySet, avatar: number })
 				<Suspense fallback={<Html>Loading</Html>}>
 					{/* <directionalLight castShadow position={[8, 20, -3]} /> */}
 					<ambientLight />
-					<OrbitControls />
+					{/* <OrbitControls /> */}
 					<Stats />
 					<Physics>
+						<Player />
 						<Ground enableShaders={true} />
 					</Physics>
 				</Suspense>
@@ -39,4 +41,4 @@ function ThreeGame({ studySet, avatar }: { studySet: StudySet, avatar: number })
     );
 }
 
-export default ThreeGame;
+export default FishingGame;

@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "prettier": "^2.8.8",
-    "turbo": "^1.10.14"
+    "turbo": "^1.10.15"
   },
   "resolutions": {
     "@types/react": "^17.0.43",

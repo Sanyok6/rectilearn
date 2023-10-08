@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import BushGame from "@/components/Games/bushGame";
 import Dogeball from "@/components/Games/dogeball";
-import FishingGame from "@/components/Games/fishingGame";
+import FishingGame from "@/components/Games/fishingGame/index";
 import FoodFight from "@/components/Games/foodFight";
 import LavaGame from "@/components/Games/lavaGame";
 import ThreeGame from "@/components/Games/three_game_template/threeGame"
