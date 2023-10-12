@@ -1,13 +1,13 @@
-"use client";
-
 import { Box } from "@chakra-ui/react";
 import NavBar from "./navBar";
 import Background from "./background";
 import Section1 from "./section1";
-import dynamic from "next/dynamic";
+import Section2 from "./section2";
+import Section3 from "./section3";
+// import dynamic from "next/dynamic";
 
-const Section2 = dynamic(() => import("./section2"));
-const Section3 = dynamic(() => import("./section3"));
+// const Section2 = dynamic(() => import("./section2"));
+// const Section3 = dynamic(() => import("./section3"));
 import Footer from "./footer";
 
 export default function WelcomePage() {

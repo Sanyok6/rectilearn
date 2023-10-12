@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useContext, useEffect } from 'react';
+import { ReactNode, useContext } from 'react';
 import {
   Box,
   Flex,

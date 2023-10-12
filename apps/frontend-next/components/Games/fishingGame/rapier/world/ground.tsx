@@ -2,7 +2,7 @@
 
 import { MeshStandardMaterial, Euler, PlaneGeometry, CanvasTexture, TextureLoader, Vector3, RepeatWrapping, MathUtils, BoxGeometry } from "three";
 import type * as THREE from "three";
-import { RigidBody } from "@react-three/rapier";
+import { RigidBody, interactionGroups } from "@react-three/rapier";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import alea from "alea";
 import { createNoise2D } from "simplex-noise";
@@ -232,7 +232,7 @@ function Ground({ enableShaders }: { enableShaders: boolean }) {
             {groundTexture && groundGeo && (
                 <>
                     <group position={[0, -0.01, 0]}>
-                        <RigidBody colliders="trimesh" type="fixed" userData={{ name: "ground" }}>
+                        <RigidBody colliders="trimesh" type="fixed" userData={{ name: "ground" }} friction={1} restitution={0.1}>
                             <mesh
                                 receiveShadow
                                 geometry={groundGeo}
@@ -248,7 +248,7 @@ function Ground({ enableShaders }: { enableShaders: boolean }) {
                         </>
                     )}
                     <group position={[0, -3, 0]}>
-                        <RigidBody colliders="cuboid" type="fixed" userData={{ name: "water" }}>
+                        <RigidBody colliders="cuboid" type="fixed" userData={{ name: "water" }} friction={1} restitution={0.1}>
                             <mesh
                                 receiveShadow
                                 geometry={new BoxGeometry(width, 1, height)}
