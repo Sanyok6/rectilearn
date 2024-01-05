@@ -41,84 +41,88 @@ import CharacterModel from "./character/Character";
 import { Vector3 } from "three";
 
 function Experience() {
-  /**
-   * Debug settings
-   */
-  const { physics } = useControls("World Settings", {
-    physics: false,
-  });
+	/**
+	 * Debug settings
+	 */
+	const { physics } = useControls("World Settings", {
+		physics: false,
+	});
 
-  /**
-   * Keyboard control preset
-   */
-  const keyboardMap = [
-    { name: "forward", keys: ["ArrowUp", "KeyW"] },
-    { name: "backward", keys: ["ArrowDown", "KeyS"] },
-    { name: "leftward", keys: ["ArrowLeft", "KeyA"] },
-    { name: "rightward", keys: ["ArrowRight", "KeyD"] },
-    { name: "jump", keys: ["Space"] },
-    { name: "run", keys: ["Shift"] },
-    { name: "action1", keys: ["1"] },
-    { name: "action2", keys: ["2"] },
-    { name: "action3", keys: ["3"] },
-    { name: "action4", keys: ["KeyF"] },
-  ];
+	/**
+	 * Keyboard control preset
+	 */
+	const keyboardMap = [
+		{ name: "forward", keys: ["ArrowUp", "KeyW"] },
+		{ name: "backward", keys: ["ArrowDown", "KeyS"] },
+		{ name: "leftward", keys: ["ArrowLeft", "KeyA"] },
+		{ name: "rightward", keys: ["ArrowRight", "KeyD"] },
+		{ name: "jump", keys: ["Space"] },
+		{ name: "run", keys: ["Shift"] },
+		{ name: "action1", keys: ["1"] },
+		{ name: "action2", keys: ["2"] },
+		{ name: "action3", keys: ["3"] },
+		{ name: "action4", keys: ["KeyF"] },
+	];
 
-  return (
-    <>
-      {/* <Perf position="top-left" /> */}
+	return (
+		<>
+			{/* <Perf position="top-left" /> */}
 
-      <Grid
-        args={[300, 300]}
-        sectionColor={"lightgray"}
-        cellColor={"gray"}
-        position={[0, -0.99, 0]}
-        userData={{ camExcludeCollision: true }} // this won't be collide by camera ray
-      />
+			<Grid
+				args={[300, 300]}
+				sectionColor={"lightgray"}
+				cellColor={"gray"}
+				position={[0, -0.99, 0]}
+				userData={{ camExcludeCollision: true }} // this won't be collide by camera ray
+			/>
 
-      {/* <Lights /> */}
+			{/* <Lights /> */}
 
-      <Physics debug={physics} timeStep="vary">
-        {/* Keyboard preset */}
-        <KeyboardControls map={keyboardMap}>
-          {/* Character Control */}
-          <Ecctrl
-            // debug
-            animated
-            followLight
-            springK={2}
-            dampingC={0.2}
-            autoBalanceSpringK={1.2}
-            autoBalanceDampingC={0.04}
-          >
-            {/* Replace your model here */}
-            <CharacterModel />
-          </Ecctrl>
-        </KeyboardControls>
+			<Physics debug={physics} timeStep="vary">
+				{/* Keyboard preset */}
+				<KeyboardControls map={keyboardMap}>
+					{/* Character Control */}
+					<Ecctrl
+						// debug
+						animated
+						followLight
+						springK={2}
+						dampingC={0.2}
+						autoBalanceSpringK={1.2}
+						autoBalanceDampingC={0.04}
+					>
+						{/* Replace your model here */}
+						<CharacterModel />
+					</Ecctrl>
+				</KeyboardControls>
 
-        <Ground enableShaders />
-      </Physics>
-    </>
-  );
+				<Ground enableShaders />
+			</Physics>
+		</>
+	);
 }
 
-function FishingGame({ studySet, avatar }: { studySet: StudySet, avatar: number }) {
-    const [open, setOpen] = useState<boolean>(false);
+function FishingGame({ studySet, avatar }: { studySet: StudySet; avatar: number }) {
+	const [open, setOpen] = useState<boolean>(false);
 	const [playerPos, setPlayerPos] = useState<[number, number, number]>(gameCtxDefault.playerPos);
 	const [death, setDeath] = useState<boolean>(gameCtxDefault.death);
-    return (
-        <GameContext.Provider value={{
-			playerPos,
-			setPlayerPos,
-			death,
-			setDeath
-		}}>
+	return (
+		<GameContext.Provider
+			value={{
+				playerPos,
+				setPlayerPos,
+				death,
+				setDeath,
+			}}
+		>
 			<Leva collapsed />
-            <Canvas style={{
-                width: '100%',
-                height: '100%',
-                position: 'fixed'
-            }}>
+			<Canvas
+				style={{
+					width: "100%",
+					height: "100%",
+					position: "fixed",
+				}}
+			>
 				<Suspense fallback={<Html>Loading</Html>}>
 					{/* <directionalLight castShadow position={[8, 20, -3]} /> */}
 					<ambientLight />
@@ -126,14 +130,10 @@ function FishingGame({ studySet, avatar }: { studySet: StudySet, avatar: number 
 					<Stats />
 					<Experience />
 				</Suspense>
-            </Canvas>
-            <Questions
-				questions={studySet.questions}
-				open={open}
-				isOpen={setOpen}
-			/>
-        </GameContext.Provider>
-    );
+			</Canvas>
+			<Questions questions={studySet.questions} open={open} isOpen={setOpen} />
+		</GameContext.Provider>
+	);
 }
 
 export default FishingGame;
