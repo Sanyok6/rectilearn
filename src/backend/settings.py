@@ -4,7 +4,7 @@ import os
 
 load_dotenv()
 
-PRODUCTION = (os.getenv("PRODUCTION"))
+PRODUCTION = bool(int(os.getenv("PRODUCTION")))
 USE_RAILWAY = (os.getenv("USE_RAILWAY"))
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"

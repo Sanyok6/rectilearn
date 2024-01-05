@@ -10,9 +10,6 @@ database.db
 venv
 .env
 
-# vscode
-.vscode
-
 # jetbrains
 .idea
 
