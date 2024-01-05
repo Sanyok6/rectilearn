@@ -4,3 +4,17 @@
     font-style: normal;
     font-weight: normal;
 }
+
+.hover-underline {
+    &:hover {
+        text-decoration-line: underline;
+    }
+}
+
+.link {
+    @apply transition-colors;
+
+    &:hover {
+        @apply text-sky-600;
+    }
+}
