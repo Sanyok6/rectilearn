@@ -2,6 +2,7 @@
 	import Button from '$lib/components/button.svelte';
 	import TypeWriter from '$lib/components/typeWriter.svelte';
 	import { onMount } from 'svelte';
+	import Footer from './footer.svelte';
 
 	onMount(() => {
 		const observer = new IntersectionObserver(
@@ -185,18 +186,20 @@
 	<h3 class="text-center text-4xl font-semibold text-blue-400 max-w-md">
 		Ready to start learning smarter?
 	</h3>
-	<p class="max-w-xl text-center text-lg my-8">
+	<p class="max-w-xl text-center text-lg mt-7 mb-10">
 		Level up your learning journey with the best studying tool in existence! Create your account for
 		free!
 	</p>
 	<a href="/auth/signup">
-		<Button class="btn-xl">Start learning</Button>
+		<Button class="btn-xl btn-ghost">Start learning</Button>
 	</a>
 </section>
 
+<Footer />
+
 <style lang="scss">
 	section {
-		@apply min-h-[85dvh] flex flex-col items-center;
+		@apply min-h-[80dvh] flex flex-col items-center;
 	}
 
 	#main-title {
