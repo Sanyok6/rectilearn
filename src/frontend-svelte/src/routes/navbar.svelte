@@ -38,8 +38,8 @@
 			// 	return false;
 			// }
 			console.log($page.url.pathname.toLowerCase());
-			return (i.url !== $page.url.pathname.toLowerCase());
-		})
+			return i.url !== $page.url.pathname.toLowerCase();
+		});
 	}
 </script>
 
@@ -48,10 +48,14 @@
 
 	<div class="ml-auto">
 		<div class="flex gap-4 md:gap-9 font-semibold">
-			<ColorToggle class="appearance-none px-3 py-2 rounded-md font-bold text-gray-600 dark:text-inherit hover:no-underline hover:bg-blue-300 hover:dark:bg-gray-700" />
+			<ColorToggle />
 			{#each display as link}
-				<a href={link.url} class="px-3 py-2 rounded-md font-bold text-gray-600 dark:text-inherit hover:no-underline hover:bg-blue-300 hover:dark:bg-gray-700">{link.name}</a>
-			<!-- <a href="/auth/signup" class="hover-underline">Signup</a> -->
+				<a
+					href={link.url}
+					class="px-3 py-2 rounded-md font-bold text-gray-600 dark:text-inherit hover:no-underline hover:bg-blue-300 hover:dark:bg-gray-700"
+					>{link.name}</a
+				>
+				<!-- <a href="/auth/signup" class="hover-underline">Signup</a> -->
 			{/each}
 		</div>
 	</div>
