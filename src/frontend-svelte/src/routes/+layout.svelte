@@ -6,6 +6,6 @@
 
 <NavBar />
 
-<main>
+<main class="h-[94%]">
 	<slot />
 </main>

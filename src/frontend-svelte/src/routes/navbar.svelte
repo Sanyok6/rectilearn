@@ -1,4 +1,45 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+
+	const links = [
+		{
+			name: 'Home',
+			url: '/'
+		},
+		// {
+		//   name: 'About',  // about page does not exist currently
+		//   url: '/about'
+		// },
+		{
+			name: 'Login',
+			url: '/auth/login'
+		},
+		{
+			name: 'Signup',
+			url: '/auth/signup'
+		},
+		{
+			name: 'Dashboard',
+			url: '/dashboard'
+		}
+	];
+
+	let display: {
+		name: string;
+		url: string;
+	}[];
+
+	$: {
+		display = links.filter((i) => {
+			// if (["/auth/login", "/auth/signup"].includes(i.url) /* && ctx.loggedIn */) {
+			// 	return false;
+			// } else if (i.url === "/dashboard" /* && !ctx.loggedIn */) {
+			// 	return false;
+			// }
+			console.log($page.url.pathname.toLowerCase());
+			return (i.url !== $page.url.pathname.toLowerCase())
+		})
+	}
 </script>
 
 <header>
@@ -6,8 +47,10 @@
 
 	<div class="ml-auto">
 		<div class="flex gap-4 md:gap-9 font-semibold">
-			<a href="/auth/login" class="hover-underline">Login</a>
-			<a href="/auth/signup" class="hover-underline">Signup</a>
+			{#each display as link}
+				<a href={link.url} class="hover-underline">{link.name}</a>
+			<!-- <a href="/auth/signup" class="hover-underline">Signup</a> -->
+			{/each}
 		</div>
 	</div>
 </header>
