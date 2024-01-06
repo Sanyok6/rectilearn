@@ -1,4 +1,3 @@
 body {
-    background: radial-gradient(circle, rgba(0,0,0,1) 30%, rgba(0,44,60,1) 100%);
-    color: rgba(255, 255, 255, 0.92);
+    @apply bg-[radial-gradient(circle,_rgba(255,255,255,1)_30%,_rgba(179,235,255,1)_100%)] dark:bg-[radial-gradient(circle,_rgba(0,0,0,1)_30%,_rgba(0,44,60,1)_100%)] text-[#374151] dark:text-white/[0.92];
 }

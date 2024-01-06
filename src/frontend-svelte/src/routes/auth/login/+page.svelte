@@ -3,7 +3,7 @@
 </script>
 
 <!-- bg -->
-<div class="bg-gray-900 h-full flex flex-col items-center justify-center flex-auto">
+<div class="dark:bg-gray-900 h-full flex flex-col items-center justify-center flex-auto">
     <!-- container -->
     <div class="max-w-lg py-12 md:py-24 px-0 sm:px-8 w-full">
         <!-- vstack -->
@@ -15,13 +15,13 @@
                     <h1 class="text-4xl font-bold">Log in to your account</h1>
                     <!-- hstack -->
                     <div class="flex flex-row space-x-1 justify-center font-light">
-                        <p class="text-gray-300">Don't have an account?</p>
+                        <p class="dark:text-gray-300">Don't have an account?</p>
                         <a href="/auth/signup" class="text-[#90cdf4] hover:underline">Sign up</a>
                     </div>
                 </div>
             </div>
             <!-- Form -->
-            <div class="py-6 sm:py-8 px-4 sm:px-10 bg-[#2D3748] shadow-none sm:shadow-md rounded-xl">
+            <div class="py-6 sm:py-8 px-4 sm:px-10 bg-gray-50 dark:bg-[#2D3748] shadow-none sm:shadow-md rounded-xl">
                 <form on:submit|preventDefault={() => {
                     alert("Submit")
                 }}>
@@ -30,12 +30,12 @@
                             <div class="flex flex-col space-y-2">
                                 <label for="email">Email</label>
                                 <input id="email" type="email" name="username"
-                                    class="bg-black/[.16] border border-solid border-white/[.16] focus:outline-none hover:border-white/[.24] focus:border-[#63b3ed] focus:shadow-[0_0_0_1px_#63b3ed] transition-[border-color] duration-200 px-3 py-2 rounded-md">
+                                    class="dark:bg-black/[.16] border border-solid border-white/[.16] focus:outline-none hover:border-white/[.24] focus:border-[#63b3ed] focus:shadow-[0_0_0_1px_#63b3ed] transition-[border-color] duration-200 px-3 py-2 rounded-md">
                             </div>
                             <div class="flex flex-col space-y-2">
                                 <label for="password">Password</label>
                                 <input id="password" type="password" name="password"
-                                    class="bg-black/[.16] border border-solid border-white/[.16] focus:outline-none hover:border-white/[.24] focus:border-[#63b3ed] focus:shadow-[0_0_0_1px_#63b3ed] transition-[border-color] duration-200 px-3 py-2 rounded-md">
+                                    class="dark:bg-black/[.16] border border-solid border-white/[.16] focus:outline-none hover:border-white/[.24] focus:border-[#63b3ed] focus:shadow-[0_0_0_1px_#63b3ed] transition-[border-color] duration-200 px-3 py-2 rounded-md">
                             </div>
                         </div>
                         <div class="flex flex-row justify-between">
@@ -51,7 +51,7 @@
                             </div>
                             <a href="#guest" class="max-w-[40%] self-center hover:no-underline">
                                 <!-- FiUser -->
-                                <p class="font-light">Login as <span class="text-[#90cdf4] hover:underline hover:scale-[1.05]">Guest</span></p>
+                                <p class="font-light">Login as <span class="text-blue-700 dark:text-[#90cdf4] hover:underline hover:scale-[1.05]">Guest</span></p>
                             </a>
                         </div>
                     </div>

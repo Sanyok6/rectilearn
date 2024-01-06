@@ -1,8 +1,21 @@
 <script lang="ts">
-	import Button from '$lib/components/button.svelte';
+	// import Button from '$lib/components/button.svelte';
 	import TypeWriter from '$lib/components/typeWriter.svelte';
 	import { onMount } from 'svelte';
 	import Footer from './footer.svelte';
+
+	let video: HTMLVideoElement;
+	let playing: boolean = false;
+
+	$: {
+		if (video) {
+			if (playing) {
+				video.play();
+			} else {
+				video.pause();
+			}
+		}
+	}
 
 	onMount(() => {
 		const observer = new IntersectionObserver(
@@ -28,32 +41,37 @@
 	because it thinks that the class is unused -->
 <span class="element-visible"></span>
 
-<section class="justify-center">
-	<div class="flex w-ful ps-14 pe-14 ms-14 me-14">
-		<div class="flex-[1]">
-			<h1 id="main-title">With <span class="font-pacifico">Rectilearn,</span></h1>
-			<h2 class="text-4xl">
-				studying is more <span class="text-sky-400 font-semibold"
-					><TypeWriter messages={['Fun', 'Efficient', 'Cooler', 'Exciting']} /></span
-				>
-			</h2>
-			<p class="max-w-xl text-gray-400 text-lg my-6">
+<!-- Section1 (legacy name) -->
+<section class="max-w-7xl min-h-100vh sm:min-h-80vh w-full ml-auto mr-auto">
+	<div class="flex flex-col md:flex-row items-center gap-8 md:gap-36 py-20 md:py-28 mx-2 sm:mx-6 md:mx-10 lg:mx-6"><!-- ps-14 pe-14 ms-14 me-14 -->
+		<!-- This gap-10 is crazy -->
+		<div class="flex-[1] flex-col gap-5 md:gap-10">
+			<div class="leading-none font-semibold font-3xl sm:font-4xl lg:font-6xl">
+				<h1 id="main-title">With <span class="font-pacifico">Rectilearn</span>,</h1>
+				<h2 class="text-4xl text-black dark:text-white">
+					studying is more <span class="text-sky-400 font-semibold"
+						><TypeWriter messages={['Fun', 'Efficient', 'Cooler', 'Exciting', 'Better', 'Easier']}/></span
+					>
+				</h2>
+			</div>
+			<p class="max-w-[28rem] sm:max-w-2xl text-gray-700 dark:text-gray-400 text-lg my-6 text-left">
 				<span class="font-pacifico">Rectilearn</span> makes studying a little less ordinary with games that let you have fun while
 				studying. But <span class="font-pacifico">Rectilearn</span> is not just another study game, unlike other study tools, it is
 				<a href="https://github.com/Sanyok6/TWTcodejam-team-Rectifiers" class="underline">Open Source</a>, it is directed towards language learners, and it makes studying much more
 				enjoyable.
 			</p>
 			<a href="/auth/signup">
-				<Button class="btn-lg rounded-full">Start learning</Button>
+				<button class="bg-blue-400 hover:bg-blue-500 px-6 py-2 rounded-full">Start learning</button>
 			</a>
 		</div>
 
-		<div class="relative flex-[1]">
+		<div class="relative flex flex-[1] items-center justify-center w-full">
 			<svg
 				viewBox="0 0 578 440"
 				focusable="false"
-				class="h-full w-full absolute text-blue-500"
+				class="h-[150%] w-full absolute text-blue-300 dark:text-blue-500 left-0 z-[-1] top-[-20%]"
 				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
 				><path
 					fill-rule="evenodd"
 					clip-rule="evenodd"
@@ -62,7 +80,9 @@
 				></path></svg
 			>
 			<div class="relative flex flex-col h-full rounded-2xl shadow-2xl w-full overflow-hidden">
-				<svg viewBox="0 0 58 58" xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 z-10 translate-x-[-50%] translate-y-[-50%] top-[50%] left-[50%] absolute text-white hover:bg-transparent">
+				<!-- svelte-ignore a11y-no-static-element-interactions a11y-click-events-have-key-events -->
+				<svg viewBox="0 0 58 58" xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 z-10 translate-x-[-50%] translate-y-[-50%] top-[50%] left-[50%] absolute text-white hover:bg-transparent hover:cursor-pointer"
+				on:click={() => playing = true} style={playing ? "display: none" : ""}>
 					<path 
 						fill-rule="evenodd"
 						clip-rule="evenodd"
@@ -71,7 +91,8 @@
 					</path>
 				</svg>
 				<!-- svelte-ignore a11y-media-has-caption -->
-				<video class="relative h-auto w-full p-10 rounded-[50px]">
+				<!--  class="relative h-auto w-full p-10 rounded-[50px]" -->
+				<video bind:this={video} class="flex-[1]" on:click={() => playing = false}>
 					<source
 						src="https://cdn.discordapp.com/attachments/563779252735180831/1156800111645556838/rectilearn.mp4"
 						type="video/mp4"
@@ -83,18 +104,19 @@
 	</div>
 </section>
 
+<!-- Section2 (legacy name) -->
 <section class="mt-20">
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		viewBox="0 0 1200 120"
-		class="w-full rotate-180 translate-y-[1px]"
+		class="w-full rotate-180 translate-y-[1px] overflow-hidden leading-[0]"
 		preserveAspectRatio="none"
 		><path
 			d="M0,0V7.23C0,65.52,268.63,112.77,600,112.77S1200,65.52,1200,7.23V0Z"
-			style="fill:#1c5f97"
+			class="fill-[#95c2ea] dark:fill-[#1c5f97]"
 		></path></svg
 	>
-	<div class="grid place-items-center w-full bg-[#1c5f97] py-10">
+	<div class="grid place-items-center w-full bg-[#95c2ea] dark:bg-[#1c5f97] pt-14 pb-40">
 		<div class="flex flex-col gap-24">
 			<div class="feature-point scale-in">
 				<svg
@@ -186,23 +208,32 @@
 			width="100%"
 			><path
 				d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-				style="fill:#1c5f97"
+				class="fill-[#95c2ea] dark:fill-[#1c5f97]"
 			></path></svg
 		>
 	</div>
 </section>
 
-<section class="mt-52">
-	<h3 class="text-center text-4xl font-semibold text-blue-400 max-w-md">
-		Ready to start learning smarter?
-	</h3>
-	<p class="max-w-xl text-center text-lg mt-7 mb-10">
-		Level up your learning journey with the best studying tool in existence! Create your account for
-		free!
-	</p>
-	<a href="/auth/signup">
-		<Button class="btn-xl btn-ghost">Start learning</Button>
-	</a>
+<!-- Section3 (legacy name) -->
+<section class="scale-in min-h-[40vh] mt-40">
+	<div class="ml-auto mr-auto w-full py-16 md:py-24">
+		<div class="flex flex-col gap-8 md:gap-10">
+			<div class="flex flex-col gap-4 md:gap-5 items-center">
+				<h3 class="text-center text-4xl font-semibold text-blue-400 max-w-md">
+					Ready to start learning smarter?
+				</h3>
+				<p class="max-w-2xl text-center text-xl mt-7 mb-10 dark:text-[#CBD5E0]">
+					Level up your learning journey with the best studying tool in existence! Create your account for
+					free!
+				</p>
+			</div>
+			<div class="flex flex-row gap-3 justify-center">
+				<a href="/auth/signup" class="p-[1em] rounded-[20px] text-2xl text-blue-600 dark:text-blue-400 shadow-[0px_0px_28px_14px_#0ff]">
+					Start learning
+				</a>
+			</div>
+		</div>
+	</div>
 </section>
 
 <Footer />
@@ -213,7 +244,7 @@
 	}
 
 	#main-title {
-		@apply inline-block text-6xl mt-2 mb-8 relative;
+		@apply inline-block text-6xl mt-2 mb-6 relative;
 
 		&::after {
 			@apply w-full h-[25%] absolute bg-blue-500 left-0 z-[-1] bottom-1;
