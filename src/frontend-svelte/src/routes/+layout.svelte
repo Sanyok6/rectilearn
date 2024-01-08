@@ -9,6 +9,6 @@
 
 <NavBar />
 
-<main class="h-[94%]">
+<main class="h-[calc(100vh_-_var(--navbar-height))]">
 	<slot />
 </main>
