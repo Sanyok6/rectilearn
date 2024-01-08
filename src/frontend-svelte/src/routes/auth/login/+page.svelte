@@ -1,4 +1,6 @@
 <script lang="ts">
+
+	function handleLogin() {}
 </script>
 
 <!-- bg -->
