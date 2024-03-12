@@ -1,1 +1,1 @@
-# https://rectilearn.vercel.app/
+# https://rectilearn-legacy.vercel.app/
