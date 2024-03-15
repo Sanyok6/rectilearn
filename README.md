@@ -139,7 +139,8 @@ Rectilearn/
 │      │      ├ lib/ - Library code 
 │      │      ├ pages/ - URL endpoints (pages) of the website
 │      │      ├ utils/ - Utility functions for the functionality of the website
+│
 ├── webgl-builds/ - Contains the WebGL builds for the bush game
-├
+│
 ├── .vscode/ - Contains vscode configuration
 ```
