@@ -5,7 +5,7 @@ import os
 load_dotenv()
 
 PRODUCTION = bool(int(os.getenv("PRODUCTION")))
-USE_RAILWAY = (os.getenv("USE_RAILWAY"))
+USE_RAILWAY = bool(os.getenv("USE_RAILWAY"))
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_WEEKS = 15
