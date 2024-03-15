@@ -30,6 +30,14 @@ Backend:
 
 <!-- Put a crap ton of pictures here -->
 
+YouTube promotional video (2021):
+
+<div align="left">
+      <a href="https://www.youtube.com/watch?v=0Z5OMzX-Lyw" target="_blank" rel="noopener noreferrer">
+         <img src="https://img.youtube.com/vi/0Z5OMzX-Lyw/0.jpg">
+      </a>
+</div>
+
 Demo: [https://rectilearn-legacy.vercel.app](https://rectilearn-legacy.vercel.app)
 
 *Note: Due to inactivity, the database and backend have expired as we are no longer financially capable of hosting the postgres database on Google Cloud Service and FastAPI backend on railway*
@@ -136,7 +144,7 @@ Rectilearn/
 │      ├── public/ - Static assets for the website
 │      ├── src/ - Contains the source code of the frontend web application
 │      │      ├ components/ - UI components of the website
-│      │      ├ lib/ - Library code 
+│      │      ├ lib/ - Library code (context + theme)
 │      │      ├ pages/ - URL endpoints (pages) of the website
 │      │      ├ utils/ - Utility functions for the functionality of the website
 │
