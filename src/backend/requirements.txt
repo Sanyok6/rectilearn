@@ -29,7 +29,7 @@ httplib2==0.20.4
 idna==3.3
 Mako==1.2.0
 MarkupSafe==2.1.1
-multidict==6.0.2
+multidict==5.2.0
 mypy-extensions==0.4.3
 passlib==1.7.4
 pathspec==0.9.0
