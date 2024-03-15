@@ -1,3 +1,5 @@
+<!-- # https://rectilearn-legacy.vercel.app/ -->
+
 <p align="center"> 
   <img src="src/frontend/public/favicon.ico" alt="Rectilearn Logo" width="80px" height="80px">
 </p>
@@ -120,3 +122,24 @@ The backend programmed in python and uses the FastAPI library
     ```shell
     npm run dev
     ```
+
+### Project structure
+
+```txt
+Rectilearn/
+├── src/
+│
+├── backend/ - Backend server code
+│      ├── alembic/ - Database migrations
+│
+├── frontend/
+│      ├── public/ - Static assets for the website
+│      ├── src/ - Contains the source code of the frontend web application
+│      │      ├ components/ - UI components of the website
+│      │      ├ lib/ - Library code 
+│      │      ├ pages/ - URL endpoints (pages) of the website
+│      │      ├ utils/ - Utility functions for the functionality of the website
+├── webgl-builds/ - Contains the WebGL builds for the bush game
+├
+├── .vscode/ - Contains vscode configuration
+```
