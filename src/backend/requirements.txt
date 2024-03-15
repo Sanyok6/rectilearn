@@ -13,7 +13,6 @@ certifi==2021.10.8
 cffi==1.15.0
 charset-normalizer==2.0.12
 click==8.1.2
-cloud-sql-python-connector==0.6.0
 cryptography==36.0.2
 ecdsa==0.17.0
 fastapi==0.100.0
