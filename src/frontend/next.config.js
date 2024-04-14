@@ -1,10 +1,9 @@
-const withTM = require("next-transpile-modules")(["ui"]);
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 });
 
 module.exports = withBundleAnalyzer(
-  withTM({
+  {
     reactStrictMode: true,
     typescript: {
       ignoreBuildErrors: true,
@@ -17,7 +16,7 @@ module.exports = withBundleAnalyzer(
       return [
         {
           source: '/api/:path*/',
-          destination: `http://localhost:8000/:path*/`,
+          destination: `http://127.0.0.1:8000/:path*/`,
         },
         // {
         //   source: "/api/:path*/",
@@ -51,5 +50,5 @@ module.exports = withBundleAnalyzer(
         },
       ];
     },
-  })
+  }
 );

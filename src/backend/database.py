@@ -4,9 +4,9 @@ import settings
 from sqlalchemy.ext.declarative import declarative_base
 
 
-if settings.PRODUCTION:
+if settings.PRODUCTION or settings.USE_LOCAL_PG:
     engine = sqlalchemy.create_engine(
-        "cockroachdb+psycopg2"+settings.POSTGRESQL_URI
+     f"{'cockroachdb+psycopg2' if not settings.USE_LOCAL_PG else ''}" + settings.POSTGRESQL_URI
     )
 
     Base = declarative_base()

@@ -35,7 +35,6 @@
     "swr": "^1.3.0",
     "three": "~0.157.0",
     "typewriter-effect": "^2.21.0",
-    "ui": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "latest",
@@ -48,7 +47,6 @@
     "eslint-config-next": "latest",
     "postcss": "latest",
     "tailwindcss": "latest",
-    "tsconfig": "workspace:*",
     "typescript": "latest"
   }
 }
